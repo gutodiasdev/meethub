@@ -5,25 +5,29 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { theme } from "../styles/theme"
 import { SidebarDrawerProvider } from "../contexts/SidebarContextDrawer"
-import { makeServer } from "../services/mirage"
+// import { makeServer } from "../services/mirage"
+import { AuthProvider } from "../contexts/AuthContext";
 
-if (process.env.NODE_ENV === 'development') {
-  makeServer();
-}
+// if (process.env.NODE_ENV === 'development') {
+//   makeServer();
+// }
 
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
+
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
         <SidebarDrawerProvider>
-          <Component {...pageProps} />
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
         </SidebarDrawerProvider>
       </ChakraProvider>
-
       <ReactQueryDevtools />
     </QueryClientProvider>
+
   )
 }
 

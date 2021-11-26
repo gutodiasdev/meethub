@@ -3,10 +3,14 @@ import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
 
-import { Header } from '../../components/Header';
-import { Sidebar } from '../../components/Sidebar';
-import { Input } from '../../components/Form/Input';
+import { Header } from '../../../components/Header';
+import { Sidebar } from '../../../components/Sidebar';
+import { Input } from '../../../components/Forms/Input';
+import { api } from '../../../services/api';
+import { queryClient } from '../../../services/query/queryClient';
 
 type CreateUserFormData = {
   name: string;
@@ -22,21 +26,38 @@ const createUserFormSchema = yup.object().shape({
   name: yup.string().required('Nome do usuário é obrigatório'),
   email: yup.string().required('E-mail do usuário é obrigatório').email('E-mail inválido'),
   password: yup.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
-  telephone: yup.string().required('Telefone é obrigatório').min(12, 'No mínimo 12 caracteres'),
+  telephone: yup.string().required('Telefone é obrigatório').min(11, 'No mínimo 11 caracteres'),
   role: yup.string().required('Tipo de usuário é obrigatório'),
   position: yup.string(),
   biography: yup.string()
 })
 
 export default function CreateUser() {
+  const router = useRouter()
+
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const response = await api.post('/users', {
+      user: {
+        ...user,
+        created_at: new Date(),
+      }
+    })
+
+    return response.data.user;
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('user');
+    }
+  });
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(createUserFormSchema)
   })
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await createUser.mutateAsync(values);
 
-    console.log(values);
+    router.push('/users')
   }
 
   return (
@@ -166,3 +187,4 @@ export default function CreateUser() {
     </Box >
   );
 }
+

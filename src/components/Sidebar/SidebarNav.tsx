@@ -9,11 +9,11 @@ export function SidebarNav() {
     <Stack spacing="12" align="flex-start">
       <NavSection title="GERAL">
         <NavLink icon={RiDashboardLine} href="/dashboard">Dashboard</NavLink>
-        <NavLink icon={RiContactsLine} href="/users">Usuários</NavLink>
-        <NavLink icon={RiTeamLine} href="/users/mentors">Mentores</NavLink>
+        <NavLink icon={RiContactsLine} href="/dashboard/users">Usuários</NavLink>
+        <NavLink icon={RiTeamLine} href="/dashboard/mentors">Mentores</NavLink>
       </NavSection>
       <NavSection title="MEETS">
-        <NavLink icon={RiAddLine} href="/meets/create">Adicionar novo</NavLink>
+        <NavLink icon={RiAddLine} href="/dashboard/meets/create">Adicionar novo</NavLink>
       </NavSection>
     </Stack>
   );
