@@ -2,7 +2,7 @@ import { Flex, Box, Text, Avatar } from "@chakra-ui/react";
 
 interface ProfileProps {
   showProfileData?: boolean;
-  userEmail: string;
+  userEmail?: string;
 }
 
 export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
@@ -12,9 +12,8 @@ export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
     >
       {showProfileData && (
         <Box mr="4" textAlign="right">
-          <Text>Você está logado</Text>
+          <Text color="gray.400" fontSize="xs">Logado(a), como</Text>
           <Text
-            color="gray.400"
             fontSize="small"
           >
             {userEmail}

@@ -35,7 +35,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (token) {
       api.get('/me').then(response => {
-        console.log(response)
+        const { email, permissions, roles } = response.data
+
+        setUser({ email, permissions, roles })
       })
     }
   }, [])
@@ -51,11 +53,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setCookie(undefined, 'meethub.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
-        paht: '/'
+        path: '/'
       })
+
       setCookie(undefined, 'meethub.refreshToken', refreshToken, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
-        paht: '/'
+        path: '/'
       })
 
       setUser({
@@ -63,6 +66,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         permissions,
         roles
       })
+
+      api.defaults.headers['Authorization'] = `Bearer ${token}`
 
       Router.push('/dashboard')
     } catch (error) {

@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Link, Text } from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Link, Text } from '@chakra-ui/react'
 import SignInForm from '../Forms/SignInForm'
 
 export function UserLoginModal() {
@@ -8,6 +8,7 @@ export function UserLoginModal() {
     <>
       <Link onClick={onOpen} cursor="pointer">Login</Link>
       <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInBottom" isCentered >
+        <ModalOverlay />
         <ModalContent>
           <ModalHeader>
             <Text fontSize="lg">Login</Text>

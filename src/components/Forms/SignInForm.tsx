@@ -37,7 +37,7 @@ export default function SignInForm() {
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
-      <Button type="submit">Login</Button>
+      <Button type="submit">Entrar</Button>
     </VStack>
   )
 }
