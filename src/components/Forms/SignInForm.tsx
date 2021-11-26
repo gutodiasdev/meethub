@@ -1,5 +1,6 @@
 import { VStack, Button } from '@chakra-ui/react'
 import { sign } from 'crypto'
+import { GetServerSideProps } from 'next'
 import { FormEvent, useContext, useState } from 'react'
 import { Input } from '../../components/Forms/Input'
 import { AuthContext } from '../../contexts/AuthContext'
@@ -41,3 +42,4 @@ export default function SignInForm() {
     </VStack>
   )
 }
+

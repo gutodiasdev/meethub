@@ -20,8 +20,9 @@ export function Header() {
   const { user } = useContext(AuthContext)
 
   useEffect(() => {
-    api.get('/me').then(response => console.log(response))
-
+    api.get('/me')
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
   }, [])
 
   return (

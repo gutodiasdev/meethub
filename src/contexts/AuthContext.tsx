@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
 import Router from 'next/router'
 import { api } from "../services/api";
-import { setCookie, parseCookies } from 'nookies'
+import { setCookie, parseCookies, destroyCookie } from 'nookies'
 
 type User = {
   email: string;
@@ -26,6 +26,13 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
+export function signOut() {
+  destroyCookie(undefined, 'meethub.token')
+  destroyCookie(undefined, 'meethub.refreshToken')
+
+  Router.push('/');
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()
   const isAuthenticated = !!user
@@ -34,11 +41,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { 'meethub.token': token } = parseCookies()
 
     if (token) {
-      api.get('/me').then(response => {
-        const { email, permissions, roles } = response.data
+      api.get('/me')
+        .then(response => {
+          const { email, permissions, roles } = response.data
 
-        setUser({ email, permissions, roles })
-      })
+          setUser({ email, permissions, roles })
+        })
+        .catch(() => {
+          signOut()
+        })
     }
   }, [])
 

@@ -1,4 +1,8 @@
 import { Flex } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
+import { parseCookies } from 'nookies';
+import { withSSRGuest } from "../../utils/withSSRGuest";
+
 import { Hero } from "../components/Hero";
 import { HomeContent } from "../components/HomeContent";
 import { UserFooter } from "../components/UserFooter";
@@ -20,3 +24,9 @@ export default function Home() {
     </Flex>
   )
 }
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {}
+  }
+});
