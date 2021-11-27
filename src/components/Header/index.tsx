@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react';
 import { RiMenuLine } from 'react-icons/ri';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useSidebarDrawer } from '../../contexts/SidebarContextDrawer';
-import { api } from '../../services/api';
+import { api } from '../../services/apiClient';
 import { Logo } from './Logo';
 import { NotificationsNav } from './NotificationsNav';
 import { Profile } from './Profile';

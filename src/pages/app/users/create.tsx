@@ -9,8 +9,8 @@ import { useMutation } from 'react-query';
 import { Header } from '../../../components/Header';
 import { Sidebar } from '../../../components/Sidebar';
 import { Input } from '../../../components/Forms/Input';
-import { api } from '../../../services/api';
 import { queryClient } from '../../../services/query/queryClient';
+import { api } from '../../../services/apiClient';
 
 type CreateUserFormData = {
   name: string;

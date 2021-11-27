@@ -10,7 +10,7 @@ import { Pagination } from '../../../components/Pagination';
 import { getUsers, useUsers } from '../../../services/hooks/users/useUsers';
 
 import { queryClient } from '../../../services/query/queryClient';
-import { api } from '../../../services/api';
+import { api } from '../../../services/apiClient';
 // import { GetServerSideProps } from 'next';
 
 export default function UserList() {

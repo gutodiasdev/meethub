@@ -8,7 +8,7 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
     if (cookies['meethub.token']) {
       return {
         redirect: {
-          destination: '/dashboard',
+          destination: '/app',
           permanent: false,
         }
       }
