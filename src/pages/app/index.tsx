@@ -1,11 +1,14 @@
 import { Flex, SimpleGrid, Box, Text, theme } from "@chakra-ui/react";
 import dynamic from 'next/dynamic';
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
+import { WhoCanUse } from "../../components/WhoCanUse";
+import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { api } from "../../services/apiClient";
+import { useCan } from "../../services/hooks/users/useCan";
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
@@ -64,7 +67,13 @@ const meetSeries = [
   { name: 'Usuários', data: [3, 5, 2, 1, 8, 4, 2] }
 ]
 
-export default function Dashboard() {
+export default function App() {
+
+  const { user, isAuthenticated } = useContext(AuthContext);
+
+  const userCanSeeMetrics = useCan({
+    permissions: ['metrics.list']
+  });
 
   useEffect(() => {
     api.get('/me')
@@ -77,26 +86,29 @@ export default function Dashboard() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
-          <Box
-            p={["6", "8"]}
-            bg="white"
-            borderRadius="8"
-            pb="4"
-          >
-            <Text fontSize="lg" mb="4">Novos Usuários</Text>
-            <Chart options={options} series={userSeries} type="area" height={160} />
-          </Box>
-          <Box
-            p={["6", "8"]}
-            bg="white"
-            borderRadius="8"
-          >
-            <Text fontSize="lg" mb="4">Meets Vendidos</Text>
-            <Chart options={options} series={meetSeries} type="area" height={160} />
-          </Box>
+        <WhoCanUse roles={['administrator']}>
+          <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
+            <Box
+              p={["6", "8"]}
+              bg="white"
+              borderRadius="8"
+              pb="4"
+            >
+              <Text fontSize="lg" mb="4">Novos Usuários</Text>
+              <Chart options={options} series={userSeries} type="area" height={160} />
+            </Box>
+            <Box
+              p={["6", "8"]}
+              bg="white"
+              borderRadius="8"
+            >
+              <Text fontSize="lg" mb="4">Meets Vendidos</Text>
+              <Chart options={options} series={meetSeries} type="area" height={160} />
+            </Box>
 
-        </SimpleGrid>
+          </SimpleGrid>
+        </WhoCanUse>
+
       </Flex>
     </Flex>
   )

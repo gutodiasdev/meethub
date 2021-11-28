@@ -8,12 +8,12 @@ export function SidebarNav() {
   return (
     <Stack spacing="12" align="flex-start">
       <NavSection title="GERAL">
-        <NavLink icon={RiDashboardLine} href="/dashboard">Dashboard</NavLink>
-        <NavLink icon={RiContactsLine} href="/dashboard/users">Usuários</NavLink>
-        <NavLink icon={RiTeamLine} href="/dashboard/mentors">Mentores</NavLink>
+        <NavLink icon={RiDashboardLine} href="/app">Dashboard</NavLink>
+        <NavLink icon={RiContactsLine} href="/app/users">Usuários</NavLink>
+        <NavLink icon={RiTeamLine} href="/app/mentors">Mentores</NavLink>
       </NavSection>
       <NavSection title="MEETS">
-        <NavLink icon={RiAddLine} href="/dashboard/meets/create">Adicionar novo</NavLink>
+        <NavLink icon={RiAddLine} href="/app/meets/create">Adicionar novo</NavLink>
       </NavSection>
     </Stack>
   );
