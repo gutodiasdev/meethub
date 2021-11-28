@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 
-import { withSSRGuest } from "../../utils/withSSRGuest";
+import { withSSRGuest } from "../utils/withSSRGuest";
 import { Hero } from "../components/Hero";
 import { HomeContent } from "../components/HomeContent";
 import { UserFooter } from "../components/UserFooter";

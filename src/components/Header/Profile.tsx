@@ -1,4 +1,6 @@
-import { Flex, Box, Text, Avatar } from "@chakra-ui/react";
+import { Flex, Box, Text, Avatar, Button } from "@chakra-ui/react";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface ProfileProps {
   showProfileData?: boolean;
@@ -6,6 +8,9 @@ interface ProfileProps {
 }
 
 export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
+
+  const { signOut } = useContext(AuthContext);
+
   return (
     <Flex
       align="center"
@@ -18,6 +23,7 @@ export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
           >
             {userEmail}
           </Text>
+          <Button onClick={signOut}>Sair</Button>
         </Box>
       )}
 

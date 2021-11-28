@@ -1,10 +1,9 @@
-import { Flex, SimpleGrid, Box, Text, theme } from "@chakra-ui/react";
+import { Flex, theme } from "@chakra-ui/react";
 import dynamic from 'next/dynamic';
 import { useContext, useEffect } from "react";
-import { withSSRAuth } from "../../../utils/withSSRAuth";
+import { withSSRAuth } from "../../utils/withSSRAuth";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
-import { WhoCanUse } from "../../components/WhoCanUse";
 import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { api } from "../../services/apiClient";
@@ -86,29 +85,8 @@ export default function App() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <WhoCanUse roles={['administrator']}>
-          <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
-            <Box
-              p={["6", "8"]}
-              bg="white"
-              borderRadius="8"
-              pb="4"
-            >
-              <Text fontSize="lg" mb="4">Novos Usuários</Text>
-              <Chart options={options} series={userSeries} type="area" height={160} />
-            </Box>
-            <Box
-              p={["6", "8"]}
-              bg="white"
-              borderRadius="8"
-            >
-              <Text fontSize="lg" mb="4">Meets Vendidos</Text>
-              <Chart options={options} series={meetSeries} type="area" height={160} />
-            </Box>
-
-          </SimpleGrid>
-        </WhoCanUse>
-
+        {/*  */}
+        {/*  */}
       </Flex>
     </Flex>
   )
