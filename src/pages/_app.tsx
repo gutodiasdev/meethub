@@ -25,7 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           </AuthProvider>
         </SidebarDrawerProvider>
       </ChakraProvider>
-      <ReactQueryDevtools />
     </QueryClientProvider>
 
   )

@@ -30,11 +30,11 @@ export function Header() {
       as="header"
       w="100%"
       maxWidth={1480}
-      h="20"
-      mx="auto"
-      mt="4"
+      h="16"
       px="6"
       align="center"
+      borderBottom="1px"
+      borderColor="gray.100"
     >
       {!isWideVersion && (
         <IconButton
@@ -50,7 +50,7 @@ export function Header() {
       )}
       {isWideVersion && <Logo />}
 
-      {isWideVersion && <Search />}
+      {/* {isWideVersion && <Search />} */}
 
       <Flex
         align="center"

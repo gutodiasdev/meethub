@@ -28,7 +28,15 @@ export function Sidebar() {
   }
 
   return (
-    <Box as="aside" w="64" mr="8">
+    <Box
+      as="aside"
+      borderRight="1px"
+      borderColor="gray.100"
+      h="100%"
+      position="fixed"
+      p="6"
+    >
+      <Logo />
       <SidebarNav />
     </Box>
   );

@@ -15,24 +15,77 @@ model User {
   email      String   @unique
   telephone  String
   password   String
+  role       UserRole @default(user)
   created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  user_profile UserProfile?
+  user_profile     UserProfile?
+  user_preferences UserPreferences[]
 }
 
 model UserProfile {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   name      String?
-  role      UserRole
   position  String?
   biography String?
+  image     String?
 
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
 }
 
 enum UserRole {
-  Admin
-  User
-  Mentor
+  administrator
+  user
+  mentor
+}
+
+model UserPreferences {
+  id String @id @default(uuid())
+
+  user       User?        @relation(fields: [user_id], references: [id])
+  user_id    String?
+  categories Categories[]
+}
+
+model Categories {
+  id   String @id @default(uuid())
+  name String
+
+  sub_categories SubCategories[]
+
+  user_preferences_id String?
+  user_preferences    UserPreferences? @relation(fields: [user_preferences_id], references: [id])
+
+  meet_id String?
+  Meets   Meet?   @relation(fields: [meet_id], references: [id])
+
+}
+
+model SubCategories {
+  id   String @id @default(uuid())
+  name String
+
+  Categories   Categories? @relation(fields: [categoriesId], references: [id])
+  categoriesId String?
+}
+
+model Meet {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal
+
+  categories Categories[]
+  reviews    Reviews[]
+}
+
+model Reviews {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  rating      Int
+
+  meet    Meet?   @relation(fields: [meet_id], references: [id])
+  meet_id String?
 }
