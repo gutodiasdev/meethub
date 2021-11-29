@@ -5,6 +5,8 @@ import { Hero } from "../components/Hero";
 import { HomeContent } from "../components/HomeContent";
 import { UserFooter } from "../components/UserFooter";
 import { UserHeader } from "../components/UserHeader";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 export default function Home() {
   return (
@@ -22,6 +24,12 @@ export default function Home() {
     </Flex>
   )
 }
+
+// export const getServerSideProps = withSSRGuest(async (ctx) => {
+//   return {
+//     props: {}
+//   }
+// });
 
 export const getServerSideProps = withSSRGuest(async (ctx) => {
   return {

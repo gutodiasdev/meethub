@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,30 +8,32 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  telephone  String
-  password   String
-  role       UserRole @default(user)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id        String  @id @default(uuid())
+  email     String  @unique
+  telephone String
+  password  String
+  roles     Role    @default(user)
+  token     String?
+  meets     Meets[]
 
-  user_profile     UserProfile?
-  user_preferences UserPreferences[]
+  created_at  DateTime     @default(now())
+  UserProfile UserProfile?
 }
 
 model UserProfile {
   id        String  @id @default(uuid())
   name      String?
+  image     String?
   position  String?
   biography String?
-  image     String?
+
+  user_preferences UserPreferences?
 
   user_id String @unique
   user    User   @relation(fields: [user_id], references: [id])
 }
 
-enum UserRole {
+enum Role {
   administrator
   user
   mentor
@@ -43,49 +42,56 @@ enum UserRole {
 model UserPreferences {
   id String @id @default(uuid())
 
-  user       User?        @relation(fields: [user_id], references: [id])
-  user_id    String?
   categories Categories[]
+
+  user_profile_id String      @unique
+  user_profile    UserProfile @relation(fields: [user_profile_id], references: [id])
 }
 
 model Categories {
   id   String @id @default(uuid())
   name String
 
-  sub_categories SubCategories[]
+  subcategory SubCategories[]
 
-  user_preferences_id String?
-  user_preferences    UserPreferences? @relation(fields: [user_preferences_id], references: [id])
-
-  meet_id String?
-  Meets   Meet?   @relation(fields: [meet_id], references: [id])
-
+  user_preferences_id String
+  user_preferences    UserPreferences @relation(fields: [user_preferences_id], references: [id])
 }
 
 model SubCategories {
   id   String @id @default(uuid())
   name String
 
-  Categories   Categories? @relation(fields: [categoriesId], references: [id])
-  categoriesId String?
+  category_id String
+  category    Categories @relation(fields: [category_id], references: [id])
 }
 
-model Meet {
-  id          String  @id @default(uuid())
+model Meets {
+  id          String    @id @default(uuid())
   name        String
   description String?
   price       Decimal
+  room        Rooms?
+  review      Reviews[]
 
-  categories Categories[]
-  reviews    Reviews[]
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+}
+
+model Rooms {
+  id         String @id @default(uuid())
+  meeting_id String
+
+  meet_id String @unique
+  meet    Meets  @relation(fields: [meet_id], references: [id])
 }
 
 model Reviews {
   id          String  @id @default(uuid())
-  title       String
-  description String?
   rating      Int
+  title       String?
+  description String
 
-  meet    Meet?   @relation(fields: [meet_id], references: [id])
-  meet_id String?
+  meet_id String @unique
+  meet    Meets  @relation(fields: [meet_id], references: [id])
 }

@@ -7,6 +7,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
     "@chakra-ui/react": "^1.7.2",
@@ -35,14 +38,16 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/faker": "^5.5.9",
     "@types/jsonwebtoken": "^8.5.6",
-    "@types/node": "^16.11.9",
+    "@types/node": "^16.11.10",
     "@types/react": "^17.0.35",
     "@types/uuid": "^8.3.3",
     "eslint": "7",
     "eslint-config-next": "12.0.4",
     "miragejs": "^0.1.42",
+    "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   }
 }

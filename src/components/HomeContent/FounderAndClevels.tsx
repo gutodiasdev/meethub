@@ -5,8 +5,7 @@ export function FounderAndClevels() {
     <Flex
       h="80px"
       width="100%"
-      zIndex="100"
-      mt={40}
+      my={32}
       align="center"
     >
       <Heading as="h2" w="400px" color="gray.900">Founders, Heads e C-Levels de empresas como</Heading>

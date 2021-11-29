@@ -5,7 +5,6 @@ import { api } from "../services/apiClient";
 
 type User = {
   email: string;
-  permissions: string[];
   roles: string[];
 }
 
@@ -14,7 +13,14 @@ type SignInCredentials = {
   password: string;
 }
 
+type SignUpCredentials = {
+  email: string;
+  password: string;
+  telephone: string;
+}
+
 type AuthContextData = {
+  signUp: (credentials: SignUpCredentials) => Promise<void>;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => void;
   user: User;
@@ -33,7 +39,6 @@ export function signOut() {
   destroyCookie(undefined, 'meethub.token')
   destroyCookie(undefined, 'meethub.refreshToken')
 
-  authChannel.postMessage('signOut');
 
   Router.push('/');
 }
@@ -62,9 +67,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (token) {
       api.get('/me')
         .then(response => {
-          const { email, permissions, roles } = response.data
+          const { email, roles } = response.data
 
-          setUser({ email, permissions, roles })
+          setUser({ email, roles })
         })
         .catch(() => {
           signOut()
@@ -79,7 +84,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password: password,
       })
 
-      const { token, refreshToken, permissions, roles } = response.data
+      const { token, refreshToken, roles } = response.data
+
+      setCookie(undefined, 'meethub.token', token, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: '/'
+      })
+
+      setCookie(undefined, 'meethub.refreshToken', refreshToken, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: '/'
+      })
+
+      setUser({ email, roles })
+
+      api.defaults.headers['Authorization'] = `Bearer ${token}`
+
+      Router.push('/app')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function signUp({ email, password, telephone }: SignUpCredentials) {
+    try {
+      const response = await api.post('users', {
+        email: email,
+        password: password,
+        telephone: telephone,
+      })
+      const { token, refreshToken, roles } = response.data
 
       setCookie(undefined, 'meethub.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -93,7 +127,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setUser({
         email,
-        permissions,
         roles
       })
 
@@ -106,7 +139,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated, user, signOut }}>
+    <AuthContext.Provider value={{ signIn, signUp, isAuthenticated, user, signOut }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('Admin', 'User', 'Mentor');
+CREATE TYPE "UserRole" AS ENUM ('administrator', 'user', 'mentor');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -8,7 +8,6 @@ CREATE TABLE "User" (
     "telephone" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -17,7 +16,7 @@ CREATE TABLE "User" (
 CREATE TABLE "UserProfile" (
     "id" TEXT NOT NULL,
     "name" TEXT,
-    "role" "UserRole" NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT E'user',
     "position" TEXT,
     "biography" TEXT,
     "userId" TEXT NOT NULL,

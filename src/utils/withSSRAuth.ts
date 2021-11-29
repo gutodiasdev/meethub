@@ -5,7 +5,6 @@ import decode from 'jwt-decode';
 import { validateUserPermissions } from "./validateUserPermissions";
 
 type WithSSRAuthOption = {
-  permissions?: string[];
   roles?: string[];
 }
 
@@ -25,13 +24,12 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
     }
 
     if (options) {
-      const user = decode<{ permissions: string[], roles: string[] }>(token);
+      const user = decode<{ roles: string[] }>(token);
 
-      const { permissions, roles } = options
+      const { roles } = options
 
       const userHasValidPermissions = validateUserPermissions({
         user,
-        permissions,
         roles,
       })
 

@@ -1,11 +1,14 @@
 import { VStack, Button } from '@chakra-ui/react'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import { Input } from '../components/Forms/Input'
+import { AuthContext } from '../contexts/AuthContext'
 
 export default function UserRegister() {
   const [email, setEmail] = useState('')
   const [telephone, setTelephone] = useState('')
   const [password, setPassword] = useState('')
+
+  const { signUp } = useContext(AuthContext)
 
   function handleSubmit(event: FormEvent) {
 
@@ -17,7 +20,7 @@ export default function UserRegister() {
       password,
     }
 
-    console.log(data)
+    signUp(data)
   }
 
   return (

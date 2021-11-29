@@ -3,6 +3,7 @@ import { parseCookies, setCookie } from 'nookies'
 import { signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from './errors/AuthTokenError';
 
+let cookies = parseCookies();
 let isRefresing = false;
 let failedRequestQueue = [];
 
@@ -11,7 +12,7 @@ export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx)
 
   const api = axios.create({
-    baseURL: 'http://localhost:3333',
+    baseURL: 'http://localhost:3000/api/',
     headers: {
       Authorization: `Bearer ${cookies['meethub.token']}`
     }
@@ -29,6 +30,8 @@ export function setupAPIClient(ctx = undefined) {
 
         if (!isRefresing) {
           isRefresing = true;
+
+          console.log('refresh')
 
           api.post('/refresh', {
             refreshToken,
@@ -57,6 +60,9 @@ export function setupAPIClient(ctx = undefined) {
 
             if (process.browser) {
               signOut()
+            }
+            else {
+              return Promise.reject(new AuthTokenError())
             }
           }).finally(() => {
             isRefresing = false;
