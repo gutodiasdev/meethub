@@ -5,17 +5,12 @@ export async function invalidateRefreshToken(email: string, refreshToken: string
     where: {
       email: email,
     },
-    select: {
-      token: true,
-    },
   })
 
-  const token = user.token;
-
-  if (token !== refreshToken) {
-    return token
+  if (user.token !== refreshToken) {
+    return false
   }
 
-  return false;
+  return true;
 
 }

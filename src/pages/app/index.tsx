@@ -1,19 +1,8 @@
-import { useContext, useEffect } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
-import { AuthContext } from "../../contexts/AuthContext";
-import { setupAPIClient } from "../../services/api";
-import { api } from "../../services/apiClient";
-import { useCan } from "../../services/hooks/users/useCan";
 import AppContainer from "../../components/AppContainer";
+import { setupAPIClient } from "../../services/api";
 
 export default function App() {
-
-  useEffect(() => {
-    api.get('/me')
-      .then(response => console.log(response))
-      .catch(err => console.log(err));
-  }, [])
-
   return (
     <AppContainer>
 
@@ -22,6 +11,8 @@ export default function App() {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
+  const response = await apiClient.get('/me')
 
   return {
     props: {}

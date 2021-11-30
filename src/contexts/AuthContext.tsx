@@ -2,6 +2,7 @@ import { createContext, ReactNode, useState, useEffect } from "react";
 import Router from 'next/router'
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { api } from "../services/apiClient";
+import prisma from "../lib/utils/prisma";
 
 type User = {
   email: string;
@@ -79,7 +80,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await api.post('sessions', {
+      const response = await api.post('/sessions', {
         email: email,
         password: password,
       })

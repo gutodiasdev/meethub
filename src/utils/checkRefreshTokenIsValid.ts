@@ -5,15 +5,10 @@ export async function checkRefreshTokenIsValid(email: string, refreshToken: stri
     where: {
       email: email,
     },
-    select: {
-      token: true,
-    },
   })
 
-  const token = user.token;
-
-  if (token === refreshToken) {
-    return token
+  if (user.token === refreshToken) {
+    return true
   }
 
   return false;

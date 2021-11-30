@@ -17,26 +17,32 @@ const checkAuthMiddleware = (handler) => {
     if (!token) {
       return response
         .status(401)
-        .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
+        .json({ error: true, code: 'token.invalid', message: 'Token not present.' }) as DecodedToken
     }
 
     try {
-      const decoded = jwt.verify(token as string, process.env.AUTH_SECRET) as DecodedToken;
+      //verify token
+      const decoded = jwt.verify(token as string, process.env.AUTH_SECRET)
 
-      const currentUser = await prisma.user.findUnique({
-        where: { email: decoded.sub },
-        select: {
-          email: true,
-        }
-      })
+      // const currentUser = await prisma.user.findUnique({
+      //   where: {
+      //     email: decoded.sub,
+      //   },
+      //   select: {
+      //     email: true,
+      //   }
+      // })
 
-      if (!currentUser) {
-        return response.status(401).json({ message: 'Erro no token.' })
-      }
+      // if (!currentUser) {
+      //   return response.status(401).json({
+      //     success: false,
+      //     message: 'The user belonging to this token no longer exist.',
+      //   });
+      // }
 
-      request.user = currentUser;
+      request.user = decoded.sub;
 
-      return handler(request, response);
+      return handler(request, response)
 
     } catch (err) {
 
