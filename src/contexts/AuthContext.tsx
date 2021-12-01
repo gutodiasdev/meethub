@@ -109,7 +109,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signUp({ email, password, telephone }: SignUpCredentials) {
     try {
-      const response = await api.post('users', {
+      const response = await api.post('users/create', {
         email: email,
         password: password,
         telephone: telephone,

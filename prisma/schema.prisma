@@ -42,28 +42,25 @@ enum Role {
 model UserPreferences {
   id String @id @default(uuid())
 
-  categories Categories[]
+  categories Category[]
 
   user_profile_id String      @unique
   user_profile    UserProfile @relation(fields: [user_profile_id], references: [id])
 }
 
-model Categories {
+model Category {
   id   String @id @default(uuid())
   name String
 
-  subcategory SubCategories[]
-
-  user_preferences_id String
-  user_preferences    UserPreferences @relation(fields: [user_preferences_id], references: [id])
+  subcategory     SubCategory[]
+  user_preference UserPreferences[]
 }
 
-model SubCategories {
+model SubCategory {
   id   String @id @default(uuid())
   name String
 
-  category_id String
-  category    Categories @relation(fields: [category_id], references: [id])
+  categories Category[]
 }
 
 model Meets {

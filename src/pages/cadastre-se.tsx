@@ -1,6 +1,6 @@
-import { VStack, Button } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import { FormEvent, useContext, useState } from 'react'
-import { Input } from '../components/Forms/Input'
+import { UserRegisterForm } from '../components/Forms/UserRegisterForm'
 import { AuthContext } from '../contexts/AuthContext'
 
 export default function UserRegister() {
@@ -24,27 +24,12 @@ export default function UserRegister() {
   }
 
   return (
-    <VStack as="form" onSubmit={handleSubmit} w="50%" mx="auto" mt={40} spacing={4}>
-      <Input
-        name="email"
-        label="E-mail"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <Input
-        name="telephone"
-        label="Telefone"
-        value={telephone}
-        onChange={e => setTelephone(e.target.value)}
-      />
-      <Input
-        name="password"
-        label="Senha"
-        type="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <Button type="submit">Cadastrar</Button>
-    </VStack>
+    <Flex
+      w="100%"
+      h="100vh"
+      align="center"
+    >
+      <UserRegisterForm />
+    </Flex>
   )
 }

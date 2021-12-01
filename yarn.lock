@@ -3947,6 +3947,11 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
+pagarme@^4.20.0:
+  version "4.20.0"
+  resolved "https://registry.yarnpkg.com/pagarme/-/pagarme-4.20.0.tgz#899bf240afb82a0b5cd367bfb85d8ca778e1d00d"
+  integrity sha512-publYbudSsO/noEArIx3W0BipGd3vVbyCa/TYEHzHsrV4R8JVBXYja5cxebwsomMjga8c8UEXND9VhXw+qb6Fw==
+
 pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
