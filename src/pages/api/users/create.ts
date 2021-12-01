@@ -15,6 +15,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         email: email,
         password: passwordHash,
         telephone: telephone,
+        roles: 'user',
       },
       select: {
         id: true,
