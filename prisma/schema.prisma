@@ -12,7 +12,7 @@ model User {
   email     String  @unique
   telephone String
   password  String
-  roles     Role    @default(user)
+  roles     Role
   token     String?
   meets     Meets[]
 

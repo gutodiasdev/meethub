@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import bcrypt from "bcrypt"
-import { generateJwtAndRefreshToken } from "../../utils/generateJwtAndRefreshToken"
-import prisma from "../../lib/utils/prisma"
+import { generateJwtAndRefreshToken } from "../../../utils/generateJwtAndRefreshToken"
+import prisma from "../../../lib/utils/prisma"
 
 
-const handler = async (request, response) => {
+export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === 'POST') {
     const { email, password, telephone } = request.body
 
@@ -22,7 +22,7 @@ const handler = async (request, response) => {
       }
     })
 
-    const { token, refreshToken } = generateJwtAndRefreshToken(email, {
+    const { token, refreshToken } = await generateJwtAndRefreshToken(email, {
       role: user.roles,
     })
 
@@ -35,5 +35,3 @@ const handler = async (request, response) => {
     return response.status(201).json(userData)
   }
 }
-
-export default handler;
