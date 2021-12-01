@@ -8,12 +8,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .json({ message: 'Error. Method not allowed' })
   }
 
-  const router = useRouter();
-  const { uid } = router.query;
-
   const response = await prisma.user.findUnique({
     where: {
-      id: uid.toString(),
+      id: req.query.id.toString(),
+    },
+    include: {
+      UserProfile: true,
     }
   })
 

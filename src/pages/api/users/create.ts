@@ -6,7 +6,7 @@ import prisma from "../../../lib/utils/prisma"
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === 'POST') {
-    const { email, password, telephone } = request.body
+    const { email, password, telephone, roles = 'user' } = request.body
 
     const passwordHash = await bcrypt.hash(password, 6)
 
@@ -15,7 +15,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         email: email,
         password: passwordHash,
         telephone: telephone,
-        roles: 'user',
+        roles: roles,
       },
       select: {
         id: true,
