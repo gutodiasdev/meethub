@@ -4,55 +4,64 @@ import { useContext } from 'react'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 
-import { AuthContext } from '../../contexts/AuthContext';
 import { Input } from './Input';
+import { ApiContext } from '../../contexts/ApiContext';
 
-type SignUpFormData = {
+type CreateUserFormData = {
   email: string;
   password: string;
   telephone: string;
 }
 
-const signupFormSchema = yup.object().shape({
+const createUserFormSchema = yup.object().shape({
   email: yup.string().required('E-mail é obrigatório.').email('Digite um email válido'),
-  password: yup.string().required('Senha é obrigatória.'),
+  password: yup.string().required('Senha é obrigatória.').min(6, 'No mínimo 6 caracteres'),
+  password_confirmation: yup.string().oneOf([
+    null, yup.ref('password'),
+  ], 'As senhas precisam ser iguais'),
   telephone: yup.string().required('Telefone é obrigatório.'),
 })
 
 export function UserRegisterForm() {
   const { register, handleSubmit, formState } = useForm({
-    resolver: yupResolver(signupFormSchema)
+    resolver: yupResolver(createUserFormSchema)
   });
-  const { signUp } = useContext(AuthContext);
+  const { createUser } = useContext(ApiContext);
 
-  const handleSignUp: SubmitHandler<SignUpFormData> = (values) => {
+  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
     const data = {
       email: values.email,
       password: values.password,
       telephone: values.telephone,
     }
 
-    signUp(data);
+    console.log(values);
+
+    await createUser(data);
   }
 
   const { errors } = formState;
 
   return (
     <Flex
-      as="form"
+
       direction="column"
-      onSubmit={handleSubmit(handleSignUp)}
       w={450}
       m="auto"
       p="8"
       borderRadius="16px"
       boxShadow="lg"
     >
-      <Stack spacing="4">
+      <Stack
+        spacing="4"
+        as="form"
+        onSubmit={handleSubmit(handleCreateUser)}
+      >
         <Input
           type="email"
           name="email"
           label="E-mail"
+          size="md"
           error={errors.email}
           {...register}
         />
@@ -60,6 +69,7 @@ export function UserRegisterForm() {
           type="telephone"
           name="telephone"
           label="Telefone"
+          size="md"
           error={errors.telephone}
           {...register}
         />
@@ -67,10 +77,20 @@ export function UserRegisterForm() {
           type="password"
           name="password"
           label="Senha"
+          size="md"
           error={errors.password}
           {...register}
         />
+        <Input
+          type="password"
+          name="password"
+          label="Confirme a senha"
+          size="md"
+          error={errors.password_confirmation}
+          {...register}
+        />
         <Button
+          fontWeight="normal"
           type="submit"
           colorScheme="blue"
           h={12}

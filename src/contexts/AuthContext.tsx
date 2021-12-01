@@ -2,7 +2,6 @@ import { createContext, ReactNode, useState, useEffect } from "react";
 import Router from 'next/router'
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { api } from "../services/apiClient";
-import prisma from "../lib/utils/prisma";
 
 type User = {
   email: string;
