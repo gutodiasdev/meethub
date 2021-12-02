@@ -1,6 +1,7 @@
-import { Grid, VStack } from "@chakra-ui/react";
+import { Grid, VStack, GridItem, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Sidebar } from "../../components/Sidebar";
+import { Search } from "../Header/Search";
 
 interface AppContainerProps {
   children: ReactNode;
@@ -9,15 +10,32 @@ interface AppContainerProps {
 export default function AppContainer({ children }: AppContainerProps) {
   return (
     <Grid
-    // gridTemplateColumns="200px 1fr"
+      templateColumns="repeat(12, 1fr)"
+      h="100vh"
     >
-      <Sidebar />
-      <VStack
-        p="6"
-        ml="200px"
+      <GridItem
+        colSpan={2}
+        borderRight="1px"
+        borderColor="gray.100"
       >
-        {children}
-      </VStack>
+        <Sidebar />
+      </GridItem>
+      <GridItem colSpan={7}>
+        <VStack
+          p="6"
+        >
+          {children}
+        </VStack>
+      </GridItem>
+      <GridItem
+        colSpan={3}
+        borderLeft="1px"
+        borderColor="gray.100"
+      >
+        <Flex direction="column">
+
+        </Flex>
+      </GridItem>
     </Grid>
   )
 }

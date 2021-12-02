@@ -8,29 +8,33 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
+  email     String @unique
+  telephone String
+  password  String
+
+  roles           Role             @default(user)
+  token           String?
+  meets           MeetEnrollment[]
+  userPreferences UserPreferences?
+
+  createdAt DateTime @default(now())
+}
+
+model Mentor {
+  id String @id @default(uuid())
+
   email     String  @unique
   telephone String
   password  String
-  roles     Role
-  token     String?
-  meets     Meets[]
-
-  created_at  DateTime     @default(now())
-  UserProfile UserProfile?
-}
-
-model UserProfile {
-  id        String  @id @default(uuid())
   name      String?
   image     String?
   position  String?
   biography String?
 
-  user_preferences UserPreferences?
-
-  user_id String @unique
-  user    User   @relation(fields: [user_id], references: [id])
+  meet           Meet[]
+  meetEnrollment MeetEnrollment[]
+  roles          Role             @default(mentor)
 }
 
 enum Role {
@@ -44,16 +48,16 @@ model UserPreferences {
 
   categories Category[]
 
-  user_profile_id String      @unique
-  user_profile    UserProfile @relation(fields: [user_profile_id], references: [id])
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Category {
   id   String @id @default(uuid())
   name String
 
-  subcategory     SubCategory[]
-  user_preference UserPreferences[]
+  subcategory    SubCategory[]
+  userPreference UserPreferences[]
 }
 
 model SubCategory {
@@ -63,24 +67,32 @@ model SubCategory {
   categories Category[]
 }
 
-model Meets {
-  id          String    @id @default(uuid())
+model Meet {
+  id          String           @id @default(uuid())
   name        String
-  description String?
+  meetDetails String?
   price       Decimal
-  room        Rooms?
-  review      Reviews[]
+  // Relation Fields
+  reviews     Reviews[]
+  members     MeetEnrollment[]
 
-  user_id String @unique
-  user    User   @relation(fields: [user_id], references: [id])
+  mentorId String @unique
+  mentor   Mentor @relation(fields: [mentorId], references: [id])
 }
 
-model Rooms {
-  id         String @id @default(uuid())
-  meeting_id String
+model MeetEnrollment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  roles     Role
+  room      String?
 
-  meet_id String @unique
-  meet    Meets  @relation(fields: [meet_id], references: [id])
+  // Relation Fields
+  userId   String
+  meetId   String
+  mentorId String
+  user     User   @relation(fields: [userId], references: [id])
+  meet     Meet   @relation(fields: [meetId], references: [id])
+  mentor   Mentor @relation(fields: [mentorId], references: [id])
 }
 
 model Reviews {
@@ -89,6 +101,6 @@ model Reviews {
   title       String?
   description String
 
-  meet_id String @unique
-  meet    Meets  @relation(fields: [meet_id], references: [id])
+  meetId String @unique
+  meet   Meet   @relation(fields: [meetId], references: [id])
 }

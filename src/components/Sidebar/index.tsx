@@ -30,13 +30,14 @@ export function Sidebar() {
   return (
     <Box
       as="aside"
-      borderRight="1px"
-      borderColor="gray.100"
       h="100%"
       position="fixed"
-      p="6"
+      px="10"
+      pt="4"
     >
-      <Logo />
+      <Box mb="4">
+        <Logo />
+      </Box>
       <SidebarNav />
     </Box>
   );
