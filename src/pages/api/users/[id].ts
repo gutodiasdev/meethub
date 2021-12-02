@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { useRouter } from 'next/router'
 import prisma from '../../../lib/utils/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,8 +8,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       where: {
         id: req.query.id.toString(),
       },
-      include: {
-        UserProfile: true,
+      select: {
+        id: true,
+        email: true,
+        roles: true,
+        userPreferences: true,
+        telephone: true,
       }
     })
 
@@ -19,10 +22,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === 'PUT') {
-    // TODO
+    const response = await prisma.user.update({
+      where: {
+        id: req.query.id.toString(),
+      },
+      data: {
+        email: req.body.email,
+        password: req.body.password,
+        telephone: req.body.telephone,
+      }
+    })
   }
   if (req.method === 'DELETE') {
-    // TODO
+    const response = await prisma.user.delete({
+      where: {
+        id: req.query.id.toString(),
+      }
+    })
   }
 
 

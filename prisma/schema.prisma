@@ -8,7 +8,8 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
+  id String @id @default(uuid())
+
   email     String @unique
   telephone String
   password  String
@@ -31,10 +32,78 @@ model Mentor {
   image     String?
   position  String?
   biography String?
+  token     String?
 
-  meet           Meet[]
+  categories     Category[]
+  meets          Meet[]
   meetEnrollment MeetEnrollment[]
   roles          Role             @default(mentor)
+}
+
+model Meet {
+  id          String           @id @default(uuid())
+  name        String
+  meetDetails String?
+  price       Decimal
+  // Relation Fields
+  reviews     Reviews[]
+  members     MeetEnrollment[]
+
+  mentorId String @unique
+  mentor   Mentor @relation(fields: [mentorId], references: [id])
+}
+
+model MeetEnrollment {
+  id         String           @id @default(uuid())
+  createdAt  DateTime         @default(now())
+  roles      Role
+  room       String?
+  transition MeetTransaction?
+
+  // Relation Fields
+  userId   String
+  meetId   String
+  mentorId String
+  user     User   @relation(fields: [userId], references: [id])
+  meet     Meet   @relation(fields: [meetId], references: [id])
+  mentor   Mentor @relation(fields: [mentorId], references: [id])
+}
+
+model MeetTransaction {
+  id String @id @default(uuid())
+
+  status                 String
+  refse_reason           String
+  status_reason          String
+  acquirer_response_code String
+  acquirer_name          String
+  acquirer_id            String
+  authorization_code     String
+  date_created           String
+  date_updated           String
+  amount                 Int
+  authorized_amount      Int
+  paid_amount            Int
+  refunded_amount        Int
+  installments           Int
+  cost                   Int
+  card_holder_name       String
+  card_last_digits       String
+  card_first_digits      String
+  card_brand             String
+  card_pin_mode          String
+  postback_url           String
+  payment_method         String
+  capture_method         String
+  antifraud_score        String
+  boleto_url             String
+  boleto_barcode         String
+  boleto_expiration_date String
+  referer                String
+  email                  String
+
+  meetEnrollmentId String         @unique
+  meetEnrollment   MeetEnrollment @relation(fields: [meetEnrollmentId], references: [id])
 }
 
 enum Role {
@@ -58,6 +127,8 @@ model Category {
 
   subCategory    SubCategory?
   userPreference UserPreferences[]
+  Mentor         Mentor?           @relation(fields: [mentorId], references: [id])
+  mentorId       String?
 }
 
 model SubCategory {
@@ -66,34 +137,6 @@ model SubCategory {
 
   categoryId String   @unique
   category   Category @relation(fields: [categoryId], references: [id])
-}
-
-model Meet {
-  id          String           @id @default(uuid())
-  name        String
-  meetDetails String?
-  price       Decimal
-  // Relation Fields
-  reviews     Reviews[]
-  members     MeetEnrollment[]
-
-  mentorId String @unique
-  mentor   Mentor @relation(fields: [mentorId], references: [id])
-}
-
-model MeetEnrollment {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  roles     Role
-  room      String?
-
-  // Relation Fields
-  userId   String
-  meetId   String
-  mentorId String
-  user     User   @relation(fields: [userId], references: [id])
-  meet     Meet   @relation(fields: [meetId], references: [id])
-  mentor   Mentor @relation(fields: [mentorId], references: [id])
 }
 
 model Reviews {
