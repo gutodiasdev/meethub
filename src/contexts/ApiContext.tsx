@@ -32,7 +32,7 @@ export function ApiProvider({ children }: AuthProviderProps) {
   async function createUser({ email, password, telephone, roles = "user" }: CreateUserCredentials) {
     const userRoles = roles
     try {
-      const response = await api.post('users/create', {
+      const response = await api.post('users', {
         email: email,
         password: password,
         telephone: telephone,
