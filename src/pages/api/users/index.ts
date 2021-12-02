@@ -35,7 +35,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(201).json(userData)
   }
   if (req.method === 'GET') {
-    const allUsers = await
+    const allUsers = await prisma.user.findMany({})
+
+    return res.status(200).json(allUsers)
   }
 
 
