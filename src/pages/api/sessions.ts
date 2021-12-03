@@ -35,12 +35,14 @@ const handler = async (request, response) => {
 
   const { token, refreshToken } = await generateJwtAndRefreshToken(email, {
     roles: user.roles,
+    permissions: user.permissions,
   })
 
   return response.json({
     token,
     refreshToken,
     roles: user.roles,
+    permissions: user.permissions,
     email,
   });
 }

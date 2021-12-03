@@ -1,4 +1,5 @@
-import pmClient from '../../../services/pagarme/pagarmeClient';
+import prisma from '../../../../lib/utils/prisma';
+import pmClient from '../../../../services/pagarme/pagarmeClient';
 
 export default async (req, res) => {
   if (req.method !== 'POST') {
@@ -6,7 +7,7 @@ export default async (req, res) => {
   }
 
   try {
-    pmClient.transactions.create({
+    const transaction = pmClient.transactions.create({
       "amount": req.body.amount,
       "card_number": req.body.cardNumber,
       "card_cvv": req.body.card_cvv,
@@ -36,7 +37,7 @@ export default async (req, res) => {
           "city": req.body.city,
           "neighborhood": req.body.neighborhood,
           "street": req.body.street,
-          "street_number": req.body.streeNum,
+          "street_number": req.body.streetNumber,
           "zipcode": req.body.zipcode
         }
       },
@@ -50,6 +51,11 @@ export default async (req, res) => {
         },
       ]
     })
+
+    if (!transaction) {
+      return res.status(417).json({ message: 'Error' })
+    }
+
   } catch (error) {
     console.log(error)
   }

@@ -24,22 +24,6 @@ const checkAuthMiddleware = (handler) => {
       //verify token
       const decoded = jwt.verify(token as string, process.env.AUTH_SECRET)
 
-      // const currentUser = await prisma.user.findUnique({
-      //   where: {
-      //     email: decoded.sub,
-      //   },
-      //   select: {
-      //     email: true,
-      //   }
-      // })
-
-      // if (!currentUser) {
-      //   return response.status(401).json({
-      //     success: false,
-      //     message: 'The user belonging to this token no longer exist.',
-      //   });
-      // }
-
       request.user = decoded.sub;
 
       return handler(request, response)

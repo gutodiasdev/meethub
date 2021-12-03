@@ -1,82 +1,68 @@
-import { Box, Flex, Heading, Divider, VStack, SimpleGrid, Select, FormLabel, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Box, Flex, Heading, Divider, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
 
-import { Header } from '../../../components/Header';
-import { Sidebar } from '../../../components/Sidebar';
 import { Input } from '../../../components/Forms/Input';
-import { queryClient } from '../../../services/query/queryClient';
 import { api } from '../../../services/apiClient';
+import AppContainer from '../../../components/AppContainer';
+import Router from 'next/router';
 
-type CreateUserFormData = {
+type CreateMentorFormData = {
   name: string;
   email: string;
   password: string;
   telephone: string;
-  role: string;
   position?: string;
   biography?: string;
 }
 
-const createUserFormSchema = yup.object().shape({
+const createMentorFormSchema = yup.object().shape({
   name: yup.string().required('Nome do usuário é obrigatório'),
   email: yup.string().required('E-mail do usuário é obrigatório').email('E-mail inválido'),
   password: yup.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
   telephone: yup.string().required('Telefone é obrigatório').min(11, 'No mínimo 11 caracteres'),
-  role: yup.string().required('Tipo de usuário é obrigatório'),
   position: yup.string(),
   biography: yup.string()
 })
 
-export default function CreateUser() {
-  const router = useRouter()
-
-  const createUser = useMutation(async (user: CreateUserFormData) => {
-    const response = await api.post('/users', {
-      user: {
-        ...user,
-        created_at: new Date(),
-      }
-    })
-
-    return response.data.user;
-  }, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('user');
-    }
-  });
-
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-    resolver: yupResolver(createUserFormSchema)
+export default function CreateMentor() {
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(createMentorFormSchema)
   })
 
-  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
-    await createUser.mutateAsync(values);
+  const { errors, isSubmitting } = formState
 
-    router.push('/users')
+  const handleCreateMentor: SubmitHandler<CreateMentorFormData> = async (values) => {
+    const response = await api.post('/admin/mentors', {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      position: values.position,
+      telephone: values.telephone,
+      biography: values.biography,
+    })
+
+    if (response.status === 201) {
+      Router.push('/app/mentores')
+    }
   }
 
   return (
-    <Box>
-      <Header />
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <Sidebar />
+    <AppContainer>
+      <Flex w="100%" maxWidth={1480} mx="auto">
         <Box
           as="form"
           flex="1"
           borderRadius="8"
           bg="white"
-          p={["6", "8"]}
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleCreateMentor)}
         >
-          <Heading size="lg" fontWeight="normal">Criar usuário</Heading>
+          <Heading size="lg" fontWeight="normal">Criar mentor</Heading>
           <Divider my="6" borderColor="gray.200" />
           <VStack spacing="8">
-            <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
+            <SimpleGrid spacing={["6", "8"]} w="100%">
               <Input
                 id="name"
                 name="name"
@@ -94,7 +80,7 @@ export default function CreateUser() {
                 error={errors.email}
               />
             </SimpleGrid>
-            <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
+            <SimpleGrid spacing={["6", "8"]} w="100%">
               <Input
                 id="password"
                 name="password"
@@ -104,22 +90,9 @@ export default function CreateUser() {
                 error={errors.password}
               />
               <Box>
-                <FormLabel>Tipo de usuário</FormLabel>
-                <Select
-                  variant="filled"
-                  h={12}
-                  name="role"
-                  id="role"
-                  {...register('role')}
-                  error={errors.role}
-                >
-                  <option value="USER">Assinante</option>
-                  <option value="MENTOR">Mentor</option>
-                  <option value="ADMIN">Administrador</option>
-                </Select>
               </Box>
             </SimpleGrid>
-            <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
+            <SimpleGrid spacing="8" w="100%">
               <Box>
                 <Input
                   id="position"
@@ -142,7 +115,7 @@ export default function CreateUser() {
                 />
               </Box>
             </SimpleGrid>
-            <VStack minChildWidth="240px" w="100%" justify="flex-start">
+            <VStack w="100%" justify="flex-start">
               <FormLabel htmlFor="biography">Bio do mentor</FormLabel>
               <Textarea
                 focusBorderColor="blue.500"
@@ -184,7 +157,7 @@ export default function CreateUser() {
           </Flex>
         </Box>
       </Flex >
-    </Box >
+    </AppContainer>
   );
 }
 

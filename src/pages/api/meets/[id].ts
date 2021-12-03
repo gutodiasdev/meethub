@@ -12,15 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         name: true,
         meetDetails: true,
         price: true,
-        mentor: {
-          select: {
-            id: true,
-            position: true,
-            name: true,
-            email: true,
-            telephone: true,
-          }
-        }
+        members: true,
       }
     })
 

@@ -1,6 +1,7 @@
 import { Grid, VStack, GridItem, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Sidebar } from "../../components/Sidebar";
+import { Profile } from "../Header/Profile";
 import { Search } from "../Header/Search";
 
 interface AppContainerProps {
@@ -32,8 +33,13 @@ export default function AppContainer({ children }: AppContainerProps) {
         borderLeft="1px"
         borderColor="gray.100"
       >
-        <Flex direction="column">
-
+        <Flex
+          p="4"
+          borderBottom="1px"
+          borderColor="gray.100"
+          justify="flex-end"
+        >
+          <Profile />
         </Flex>
       </GridItem>
     </Grid>

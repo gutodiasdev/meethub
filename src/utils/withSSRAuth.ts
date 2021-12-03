@@ -6,6 +6,7 @@ import { validateUserPermissions } from "./validateUserPermissions";
 
 type WithSSRAuthOption = {
   roles?: string[];
+  permissions?: string[];
 }
 
 export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthOption) {
@@ -26,11 +27,12 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
     if (options) {
       const user = decode<{ roles: string[] }>(token);
 
-      const { roles } = options
+      const { roles, permissions } = options
 
       const userHasValidPermissions = validateUserPermissions({
         user,
         roles,
+        permissions,
       })
 
       if (!userHasValidPermissions) {

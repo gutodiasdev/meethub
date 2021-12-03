@@ -8,6 +8,7 @@ type User = {
   roles?: string;
 }
 
+
 type CreateUserCredentials = {
   email: string;
   password: string;
@@ -63,6 +64,7 @@ export function ApiProvider({ children }: AuthProviderProps) {
       console.log(error)
     }
   }
+
 
   return (
     <ApiContext.Provider value={{ createUser, user }}>

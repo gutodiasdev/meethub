@@ -19,11 +19,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       select: {
         id: true,
         roles: true,
+        permissions: true,
       }
     })
 
     const { token, refreshToken } = await generateJwtAndRefreshToken(email, {
       role: user.roles,
+      permissions: user.permissions,
     })
 
     const userData = {
@@ -36,15 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === 'GET') {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        telephone: true,
-        email: true,
-        roles: true,
-        userPreferences: true,
-      }
-    })
+    const users = await prisma.user.findMany()
 
     return res.status(200).json(users)
   }

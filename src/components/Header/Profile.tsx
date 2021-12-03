@@ -25,7 +25,6 @@ export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
             fontSize="small"
             color="gray.400"
           >
-            {userEmail}
           </Text>
           <Link
             onClick={signOut}
@@ -37,7 +36,7 @@ export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
         </Flex>
       )}
 
-      <Avatar size="md" name="Augusto Dias" />
+      <Avatar size="md" />
     </Flex>
   );
 }

@@ -8,26 +8,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         name: req.body.name,
         price: req.body.price,
         meetDetails: req.body.meetDetails,
-        mentorId: req.body.mentorId,
-      }
+        members: {
+          create: {
+            roles: 'mentor',
+            user: {
+              connect: {
+                email: req.body.email,
+              }
+            }
+          }
+        }
+      },
     })
 
     return res.status(201).json(meet)
   }
   if (req.method === 'GET') {
-    const allMeets = await prisma.meet.findMany({
-      select: {
-        id: true,
-        mentor: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            position: true,
-          }
-        }
-      }
-    })
+    const allMeets = await prisma.meet.findMany()
 
     return res.status(200).json(allMeets)
   }

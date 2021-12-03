@@ -1,5 +1,7 @@
 import pagarme from 'pagarme';
 
-const pmClient = pagarme.cliente.connect({ encryption_key: "ek_test_qZLIhncZIHTFIEkWHUQILzCmjqJbVk" })
+const pmClient = pagarme.cliente.connect({
+  api_key: process.env.PAGAR_ME_TEST_API_KEY
+})
 
 export default pmClient

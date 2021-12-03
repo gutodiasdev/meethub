@@ -14,30 +14,18 @@ model User {
   telephone String
   password  String
 
-  roles           Role             @default(user)
+  name      String?
+  image     String?
+  position  String?
+  biography String?
+
+  roles           Role
+  permissions     Permission       @default(user)
   token           String?
   meets           MeetEnrollment[]
   userPreferences UserPreferences?
 
   createdAt DateTime @default(now())
-}
-
-model Mentor {
-  id String @id @default(uuid())
-
-  email     String  @unique
-  telephone String
-  password  String
-  name      String?
-  image     String?
-  position  String?
-  biography String?
-  token     String?
-
-  categories     Category[]
-  meets          Meet[]
-  meetEnrollment MeetEnrollment[]
-  roles          Role             @default(mentor)
 }
 
 model Meet {
@@ -48,25 +36,22 @@ model Meet {
   // Relation Fields
   reviews     Reviews[]
   members     MeetEnrollment[]
-
-  mentorId String @unique
-  mentor   Mentor @relation(fields: [mentorId], references: [id])
 }
 
 model MeetEnrollment {
-  id         String           @id @default(uuid())
-  createdAt  DateTime         @default(now())
-  roles      Role
-  room       String?
-  transition MeetTransaction?
+  createdAt DateTime @default(now())
+  roles     Role
+  room      String?
 
   // Relation Fields
-  userId   String
-  meetId   String
-  mentorId String
-  user     User   @relation(fields: [userId], references: [id])
-  meet     Meet   @relation(fields: [meetId], references: [id])
-  mentor   Mentor @relation(fields: [mentorId], references: [id])
+  userId            String
+  user              User             @relation(fields: [userId], references: [id])
+  meetId            String
+  meet              Meet             @relation(fields: [meetId], references: [id])
+  meetTransactionId String?
+  meetTransaction   MeetTransaction? @relation(fields: [meetTransactionId], references: [id])
+  @@id([userId, meetId])
+  @@index([userId, roles])
 }
 
 model MeetTransaction {
@@ -101,13 +86,16 @@ model MeetTransaction {
   boleto_expiration_date String
   referer                String
   email                  String
-
-  meetEnrollmentId String         @unique
-  meetEnrollment   MeetEnrollment @relation(fields: [meetEnrollmentId], references: [id])
+  MeetEnrollment         MeetEnrollment[]
 }
 
 enum Role {
   administrator
+  user
+  mentor
+}
+
+enum Permission {
   user
   mentor
 }
@@ -127,8 +115,6 @@ model Category {
 
   subCategory    SubCategory?
   userPreference UserPreferences[]
-  Mentor         Mentor?           @relation(fields: [mentorId], references: [id])
-  mentorId       String?
 }
 
 model SubCategory {

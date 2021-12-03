@@ -1,4 +1,4 @@
-import { Center, Box, Avatar, Heading, Flex, Text, HStack, Tag, Tabs, TabList, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
+import { Box, Heading, Flex, Text, HStack, Tag, Tabs, TabList, Tab, TabPanel, TabPanels, Button } from '@chakra-ui/react'
 import { setupAPIClient } from "../../../services/api";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 import AppContainer from "../../../components/AppContainer";
@@ -16,7 +16,7 @@ const Meet = ({ meet }) => {
         borderColor="gray.100"
         borderRadius="8"
         width="100%"
-        p="8"
+        p="4"
       >
         <Box
           flex="1"
@@ -37,9 +37,19 @@ const Meet = ({ meet }) => {
           <Text
             color="gray.500"
           >
-            {meets.description}</Text>
+            {meets.meetDetails}</Text>
         </Box>
 
+      </Flex>
+      <Flex width="100%" justify="flex-end">
+        <Button
+          as="a"
+          href={`agendar/${meets.id}`}
+          colorScheme="blue"
+          size="lg"
+        >
+          Agendar um meet
+        </Button>
       </Flex>
       <Flex width="100%" pt="4">
         <Tabs variant="enclosed" width="100%" >
@@ -74,10 +84,8 @@ const Meet = ({ meet }) => {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
-  const { id } = ctx.query;
-  const parsedId = id.toString()
   const apiClient = setupAPIClient(ctx);
-  const response = await apiClient.get(`meets/${parsedId}`);
+  const response = await apiClient.get(`meets/${ctx.query.id}`);
 
   console.log(response.data);
 
