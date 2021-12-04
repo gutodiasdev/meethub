@@ -3,6 +3,7 @@ import prisma from "../../../../lib/utils/prisma"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
+
     const iAmMentor = await prisma.meet.findMany({
       where: {
         members: {
@@ -21,8 +22,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const iAmUser = await prisma.meet.findMany({
       where: {
         members: {
-          every: {
-            roles: 'user'
+          some: {
+            roles: 'user',
           }
         }
       }

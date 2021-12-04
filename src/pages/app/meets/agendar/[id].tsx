@@ -67,7 +67,7 @@ const Meet = ({ meet }) => {
 
     const data = {
       userRole: "user",
-      endDate: "2021-12-03T13:30:00", //TODO - TEMPORARY
+      endDate: "2021-12-04T13:30:00", //TODO - TEMPORARY
       amount: meetPrice,
       cardNumber: values.cardNumber,
       cardCvv: values.cardCvv,

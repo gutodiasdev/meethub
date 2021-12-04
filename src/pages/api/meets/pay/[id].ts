@@ -13,9 +13,6 @@ const api = axios.create({
   }
 })
 
-const client = pagarme.client.connect({ api_key: 'ak_test_YEFfXjb6pcktWWpYys2PT1HZfBSqcs' })
-
-
 export default async (req, res) => {
   const {
     amount,
@@ -40,7 +37,8 @@ export default async (req, res) => {
     meetId,
     meetName,
     unitPrice,
-    meetQuantity
+    meetQuantity,
+    endDate,
   } = req.body;
 
   if (req.method === 'POST') {
@@ -88,11 +86,53 @@ export default async (req, res) => {
           }
         ]
       }))
-      .then(transaction => {
+      .then(async (transaction) => {
 
+        // const {
+        //   acquirer_id,
+        //   acquirer_name,
+        //   acquirer_response_code,
+        //   amount,
+        //   antifraud_score,
+        //   authorization_code,
+        //   authorized_amount,
+        //   boleto_barcode,
+        //   boleto_expiration_date,
+        //   boleto_url,
+        //   capture_method,
+        //   card_brand,
+        //   card_first_digits,
+        //   card_holder_name,
+        //   card_last_digits,
+        //   card_pin_mode,
+        //   cost,
+        //   date_created,
+        //   date_updated,
+        //   email,
+        //   installments,
+        //   paid_amount,
+        //   payment_method,
+        //   postback_url,
+        //   referer,
+        //   refse_reason,
+        //   refunded_amount,
+        //   status,
+        //   status_reason,
+        // } = transaction
 
+        const roomUrl = await api.post('/', { endDate })
+          .then(async (response) => {
+            const { roomUrl } = response.data;
 
-
+            await prisma.meetEnrollment.create({
+              data: {
+                meetId: meetId,
+                roles: 'user',
+                room: roomUrl,
+                userId: userId,
+              },
+            })
+          })
 
         res.status(200).json(transaction)
       })

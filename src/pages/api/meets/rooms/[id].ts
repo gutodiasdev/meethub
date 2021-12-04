@@ -8,11 +8,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         id: req.query.id.toString(),
       },
       select: {
-        id: true,
-        name: true,
-        meetDetails: true,
-        price: true,
-        members: true,
+        members: {
+          where: {
+            roles: 'user'
+          }
+        }
       }
     })
 

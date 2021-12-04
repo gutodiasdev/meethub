@@ -3,7 +3,7 @@ import { setupAPIClient } from "../../../../services/api";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
 import { Flex, Center, Avatar, Box, HStack, Heading, Tag, Text, Button, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 
-export default function MyMeets({ meet }) {
+export default function MyMeets({ asUser, asMentor }) {
 
   return (
     <AppContainer>
@@ -16,7 +16,7 @@ export default function MyMeets({ meet }) {
 
           <TabPanels>
             <TabPanel>
-              {meet.asUser.map(meetItem => {
+              {asUser.map(meetItem => {
                 return (
                   <Flex
                     cursor="pointer"
@@ -57,9 +57,8 @@ export default function MyMeets({ meet }) {
                     </Box>
                     <Button
                       as="a"
-                      href={`/app/meets/room/${meet.room}`}
+                      href={`/app/meets/room/${meetItem.id}`}
                       colorScheme="blue"
-                      disabled
                     >
                       Entrar na sala
                     </Button>
@@ -68,7 +67,7 @@ export default function MyMeets({ meet }) {
               })}
             </TabPanel>
             <TabPanel>
-              {meet.asMentor.map(meetItem => {
+              {asMentor.map(meetItem => {
                 return (
                   <Flex
                     cursor="pointer"
@@ -126,7 +125,8 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
 
   return {
     props: {
-      meet: response.data
+      asMentor: response.data.asMentor,
+      asUser: response.data.asUser,
     }
   }
 })
