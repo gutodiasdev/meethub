@@ -42,6 +42,7 @@ const handler = async (request, response) => {
     token,
     refreshToken,
     roles: user.roles,
+    id: user.id,
     permissions: user.permissions,
     email,
   });

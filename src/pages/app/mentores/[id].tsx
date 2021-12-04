@@ -63,7 +63,7 @@ const Meet = ({ mentor }) => {
               Reviews
             </TabPanel>
             <TabPanel>
-              {mentor.biography}
+              {mentors.biography}
             </TabPanel>
           </TabPanels>
         </Tabs>

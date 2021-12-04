@@ -25,6 +25,7 @@ const handler = async (request, response) => {
   return response.json({
     email: user.email,
     roles: user.roles,
+    id: user.id,
   })
 }
 

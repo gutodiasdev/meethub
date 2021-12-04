@@ -1,12 +1,15 @@
 import { Stack, } from "@chakra-ui/react";
 import { RiAddLine, RiCalendarTodoLine, RiContactsLine, RiDashboardLine, RiTeamLine, RiVideoChatLine } from "react-icons/ri";
 import { CgProfile } from 'react-icons/cg';
-import { WhoCanUse } from "../WhoCanUse";
 
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useContext } from "react";
 
 export function SidebarNav() {
+  const { user } = useContext(AuthContext)
+
   return (
     <Stack
       spacing="6"
@@ -18,7 +21,7 @@ export function SidebarNav() {
       </NavSection>
       <NavSection title="MEETS">
         <NavLink icon={RiAddLine} href="/app/meets/novo">Adicionar novo</NavLink>
-        <NavLink icon={RiVideoChatLine} href="/app/meets/meus">Meus meets</NavLink>
+        <NavLink icon={RiVideoChatLine} href={`/app/meets/meus/`}>Meus meets</NavLink>
       </NavSection>
       <NavSection title="PERFIL">
         <NavLink icon={RiCalendarTodoLine} href="/app/mentores/agenda">Minha agenda</NavLink>
@@ -27,3 +30,5 @@ export function SidebarNav() {
     </Stack>
   );
 }
+
+// ${user.id}
