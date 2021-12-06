@@ -26,6 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     const allMeets = await prisma.meet.findMany()
 
+
     return res.status(200).json(allMeets)
   }
 

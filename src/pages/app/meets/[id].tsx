@@ -8,6 +8,9 @@ import { useState } from "react";
 const Meet = ({ meet }) => {
   const [meets, setMeets] = useState(meet);
 
+  console.log(meet);
+  console.log(meets);
+
   return (
     <AppContainer>
       <Flex

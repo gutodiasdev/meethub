@@ -7,6 +7,7 @@ type User = {
   email: string;
   id: string;
   roles: string[];
+  permissions: string[];
 }
 
 type SignInCredentials = {
@@ -68,9 +69,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (token) {
       api.get('/me')
         .then(response => {
-          const { email, roles, id } = response.data
+          const { email, roles, id, permissions } = response.data
 
-          setUser({ email, roles, id })
+          setUser({ email, roles, id, permissions })
         })
         .catch(() => {
           signOut()
@@ -85,7 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password: password,
       })
 
-      const { token, refreshToken, roles, id } = response.data
+      const { token, refreshToken, roles, id, permissions } = response.data
 
       setCookie(undefined, 'meethub.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -97,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         path: '/'
       })
 
-      setUser({ email, roles, id })
+      setUser({ email, roles, id, permissions })
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`
 
@@ -114,7 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password: password,
         telephone: telephone,
       })
-      const { token, refreshToken, roles, id } = response.data
+      const { token, refreshToken, roles, id, permissions } = response.data
 
       setCookie(undefined, 'meethub.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -129,7 +130,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser({
         email,
         roles,
-        id
+        id,
+        permissions
       })
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`

@@ -1,5 +1,6 @@
 type User = {
-  roles: string[];
+  roles?: string[];
+  permissions?: string[];
 }
 
 type ValidateUserPermissionsParams = {
@@ -18,9 +19,10 @@ export function validateUserPermissions({ user, roles, permissions }: ValidateUs
       return false;
     }
   }
+  
   if (permissions?.length > 0) {
-    const hasAllPermissions = permissions.some(permission => {
-      return user.roles.includes(permission);
+    const hasAllPermissions = permissions.every(permission => {
+      return user.permissions.includes(permission);
     })
 
     if (!hasAllPermissions) {

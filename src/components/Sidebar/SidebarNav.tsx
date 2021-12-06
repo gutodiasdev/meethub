@@ -4,11 +4,8 @@ import { CgProfile } from 'react-icons/cg';
 
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
-import { AuthContext } from "../../contexts/AuthContext";
-import { useContext } from "react";
 
 export function SidebarNav() {
-  const { user } = useContext(AuthContext)
 
   return (
     <Stack
@@ -21,11 +18,11 @@ export function SidebarNav() {
       </NavSection>
       <NavSection title="MEETS">
         <NavLink icon={RiAddLine} href="/app/meets/novo">Adicionar novo</NavLink>
-        <NavLink icon={RiVideoChatLine} href={`/app/meets/meus/`}>Meus meets</NavLink>
+        <NavLink icon={RiVideoChatLine} href={`/app/meets/meus-meets/`}>Meus meets</NavLink>
       </NavSection>
       <NavSection title="PERFIL">
-        <NavLink icon={RiCalendarTodoLine} href="/app/mentores/agenda">Minha agenda</NavLink>
-        <NavLink icon={CgProfile} href="/app/usuarios/perfil">Meu perfil</NavLink>
+        <NavLink icon={RiCalendarTodoLine} href="/app/mentores/minha-agenda">Minha agenda</NavLink>
+        <NavLink icon={CgProfile} href="/app/meu-perfil">Meu perfil</NavLink>
       </NavSection>
     </Stack>
   );

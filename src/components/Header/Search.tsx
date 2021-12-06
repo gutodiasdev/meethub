@@ -8,19 +8,19 @@ export function Search() {
       as="label"
       flex="1"
       py="4"
-      px="8"
-      ml="6"
+      px={4}
+      mb={6}
       maxWidth={400}
       alignSelf="center"
       color="gray.900"
       position="relative"
-      bgColor="gray.100"
-      borderRadius="full"
+      border="1px"
+      borderColor="gray.200"
+      borderRadius="8px"
     >
       <Input
         color="gray.900"
         variant="unstyled"
-        px="4"
         mr="4"
         placeholder="Buscar na plataforma"
         _placeholder={{

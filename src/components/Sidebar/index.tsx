@@ -35,7 +35,7 @@ export function Sidebar() {
       px="10"
       pt="4"
     >
-      <Box mb="4">
+      <Box as="a" href="/app" mb="4">
         <Logo />
       </Box>
       <SidebarNav />

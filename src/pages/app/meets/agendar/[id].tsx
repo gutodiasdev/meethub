@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Flex, Box, HStack, Tag, Heading, Text, Center, Grid, GridItem, Button } from '@chakra-ui/react';
+import { Flex, Box, HStack, Tag, Heading, Text, Center, Grid, GridItem, Button , Select, FormControl, FormLabel} from '@chakra-ui/react';
 
 import { setupAPIClient } from "../../../../services/api";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
@@ -67,7 +67,7 @@ const Meet = ({ meet }) => {
 
     const data = {
       userRole: "user",
-      endDate: "2021-12-04T13:30:00", //TODO - TEMPORARY
+      endDate: "2021-12-06T15:30:00", //TODO - TEMPORARY
       amount: meetPrice,
       cardNumber: values.cardNumber,
       cardCvv: values.cardCvv,
@@ -77,7 +77,7 @@ const Meet = ({ meet }) => {
       userId: user.id,
       userName: values.userName,
       type: "individual",
-      country: values.country,
+      country: "br",  //TODO Country Switcher values.country
       userEmail: values.userEmail,
       // document
       documentType: "cpf",
@@ -186,9 +186,29 @@ const Meet = ({ meet }) => {
           </Center>
         )}
       </HStack>
-      <Flex as="form" w="100%" onSubmit={handleSubmit(handleCheckout)}>
-        <Grid w="100%" templateColumns="repeat(2, 1fr)">
-          <GridItem columnSpan={1}>
+
+      <Flex
+        as="form"
+        w="100%"
+        onSubmit={handleSubmit(handleCheckout)}
+        direction="column"
+      >
+        <Heading
+        as="span"
+        size="md"
+        fontWeight='thin'
+        textAlign="left"
+        color="gray.400"
+        py={4}
+        >
+        Dados do comprador
+        </Heading>
+        <Grid
+          w="100%"
+          templateColumns="repeat(2, 1fr)"
+          gap={4}
+        >
+          <GridItem columnSpan={1} >
             <Input
               name="userName"
               id="userName"
@@ -197,8 +217,86 @@ const Meet = ({ meet }) => {
               mb={4}
               {...register('userName')}
             />
+            <Input
+              name="street"
+              id="street"
+              type="text"
+              label="Endereço"
+              mb={4}
+              {...register('street')}
+            />
+            
+            <Input
+              name="streetNumber"
+              id="streetNumber"
+              type="text"
+              label="Número"
+              mb={4}
+              {...register('streetNumber')}
+            />  
+          
+            <Input
+              name="city"
+              id="city"
+              type="text"
+              label="Cidade"
+              mb={4}
+              {...register('city')}
+            />
+
+            <FormControl>
+            <FormLabel for="stateShortname" color="gray.500">Estado</FormLabel>
+            <Select
+              name="stateShortname"
+              id="stateShortname"
+              type="text"
+              mb={4}
+              h={12}
+              variant="filled"
+              width="80px"
+              {...register('stateShortname')}
+            >
+              <option value="ac">AC</option>
+              <option value="al">AL</option>
+              <option value="ap">AP</option>
+              <option value="am">AM</option>
+              <option value="ba">BA</option>
+              <option value="ce">CE</option>
+              <option value="es">ES</option>
+              <option value="go">GO</option>
+              <option value="ma">MA</option>
+              <option value="mt">MT</option>
+              <option value="ms">MS</option>
+              <option value="mg">MG</option>
+              <option value="pa">PA</option>
+              <option value="pb">PB</option>
+              <option value="pr">PR</option>
+              <option value="pe">PE</option>
+              <option value="pi">PI</option>
+              <option value="rj">RJ</option>
+              <option value="rn">RN</option>
+              <option value="rs">RS</option>
+              <option value="ro">RO</option>
+              <option value="rr">RR</option>
+              <option value="rs">SC</option>
+              <option value="sp">SP</option>
+              <option value="se">SE</option>
+              <option value="to">TO</option>
+              <option value="df">DF</option>
+            </Select>
+            </FormControl>
 
             <Input
+              name="userEmail"
+              id="userEmail"
+              type="text"
+              label="Email"
+              mb={4}
+              {...register('userEmail')}
+            />
+          </GridItem>
+          <GridItem columnSpan={1}>
+          <Input
               name="documentNumber"
               id="documentNumber"
               type="text"
@@ -206,7 +304,7 @@ const Meet = ({ meet }) => {
               mb={4}
               {...register('documentNumber')}
             />
-            <Input
+             <Input
               name="country"
               id="country"
               type="text"
@@ -223,44 +321,12 @@ const Meet = ({ meet }) => {
               {...register('zipcode')}
             />
             <Input
-              name="street"
-              id="street"
-              type="text"
-              label="Endereço"
-              mb={4}
-              {...register('street')}
-            />
-            <Input
-              name="streetNumber"
-              id="streetNumber"
-              type="text"
-              label="Número"
-              mb={4}
-              {...register('streetNumber')}
-            />
-            <Input
-              name="city"
-              id="city"
-              type="text"
-              label="Cidade"
-              mb={4}
-              {...register('city')}
-            />
-            <Input
               name="neighborhood"
               id="neighborhood"
               type="text"
               label="Bairro"
               mb={4}
               {...register('neighborhood')}
-            />
-            <Input
-              name="stateShortname"
-              id="stateShortname"
-              type="text"
-              label="Estado"
-              mb={4}
-              {...register('stateShortname')}
             />
             <Input
               name="phoneNumbers"
@@ -270,20 +336,26 @@ const Meet = ({ meet }) => {
               mb={4}
               {...register('phoneNumbers')}
             />
-            <Input
-              name="userEmail"
-              id="userEmail"
-              type="text"
-              label="Email"
-              mb={4}
-              {...register('userEmail')}
-            />
-            <GridItem columnSpan={1}>
+          </GridItem>
+        </Grid>
+        <Heading
+        as="span"
+        size="md"
+        fontWeight='thin'
+        textAlign="left"
+        color="gray.400"
+        py={4}
+        >
+        Dados de pagamento
+        </Heading>
+        <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+        <GridItem columnSpan={1}>
               <Input
                 name="cardHolderName"
                 id="cardHolderName"
                 type="text"
                 label="Nome (como escrito no cartão)"
+                mb={4}
                 {...register('cardHolderName')}
               />
               <Input
@@ -291,10 +363,10 @@ const Meet = ({ meet }) => {
                 id="cardNumber"
                 type="text"
                 label="Número do cartão"
+                mb={4}
                 {...register('cardNumber')}
               />
-            </GridItem>
-            <GridItem columnSpan={1}>
+              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
               <Input
                 name="cardExpirationDate"
                 id="cardExpirationDate"
@@ -309,20 +381,14 @@ const Meet = ({ meet }) => {
                 label="CVV"
                 {...register('cardCvv')}
               />
+              </Grid>
+
             </GridItem>
-          </GridItem>
-          <GridItem columnSpan={1}>
-            {/* "items": [
-            {
-              "id": req.body.meetId,
-            "title": req.body.meetName,
-            "unit_price": req.body.unitPrice,
-            "quantity": req.body.meetQuantity,
-            "tangible": false,
-        },
-            ] */}
-          </GridItem>
+            <GridItem columnSpan={1}>
+
+            </GridItem>
         </Grid>
+
         <Button
           type="submit"
           size="lg"

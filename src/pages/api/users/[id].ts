@@ -30,6 +30,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         email: req.body.email,
         password: req.body.password,
         telephone: req.body.telephone,
+        image: req.body.image,
+        position: req.body.position,
+        biography: req.body.biography,
       }
     })
   }

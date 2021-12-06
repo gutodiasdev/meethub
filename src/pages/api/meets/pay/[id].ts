@@ -88,37 +88,71 @@ export default async (req, res) => {
       }))
       .then(async (transaction) => {
 
-        // const {
-        //   acquirer_id,
-        //   acquirer_name,
-        //   acquirer_response_code,
-        //   amount,
-        //   antifraud_score,
-        //   authorization_code,
-        //   authorized_amount,
-        //   boleto_barcode,
-        //   boleto_expiration_date,
-        //   boleto_url,
-        //   capture_method,
-        //   card_brand,
-        //   card_first_digits,
-        //   card_holder_name,
-        //   card_last_digits,
-        //   card_pin_mode,
-        //   cost,
-        //   date_created,
-        //   date_updated,
-        //   email,
-        //   installments,
-        //   paid_amount,
-        //   payment_method,
-        //   postback_url,
-        //   referer,
-        //   refse_reason,
-        //   refunded_amount,
-        //   status,
-        //   status_reason,
-        // } = transaction
+        const {
+          acquirer_id,
+          acquirer_name,
+          acquirer_response_code,
+          amount,
+          antifraud_score,
+          authorization_code,
+          authorized_amount,
+          boleto_barcode,
+          boleto_expiration_date,
+          boleto_url,
+          capture_method,
+          card_brand,
+          card_first_digits,
+          card_holder_name,
+          card_last_digits,
+          card_pin_mode,
+          cost,
+          date_created,
+          date_updated,
+          email,
+          installments,
+          paid_amount,
+          payment_method,
+          postback_url,
+          referer,
+          refse_reason,
+          refunded_amount,
+          status,
+          status_reason,
+        } = transaction
+
+        // const createMeetTransaction = await prisma.meetTransaction.create({
+        //   data: {
+        //     acquirer_id: acquirer_id,
+        //     acquirer_name: acquirer_name,
+        //     acquirer_response_code: acquirer_response_code,
+        //     amount: amount,
+        //     antifraud_score: antifraud_score,
+        //     authorization_code: authorization_code,
+        //     authorized_amount: authorized_amount,
+        //     boleto_barcode: boleto_barcode,
+        //     boleto_expiration_date: boleto_expiration_date,
+        //     boleto_url: boleto_url,
+        //     capture_method: capture_method,
+        //     card_brand: card_brand,
+        //     card_first_digits: card_first_digits,
+        //     card_holder_name: card_holder_name,
+        //     card_last_digits: card_last_digits,
+        //     card_pin_mode: card_pin_mode,
+        //     cost: cost,
+        //     date_created: date_created,
+        //     date_updated: date_updated,
+        //     email: email,
+        //     installments: installments,
+        //     paid_amount: paid_amount,
+        //     payment_method: payment_method,
+        //     postback_url: postback_url,
+        //     referer: referer,
+        //     refse_reason: refse_reason,
+        //     refunded_amount: refunded_amount,
+        //     status: status,
+        //     status_reason: status_reason,
+        //   }
+        // })
 
         const roomUrl = await api.post('/', { endDate })
           .then(async (response) => {
@@ -130,11 +164,11 @@ export default async (req, res) => {
                 roles: 'user',
                 room: roomUrl,
                 userId: userId,
-              },
+              }
             })
           })
 
-        res.status(200).json(transaction)
+        res.status(200).json( roomUrl)
       })
       .catch(err => console.log(err))
   }
