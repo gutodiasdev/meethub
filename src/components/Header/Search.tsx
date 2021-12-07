@@ -1,9 +1,25 @@
-import { Flex, Input, Icon } from "@chakra-ui/react";
-import { useRef } from "react";
+import { Flex, Input, Icon, Box } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { RiSearchLine } from "react-icons/ri";
+import Select from 'react-select';
+import { setupAPIClient } from "../../services/api";
+import { api } from "../../services/apiClient";
+import { withSSRAuth } from "../../utils/withSSRAuth";
 
-export function Search() {
+export function Search({category}) {
+  // const [categories, setCategories] = useState(category);
+
+
+  // function getCategories() {
+    const info = category.map(cat => {
+      return { value: cat.name , label: cat.name }
+    })
+
+  //   return info;
+  // }
+
   return (
+    <Box w="100%">
     <Flex
       as="label"
       flex="1"
@@ -29,5 +45,19 @@ export function Search() {
       />
       <Icon as={RiSearchLine} fontSize="20" />
     </Flex>
+    <Select options={info} isMulti />
+    </Box>
   );
 }
+
+export const  getServerSideProps = withSSRAuth( async (ctx) => {
+  const apiClient = setupAPIClient(ctx);
+  const response = await apiClient.get('/category')
+
+
+  return { 
+    props: {
+      category: response.data,
+    }
+  }
+}) 

@@ -24,7 +24,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(201).json(meet)
   }
   if (req.method === 'GET') {
-    const allMeets = await prisma.meet.findMany()
+    const allMeets = await prisma.meet.findMany({
+      select: {
+        id: true,
+        name: true,
+        price: true,
+      }
+    })
 
 
     return res.status(200).json(allMeets)

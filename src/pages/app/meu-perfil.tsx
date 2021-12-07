@@ -5,6 +5,7 @@ import AppContainer from "../../components/AppContainer"
 import { Input } from '../../components/Forms/Input'
 import { WhoCanUse } from '../../components/WhoCanUse';
 import { api } from '../../services/apiClient';
+import { withSSRAuth } from '../../utils/withSSRAuth';
 
 type UserData = {
   name?: string;
@@ -28,7 +29,7 @@ export default function () {
       biography: values.biography,
     }
 
-    await api.put('/', data)
+    await api.put(`/users/`, data)
     .then((response) => {
 
     })
@@ -142,7 +143,7 @@ export default function () {
             >
               Cancelar
             </Button>
-            <Button type="submit" colorScheme="blue">Salvar</Button>
+            <Button type="submit" colorScheme="blue" isLoading={formState.isSubmitting}>Salvar</Button>
           </HStack>
         </Box>
       </WhoCanUse>
@@ -150,3 +151,11 @@ export default function () {
     </AppContainer>
   )
 }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  
+  
+  return {
+    props: {}
+  }
+})

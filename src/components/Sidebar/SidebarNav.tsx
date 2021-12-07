@@ -22,10 +22,8 @@ export function SidebarNav() {
       </NavSection>
       <NavSection title="PERFIL">
         <NavLink icon={RiCalendarTodoLine} href="/app/mentores/minha-agenda">Minha agenda</NavLink>
-        <NavLink icon={CgProfile} href="/app/meu-perfil">Meu perfil</NavLink>
+        <NavLink icon={CgProfile} href={`/app/meu-perfil/`}>Meu perfil</NavLink>
       </NavSection>
     </Stack>
   );
 }
-
-// ${user.id}

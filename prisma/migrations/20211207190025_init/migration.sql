@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('administrator', 'user');
+CREATE TYPE "Role" AS ENUM ('administrator', 'user', 'mentor');
 
 -- CreateEnum
 CREATE TYPE "Permission" AS ENUM ('user', 'mentor');
@@ -14,6 +14,7 @@ CREATE TABLE "User" (
     "image" TEXT,
     "position" TEXT,
     "biography" TEXT,
+    "roles" "Role" NOT NULL,
     "permissions" "Permission" NOT NULL DEFAULT E'user',
     "token" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
