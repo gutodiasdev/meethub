@@ -1,4 +1,4 @@
-import { Flex, Stack, Button } from '@chakra-ui/react';
+import { Center, Stack, Button } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useContext } from 'react'
 import * as yup from 'yup';
@@ -33,19 +33,19 @@ export default function UserRegisterForm() {
   const { errors } = formState;
 
   return (
-    <Flex
-
-      direction="column"
-      w={450}
+    <Center
       m="auto"
-      p="8"
-      borderRadius="16px"
-      boxShadow="lg"
+      h="100vh"
     >
       <Stack
         spacing="4"
+        maxW={450}
         as="form"
         onSubmit={handleSubmit(handleCreateUser)}
+        borderRadius="16px"
+        boxShadow="lg"
+        p="8"
+        w="100%"
       >
         <Input
           type="email"
@@ -88,6 +88,6 @@ export default function UserRegisterForm() {
         >
           Cadastrar</Button>
       </Stack>
-    </Flex>
+    </Center>
   )
 }

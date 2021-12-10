@@ -50,6 +50,7 @@ model MeetEnrollment {
   meet              Meet             @relation(fields: [meetId], references: [id])
   meetTransactionId String?
   meetTransaction   MeetTransaction? @relation(fields: [meetTransactionId], references: [id])
+  //TODO: Permissions
   @@id([userId, meetId])
   @@index([userId, roles])
 }

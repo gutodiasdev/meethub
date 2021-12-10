@@ -6,14 +6,14 @@ import { withSSRAuth } from '../../../utils/withSSRAuth';
 
 export default function Meets({ meet }) {
 
-  
+
 
   return (
     <AppContainer>
       <Flex
         w="100%"
       >
-      <Search />
+
       </Flex>
       <VStack
         w="100%"
@@ -47,20 +47,20 @@ export default function Meets({ meet }) {
                     justify="center"
                     ml={2}
                   >
-                  <Heading
-                    size="sm"
-                    color="gray.600"
-                    fontWeight="normal"
-                  >
-                    Fulano
+                    <Heading
+                      size="sm"
+                      color="gray.600"
+                      fontWeight="normal"
+                    >
+                      Fulano
                     </Heading>
-                  <Text
-                    mt="-1"
-                    fontSize="xs"
-                    color="gray.400"
-                  >
-                    COO - Meethub
-                  </Text>
+                    <Text
+                      mt="-1"
+                      fontSize="xs"
+                      color="gray.400"
+                    >
+                      COO - Meethub
+                    </Text>
                   </Flex>
                 </Flex>
                 <Flex>
@@ -97,7 +97,7 @@ export default function Meets({ meet }) {
             </Flex>
           )
         })}
-        </VStack>
+      </VStack>
     </AppContainer>
   )
 }
