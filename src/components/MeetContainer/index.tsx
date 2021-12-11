@@ -1,8 +1,8 @@
-import {} from ''
+import {Flex} from '@chakra-ui/react'
 
 export  function MeetContainer() {
-  return {
+  return (
     <Flex>
     </Flex>
-  }
+  )
 }
