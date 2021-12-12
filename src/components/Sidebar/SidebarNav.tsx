@@ -1,4 +1,4 @@
-import { Stack, } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { RiAddLine, RiCalendarTodoLine, RiContactsLine, RiDashboardLine, RiTeamLine, RiVideoChatLine } from "react-icons/ri";
 import { CgProfile } from 'react-icons/cg';
 

@@ -17,29 +17,16 @@ export default function AppContainer({ children }: AppContainerProps) {
       <GridItem
         colSpan={2}
         borderRight="1px"
-        borderColor="gray.100"
+        borderColor="gray.200"
       >
         <Sidebar />
       </GridItem>
-      <GridItem colSpan={7}>
-        <VStack
+      <GridItem colSpan={10}>
+        <Flex
+          direction="column"
           p="6"
         >
           {children}
-        </VStack>
-      </GridItem>
-      <GridItem
-        colSpan={3}
-        borderLeft="1px"
-        borderColor="gray.100"
-      >
-        <Flex
-          p="4"
-          borderBottom="1px"
-          borderColor="gray.100"
-          justify="flex-end"
-        >
-          <Profile />
         </Flex>
       </GridItem>
     </Grid>

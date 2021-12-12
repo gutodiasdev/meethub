@@ -7,7 +7,6 @@ import { theme } from "../styles/theme"
 import { SidebarDrawerProvider } from "../contexts/SidebarContextDrawer"
 // import { makeServer } from "../services/mirage"
 import { AuthProvider } from "../contexts/AuthContext";
-import { ApiProvider } from "../contexts/ApiContext";
 
 // if (process.env.NODE_ENV === 'development') {
 //   makeServer();
@@ -21,11 +20,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
         <SidebarDrawerProvider>
-          <ApiProvider>
             <AuthProvider>
               <Component {...pageProps} />
             </AuthProvider>
-          </ApiProvider>
         </SidebarDrawerProvider>
       </ChakraProvider>
     </QueryClientProvider>

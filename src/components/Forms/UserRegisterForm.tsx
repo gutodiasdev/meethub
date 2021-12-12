@@ -1,11 +1,11 @@
 import { Flex, Stack, Button } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useContext } from 'react'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 
 import { Input } from './Input';
-import { ApiContext } from '../../contexts/ApiContext';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 
 type CreateUserFormData = {
   email: string;
@@ -26,7 +26,8 @@ export function UserRegisterForm() {
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema)
   });
-  const { createUser } = useContext(ApiContext);
+
+  const {signUp} = useContext(AuthContext)
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
     const data = {
@@ -37,7 +38,7 @@ export function UserRegisterForm() {
 
     console.log(values);
 
-    await createUser(data);
+    await signUp(data);
   }
 
   const { errors } = formState;

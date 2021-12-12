@@ -1,6 +1,7 @@
-import { Flex, Box, Text, Avatar, Button, Link } from "@chakra-ui/react";
+import { Flex, Text, Avatar, Link } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { withSSRAuth } from "../../utils/withSSRAuth";
 
 interface ProfileProps {
   showProfileData?: boolean;
@@ -9,22 +10,24 @@ interface ProfileProps {
 
 export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
 
-  const { signOut } = useContext(AuthContext);
+  const { signOut, user } = useContext(AuthContext);
 
   return (
     <Flex
       align="center"
     >
+      <Avatar size="md" />
       {showProfileData && (
         <Flex
-          mr="4"
-          textAlign="right"
+          ml="4"
+          // textAlign="right"
           direction="column"
         >
           <Text
-            fontSize="small"
-            color="gray.400"
+            fontSize="xs"
+            color="gray.500"
           >
+            {user.email}
           </Text>
           <Link
             onClick={signOut}
@@ -35,8 +38,6 @@ export function Profile({ showProfileData = true, userEmail }: ProfileProps) {
           </Link>
         </Flex>
       )}
-
-      <Avatar size="md" />
     </Flex>
   );
 }
