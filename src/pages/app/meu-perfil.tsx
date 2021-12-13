@@ -42,7 +42,7 @@ export default function () {
     <AppContainer>
       <Flex w="100%" direction="column">
       <Heading>Meu perfil</Heading>
-      <WhoCanUse permissions={['user']}>
+      <WhoCanUse roles={['user']}>
         <Box as="form" onSubmit={handleSubmit(handleUserUpdate)} py={6}>
           <Grid  templateColumns="repeat(2, 1fr)" gap={4}>
             <Input
@@ -82,7 +82,7 @@ export default function () {
           </HStack>
         </Box>
       </WhoCanUse>
-      <WhoCanUse permissions={['mentor']}>
+      <WhoCanUse roles={['mentor']}>
         <Box as="form" onSubmit={handleSubmit(handleUserUpdate)} py={6}>
           <Grid  templateColumns="repeat(2, 1fr)" gap={4}>
             <Input
@@ -128,6 +128,8 @@ export default function () {
               id="biography"
               label="Biografia"
               type="textarea"
+              border="1px"
+              borderColor="gray.300"
               borderRadius="8px"
               {...register('biography')}
             /> 

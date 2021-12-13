@@ -4,16 +4,20 @@ import { CgProfile } from 'react-icons/cg';
 
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
+import { WhoCanUse } from "../WhoCanUse";
+import { withSSRAuth } from "../../utils/withSSRAuth";
+import { setupAPIClient } from "../../services/api";
 
 export function SidebarNav() {
-
   return (
     <Stack
       spacing="6"
     >
       <NavSection title="GERAL">
         <NavLink icon={RiDashboardLine} href="/app/meets">Meets</NavLink>
-        <NavLink icon={RiContactsLine} href="/app/usuarios">Usuários</NavLink>
+        <WhoCanUse roles={['administrator']}>
+          <NavLink icon={RiContactsLine} href="/app/usuarios">Usuários</NavLink>
+        </WhoCanUse>
         <NavLink icon={RiTeamLine} href="/app/mentores">Mentores</NavLink>
       </NavSection>
       <NavSection title="MEETS">
@@ -27,3 +31,10 @@ export function SidebarNav() {
     </Stack>
   );
 }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
+  return {
+    props: {}
+  }
+})

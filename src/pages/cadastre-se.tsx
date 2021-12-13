@@ -2,9 +2,9 @@ import { Center, Stack, Button } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useContext } from 'react'
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { ApiContext } from '../contexts/ApiContext';
+const { yupResolver } = require('@hookform/resolvers/yup')
 import { Input } from '../components/Forms/Input';
+import { AuthContext } from '../contexts/AuthContext';
 
 type CreateUserFormData = {
   email: string;
@@ -12,7 +12,7 @@ type CreateUserFormData = {
   telephone: string;
 }
 
-const createUserFormSchema = yup.object().shape({
+const createUserFormSchema = yup.object({
   email: yup.string().required('E-mail é obrigatório.').email('Digite um email válido'),
   password: yup.string().required('Senha é obrigatória.').min(6, 'No mínimo 6 caracteres'),
   password_confirmation: yup.string().oneOf([
@@ -22,12 +22,14 @@ const createUserFormSchema = yup.object().shape({
 })
 
 export default function UserRegisterForm() {
-  const { createUser } = useContext(ApiContext);
+  const { signUp } = useContext(AuthContext);
 
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(createUserFormSchema)
+  });
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = (values) => {
-    createUser(values);
+    signUp(values);
   }
 
   const { errors } = formState;

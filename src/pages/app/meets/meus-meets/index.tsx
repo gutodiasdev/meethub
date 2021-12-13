@@ -3,11 +3,8 @@ import { setupAPIClient } from "../../../../services/api";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
 import { Flex, Center, Avatar, Box, HStack, Heading, Tag, Text, Button, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 import { WhoCanUse } from "../../../../components/WhoCanUse";
-import { AuthContext } from "../../../../contexts/AuthContext";
-import { useContext } from "react";
 
 export default function MyMeets({ asUser, asMentor }) {
-
   return (
     <AppContainer>
       <Flex w="100%">
@@ -63,13 +60,12 @@ export default function MyMeets({ asUser, asMentor }) {
               })}
         </WhoCanUse>
 
-        <WhoCanUse permissions={['mentor']}>
+        <WhoCanUse roles={['mentor']}>
         <Tabs w="100%">
           <TabList>
             <Tab>Como usuário</Tab>
             <Tab>Como mentor</Tab>
           </TabList>
-
           <TabPanels>
             <TabPanel>
               {asUser.map(meetItem => {

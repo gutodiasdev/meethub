@@ -2,7 +2,7 @@ import { Box, Flex, Heading, Divider, VStack, SimpleGrid, FormLabel, Button, HSt
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+const { yupResolver } = require('@hookform/resolvers/yup')
 import { parseCookies } from "nookies";
 import Router from 'next/router';
 import decode from 'jwt-decode';
