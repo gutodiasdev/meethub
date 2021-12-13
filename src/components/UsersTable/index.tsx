@@ -1,11 +1,37 @@
-import { Box, Flex, Heading, Button, Icon, Text, Table, Thead, Th, Td, Tr, Tbody, Checkbox, Link, useBreakpointValue } from '@chakra-ui/react'
-import NextLink from "next/link"
+import { Box, Flex, Heading, Button, Icon, Text, Table, Thead, Th, Td, Tr, Tbody, Checkbox, Link, useBreakpointValue, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Divider, FormLabel, HStack, Input, Select, SimpleGrid, Textarea, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { RiAddLine, RiEditBoxLine } from 'react-icons/ri'
 import { api } from '../../services/apiClient';
+import * as yup from 'yup'
+import { useMutation } from 'react-query';
+import { queryClient } from '../../services/query/queryClient';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type CreateUserFormData = {
+  name: string;
+  email: string;
+  password: string;
+  telephone: string;
+  role: string;
+  position?: string;
+  biography?: string;
+}
+
+const createUserFormSchema = yup.object().shape({
+  name: yup.string().required('Nome do usuário é obrigatório'),
+  email: yup.string().required('E-mail do usuário é obrigatório').email('E-mail inválido'),
+  password: yup.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
+  telephone: yup.string().required('Telefone é obrigatório').min(11, 'No mínimo 11 caracteres'),
+  role: yup.string().required('Tipo de usuário é obrigatório'),
+  position: yup.string(),
+  biography: yup.string()
+})
+
 
 export function UsersTable() {
   const [users, setUsers] = useState([])
+  const {isOpen, onOpen, onClose} = useDisclosure()
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -18,6 +44,20 @@ export function UsersTable() {
     });
   }, [])
 
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const response = await api.post('/users', {
+      user: {
+        ...user,
+        created_at: new Date(),
+      }
+    })
+
+    return response.data.user;
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('user');
+    }
+  });
 
   return (
     <Box display="flex" flexDirection="column" w="100%">
@@ -26,9 +66,9 @@ export function UsersTable() {
           Usuários
 
         </Heading>
-        <NextLink href="/app/usuarios/novo" passHref>
           <Button
             as="a"
+            href="/app/usuarios/novo"
             size="sm"
             fontSize="small"
             colorScheme="blue"
@@ -36,9 +76,8 @@ export function UsersTable() {
           >
             Criar novo
           </Button>
-        </NextLink>
       </Flex>
-      <Table colorScheme="teal">
+      <Table >
         <Thead>
           <Tr>
             <Th px={["4", "4", "6"]} color="gray.600" width="8">

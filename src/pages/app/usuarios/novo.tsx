@@ -6,12 +6,12 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 
-import { Header } from '../../../components/Header';
-import { Sidebar } from '../../../components/Sidebar';
 import { Input } from '../../../components/Forms/Input';
 import { queryClient } from '../../../services/query/queryClient';
 import { api } from '../../../services/apiClient';
 import AppContainer from '../../../components/AppContainer';
+import { withSSRAuth } from '../../../utils/withSSRAuth';
+import { setupAPIClient } from '../../../services/api';
 
 type CreateUserFormData = {
   name: string;
@@ -186,3 +186,13 @@ export default function CreateUser() {
   );
 }
 
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
+  const response = apiClient.get('/me')
+
+  return {
+    props: {}
+  }
+}, {
+  roles: ['administrator']
+})

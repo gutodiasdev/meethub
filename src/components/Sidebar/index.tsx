@@ -1,10 +1,6 @@
-import { Box, useBreakpointValue, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Flex } from "@chakra-ui/react";
-import { BsGear } from "react-icons/bs";
+import { Box, useBreakpointValue, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody } from "@chakra-ui/react";
 import { useSidebarDrawer } from "../../contexts/SidebarContextDrawer";
 import { Logo } from "../Header/Logo";
-import { Profile } from "../Header/Profile";
-import { WhoCanUse } from "../WhoCanUse";
-import { NavLink } from "./NavLink";
 import { SidebarNav } from "./SidebarNav";
 
 export function Sidebar() {
@@ -43,12 +39,6 @@ export function Sidebar() {
         <Logo />
       </Box>
       <SidebarNav />
-      
-      <Flex mt={48} direction="column">
-        <WhoCanUse roles={['administrator']}>
-          <NavLink icon={BsGear} href="/app/admin">Painel Administrativo</NavLink>
-        </WhoCanUse>
-      </Flex>
     </Box>
   );
 }
