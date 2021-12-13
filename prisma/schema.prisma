@@ -113,6 +113,7 @@ model UserPreferences {
 model Category {
   id   String @id @default(uuid())
   name String
+  description String?
 
   subCategory    SubCategory?
   userPreference UserPreferences[]
