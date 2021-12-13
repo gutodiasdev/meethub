@@ -1,8 +1,8 @@
 import { Box, Flex, Heading, Divider, VStack, SimpleGrid, Select, FormLabel, Button, HStack, Textarea } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
+const { yupResolver } = require('@hookform/resolvers/yup')
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 
@@ -23,7 +23,7 @@ type CreateUserFormData = {
   biography?: string;
 }
 
-const createUserFormSchema = yup.object().shape({
+const createUserFormSchema = yup.object({
   name: yup.string().required('Nome do usuário é obrigatório'),
   email: yup.string().required('E-mail do usuário é obrigatório').email('E-mail inválido'),
   password: yup.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
@@ -110,6 +110,8 @@ export default function CreateUser() {
                   id="role"
                   {...register('role')}
                   error={errors.role}
+                  border="1px"
+                  borderColor="gray.300"
                 >
                   <option value="user">Assinante</option>
                   <option value="mentor">Mentor</option>
