@@ -2,15 +2,15 @@ import { withSSRAuth } from "../../../utils/withSSRAuth";
 import { setupAPIClient } from "../../../services/api";
 import { AdminHeader } from "../../../components/AdminHeader";
 
-
-export default function Admin() {
-
+const AdminMeets = () => {
   return (
     <>
       <AdminHeader />
     </>
   )
 }
+
+export default AdminMeets
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx);

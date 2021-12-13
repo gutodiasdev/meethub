@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Spinner, Button, Icon, Text, Table, Thead, Th, Td, Tr, Tbody, Checkbox, Link, useBreakpointValue } from '@chakra-ui/react'
+import { Box, Flex, Heading, Button, Icon, Text, Table, Thead, Th, Td, Tr, Tbody, Checkbox, Link, useBreakpointValue } from '@chakra-ui/react'
 import NextLink from "next/link"
 import { useEffect, useState } from 'react';
 import { RiAddLine, RiEditBoxLine } from 'react-icons/ri'
@@ -38,7 +38,7 @@ export function UsersTable() {
           </Button>
         </NextLink>
       </Flex>
-      <Table colorScheme="blackAlpha">
+      <Table colorScheme="teal">
         <Thead>
           <Tr>
             <Th px={["4", "4", "6"]} color="gray.600" width="8">

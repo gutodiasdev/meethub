@@ -5,10 +5,9 @@ import { Hero } from "../components/Hero";
 import { HomeContent } from "../components/HomeContent";
 import { UserFooter } from "../components/UserFooter";
 import { UserHeader } from "../components/UserHeader";
-import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
 
 export default function Home() {
+
   return (
     <Flex
       direction="column"
@@ -25,11 +24,6 @@ export default function Home() {
   )
 }
 
-// export const getServerSideProps = withSSRGuest(async (ctx) => {
-//   return {
-//     props: {}
-//   }
-// });
 
 export const getServerSideProps = withSSRGuest(async (ctx) => {
   return {
