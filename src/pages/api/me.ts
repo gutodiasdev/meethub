@@ -1,33 +1,99 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/utils/prisma";
-import checkAuthMiddleware from "../../middlewares/checkAuthMiddleware";
+import nextConnect from 'next-connect'
+import jwt from 'jsonwebtoken'
 
-const handler = async (request, response) => {
-  const { method } = request;
+// const handler = async (request: NextApiRequest, response: NextApiResponse)=> {
+//   if (request.method === 'GET') {
+//     return response
+//       .status(400)
+//       .json({ success: false, message: 'Method not allowed' });
+//   }
 
-  if (method !== 'GET') {
-    return response
-      .status(400)
-      .json({ success: false, message: 'Method not allowed' });
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       email: request.user,
+//     }
+//   })
+
+//   if (!user) {
+//     return response
+//       .status(400)
+//       .json({ error: true, message: 'User not found.' });
+//   }
+
+//   return response.json({
+//     email: user.email,
+//     roles: user.roles,
+//     permissions: user.permissions,
+//     id: user.id,
+//   })
+// }
+
+// export default checkAuthMiddleware(handler)
+
+interface NextApiRequestExatended extends NextApiRequest {
+  user: string
+}
+
+export default nextConnect<NextApiRequestExatended, NextApiResponse>({
+
+  onNoMatch(req, res) {
+    res.status(405).json({mesage: `Method ${req.method} Not Allowed`});
   }
+  
+}).use((req, res, next) => {
+
+  const { authorization } = req.headers;
+
+  if (!authorization) {
+    return res
+      .status(401)
+      .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
+  }
+
+  const [, token] = authorization?.split(' ');
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
+  }
+
+  try {
+
+    const decoded = jwt.verify(token as string, process.env.AUTH_SECRET)
+
+    req.user = String(decoded.sub);
+
+    return next()
+
+  } catch (err) {
+
+    return res
+      .status(401)
+      .json({ error: true, code: 'token.expired', message: 'Token invalid.' })
+  }
+
+}).get(async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: {
-      email: request.user,
+      email: req.user,
     }
   })
 
   if (!user) {
-    return response
+    return res
       .status(400)
       .json({ error: true, message: 'User not found.' });
   }
 
-  return response.json({
+  return res.json({
     email: user.email,
     roles: user.roles,
     permissions: user.permissions,
     id: user.id,
   })
-}
 
-export default checkAuthMiddleware(handler)
+})

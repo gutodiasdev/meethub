@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import prisma from "../lib/utils/prisma";
 import { DecodedToken } from "../utils/types";
 
 const checkAuthMiddleware = (handler) => {
@@ -21,7 +20,7 @@ const checkAuthMiddleware = (handler) => {
     }
 
     try {
-      //verify token
+ 
       const decoded = jwt.verify(token as string, process.env.AUTH_SECRET)
 
       request.user = decoded.sub;

@@ -3,7 +3,6 @@ import { parseCookies, setCookie } from 'nookies'
 import { signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from './errors/AuthTokenError';
 
-let cookies = parseCookies();
 let isRefresing = false;
 let failedRequestQueue = [];
 

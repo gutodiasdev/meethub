@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl, Select } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -10,12 +10,14 @@ import { Input } from '../../../components/Forms/Input';
 import { api } from '../../../services/apiClient';
 import AppContainer from '../../../components/AppContainer';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { useCategories } from '../../../services/hooks/categories/useCategories';
 
 type CreateMeetFormData = {
   name: string;
   price: string;
   mentorEmail: string;
   meetDetails?: string;
+  categoryId: string;
 }
 
 const createMeetFormSchema = yup.object().shape({
@@ -37,7 +39,8 @@ export default function MentorMeetCriation() {
       name: values.name,
       meetDetails: values.meetDetails,
       price: values.price,
-      email: user.email,
+      categoryId: values.categoryId,
+      email: user.id,
     })
 
     if (response.status === 201) {
@@ -45,6 +48,8 @@ export default function MentorMeetCriation() {
     }
 
   }
+
+  const { data } = useCategories()
 
   return (
     <AppContainer>
@@ -78,6 +83,23 @@ export default function MentorMeetCriation() {
                 error={errors.price}
               />
               <Box>
+                <FormControl>
+                  <FormLabel>Categoria do Meet</FormLabel>
+                  <Select 
+                    name="categoryId" 
+                    id="categoryId" 
+                    border="1px" 
+                    borderColor="gray.300" 
+                    height={12}
+                    {...register('categoryId')}
+                  >
+                    {data.categories.map(category => {
+                      return (
+                        <option key={category.id} value={category.id}>{category.name}</option>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
               </Box>
             </SimpleGrid>
             <VStack w="100%" justify="flex-start">
