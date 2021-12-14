@@ -1,11 +1,9 @@
-import { Box, Flex, Heading, Divider, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const { yupResolver } = require('@hookform/resolvers/yup')
-import { parseCookies } from "nookies";
 import Router from 'next/router';
-import decode from 'jwt-decode';
 import { useContext } from 'react'
 
 import { Input } from '../../../components/Forms/Input';
@@ -29,13 +27,12 @@ const createMeetFormSchema = yup.object().shape({
 export default function MentorMeetCriation() {
   const { user } = useContext(AuthContext)
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(createMeetFormSchema)
   })
 
-  const { errors, isSubmitting } = formState
-
   const handleCreateMentor: SubmitHandler<CreateMeetFormData> = async (values) => {
+
     const response = await api.post('/meets', {
       name: values.name,
       meetDetails: values.meetDetails,
@@ -46,6 +43,7 @@ export default function MentorMeetCriation() {
     if (response.status === 201) {
       Router.push('/app/meets')
     }
+
   }
 
   return (
@@ -70,7 +68,7 @@ export default function MentorMeetCriation() {
                 error={errors.name}
               />
             </SimpleGrid>
-            <SimpleGrid spacing={["6", "8"]} w="100%">
+            <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns="repeat(2, 1fr)">
               <Input
                 id="price"
                 name="price"
@@ -83,22 +81,25 @@ export default function MentorMeetCriation() {
               </Box>
             </SimpleGrid>
             <VStack w="100%" justify="flex-start">
-              <FormLabel htmlFor="meetDetails" w="100%" ml="3">Detalhes do meet</FormLabel>
-              <Textarea
-                focusBorderColor="blue.500"
-                bgColor="gray.100"
-                variant="filled"
-                h={40}
-                _hover={{
-                  bgColor: 'gray.50'
-                }}
-                id="meetDetails"
-                name="meetDetails"
-                type="text"
-                obs="(Importante se for Mentor)"
-                {...register('meetDetails')}
-                error={errors.meetDetails}
-              />
+              <FormControl>
+                <FormLabel htmlFor="meetDetails" w="100%" ml="3">Detalhes do meet</FormLabel>
+                <Textarea
+                  focusBorderColor="blue.500"
+                  border="1px"
+                  bgColor="gray.100"
+                  variant="filled"
+                  h={40}
+                  _hover={{
+                    bgColor: 'gray.50'
+                  }}
+                  id="meetDetails"
+                  name="meetDetails"
+                  type="text"
+                  obs="(Importante se for Mentor)"
+                  {...register('meetDetails')}
+                  error={errors.meetDetails}
+                />
+              </FormControl>
             </VStack>
           </VStack>
           <Flex mt="8" justify="flex-end">
