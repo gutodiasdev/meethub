@@ -113,7 +113,6 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
       return response.status(200).json(updatedUser) 
 
-
     } catch (error) {
 
       if(error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -134,11 +133,13 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
       const { id } = request.body
 
-      const response = await prisma.user.delete({
+      await prisma.user.delete({
         where: {
-          id: request.query.id.toString(),
+          id: id,
         }
       })
+
+      return response.status(200).json({message: `User ${id} was deleted successfully!`})
 
     } catch (error) {
 
