@@ -78,32 +78,51 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     try {
       
-      const {id, email, password, telephone, image, position, biography} = request.body
+      const {id, name, email, password, telephone, image, position, biography} = request.body
 
-      const passwordHash = await bcrypt.hash(password, 6)
+      if(password) {
+
+        const hashedPassword = await bcrypt.hash(password, 6)
+
+        const updatedUser = await prisma.user.update({
+          where: {
+            id: id,
+          },
+          data: {
+            image: image,
+            password: hashedPassword,
+          }
+        })
+
+        return response.status(200).json(updatedUser) 
+      }
   
       const updatedUser = await prisma.user.update({
         where: {
           id: id,
         },
         data: {
-          email: email,
-          password: passwordHash,
-          telephone: telephone,
           image: image,
+          email: email,
+          name: name,
+          telephone: telephone,
           position: position,
           biography: biography,
         }
       })
 
-      return response.status(200).json(updatedUser)
+      return response.status(200).json(updatedUser) 
+
 
     } catch (error) {
 
-      return response.status(500).json({
-        Error: String(error),
-        message: 'Somenthing goes wrong. Trying again',
-      })
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+
+        return response.json(String(error))
+
+      }
+
+      throw error;
       
     }
 
@@ -131,9 +150,6 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     }
 
   }
-
-
-
 
   return response.status(403).json({ Error: 'Method not supported' })
 }
