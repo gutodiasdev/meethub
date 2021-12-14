@@ -1,40 +1,46 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../lib/utils/prisma'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (request: NextApiRequest, response: NextApiResponse) => {
 
-  if (req.method === 'GET') {
-    const response = await prisma.user.findUnique({
-      where: {
-        id: req.query.id.toString(),
-      },
-    })
+  if (request.method === 'GET') {
 
-    return res.status(200).json(response)
+    const { id } = request.query
+
+    try {
+      
+      const findOne = await prisma.user.findUnique({
+        where: {
+          id: String(id),
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          position: true,
+          roles: true,
+          userPreferences: true,
+          telephone: true,
+          meets: {
+            include: {
+              meet: true,
+            }
+          }
+        },
+      })
+  
+      return response.status(200).json(findOne)
+
+    } catch (error) {
+
+      return response.status(500).json({
+        Error: String(error),
+        message: 'Somenthing goes wrong. Trying again',
+      })
+      
+    }
 
   }
 
-  if (req.method === 'PUT') {
-    const response = await prisma.user.update({
-      where: {
-        id: req.query.id.toString(),
-      },
-      data: {
-        email: req.body.email,
-        password: req.body.password,
-        telephone: req.body.telephone,
-      }
-    })
-  }
-  if (req.method === 'DELETE') {
-    const response = await prisma.user.delete({
-      where: {
-        id: req.query.id.toString(),
-      }
-    })
-  }
-
-
-  return res.status(403)
-    .json({ message: 'Error. Method not supported' })
+  return response.status(403).json({ message: 'Error. Method not supported' })
 }

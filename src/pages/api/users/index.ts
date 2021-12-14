@@ -91,6 +91,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           data: {
             image: image,
             password: hashedPassword,
+            email: email,
+            name: name,
+            telephone: telephone,
+            position: position,
+            biography: biography,
           }
         })
 

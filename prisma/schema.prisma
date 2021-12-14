@@ -33,7 +33,9 @@ model Meet {
   name        String
   meetDetails String?
   price       Decimal
+  
   // Relation Fields
+  categories Category[]
   reviews     Reviews[]
   members     MeetEnrollment[]
 }
@@ -117,6 +119,7 @@ model Category {
 
   subCategory    SubCategory?
   userPreference UserPreferences[]
+  meets Meet[]
 }
 
 model SubCategory {

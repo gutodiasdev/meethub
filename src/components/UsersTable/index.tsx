@@ -31,7 +31,6 @@ const createUserFormSchema = yup.object().shape({
 
 export function UsersTable() {
   const [users, setUsers] = useState([])
-  const {isOpen, onOpen, onClose} = useDisclosure()
 
   const isWideVersion = useBreakpointValue({
     base: false,
