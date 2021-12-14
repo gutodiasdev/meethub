@@ -4,7 +4,7 @@ import prisma from "../../../lib/utils/prisma"
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === 'POST') {
-    const { name, price, meetDetails, mentorEmail, categoryId, mentorId } = request.body
+    const { name, price, meetDetails, categoryId, mentorId } = request.body
 
     try {
     
@@ -54,6 +54,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           id: true,
           name: true,
           price: true,
+          members: {
+            where: {
+              roles: 'mentor',
+            },
+          }
         }
       })
       
