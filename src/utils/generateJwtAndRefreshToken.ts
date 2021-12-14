@@ -7,7 +7,7 @@ import prisma from '../lib/utils/prisma';
 export async function generateJwtAndRefreshToken(email: string, payload: object = {}) {
   const token = jwt.sign(payload, process.env.AUTH_SECRET, {
     subject: email,
-    expiresIn: 10, // 15 minutes
+    expiresIn: 60*15, // 15 minutes
   });
 
   // const refreshToken = createRefreshToken(email)

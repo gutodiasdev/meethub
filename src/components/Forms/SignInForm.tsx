@@ -10,12 +10,9 @@ type UserSignInData = {
 }
 
 export default function SignInForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
   const { signIn } = useContext(AuthContext)
 
-  const {register, handleSubmit} = useForm();
+  const {register, handleSubmit, formState: { isSubmitting }} = useForm();
 
   const handleSignIn: SubmitHandler<UserSignInData> = async (values, event: FormEvent) => {
 
@@ -45,7 +42,12 @@ export default function SignInForm() {
         type="password"
         {...register('password')}
       />
-      <Button type="submit">Entrar</Button>
+      <Button 
+        type="submit" 
+        isLoading={isSubmitting}
+      >
+        Entrar
+      </Button>
     </VStack>
   )
 }

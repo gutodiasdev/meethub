@@ -37,6 +37,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         refreshToken,
         user
       }
+      
+      await prisma.$disconnect()
 
       return response.status(201).json(userData)
 

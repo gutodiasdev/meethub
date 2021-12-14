@@ -23,7 +23,7 @@ const createUserFormSchema = yup.object().shape({
 })
 
 export function UserRegisterForm() {
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm({
     resolver: yupResolver(createUserFormSchema)
   });
 
@@ -40,8 +40,6 @@ export function UserRegisterForm() {
 
     await signUp(data);
   }
-
-  const { errors } = formState;
 
   return (
     <Flex
@@ -95,7 +93,7 @@ export function UserRegisterForm() {
           type="submit"
           colorScheme="blue"
           h={12}
-          isLoading={formState.isSubmitting}
+          isLoading={isSubmitting}
         >
           Cadastrar</Button>
       </Stack>
