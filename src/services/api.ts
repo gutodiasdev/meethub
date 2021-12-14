@@ -12,7 +12,7 @@ export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx)
 
   const api = axios.create({
-    baseURL: 'http://localhost:3000/api/',
+    baseURL: 'https://meethub.vercel.app/api/',
     headers: {
       Authorization: `Bearer ${cookies['meethub.token']}`
     }
