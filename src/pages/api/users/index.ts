@@ -63,10 +63,13 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     } catch (error) {
       
-      return response.status(500).json({
-        Error: String(error),
-        message: 'Somenthing goes wrong. Trying again',
-      })
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+
+        console.log(error)
+
+      }
+
+      throw error;
 
     }
   }
