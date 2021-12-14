@@ -98,25 +98,40 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     } catch (error) {
 
-      return response.status(500).json({
-        Error: String(error),
-        message: 'Somenthing goes wrong. Trying again',
-      })
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+
+        console.log(error)
+
+      }
+
+      throw error;
       
     }
   }
 
+
+  // NEED TO BE FIXED
   if (request.method === 'DELETE') {
-    const { id } = request.body
+    const {newUserId , userId, meetId } = request.body
 
     try {
+
+      await prisma.meetEnrollment.update({
+        where: {
+          userId_meetId: {
+            userId: userId,
+            meetId: meetId,
+          }
+        },
+        data: {
+          roles: 'mentor',
+          userId: newUserId,
+        }
+      })
       
       await prisma.meet.delete({
         where: {
-          id: id,
-        },
-        include: {
-          reviews: true,
+          id: meetId,
         }
       })
   
@@ -124,10 +139,13 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     } catch (error) {
 
-      return response.status(500).json({
-        Error: String(error),
-        message: 'Somenthing goes wrong. Trying again',
-      })
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+
+        console.log(error)
+
+      }
+
+      throw error;
       
     }
   }
