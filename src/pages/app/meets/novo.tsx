@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const { yupResolver } = require('@hookform/resolvers/yup')
 import Router from 'next/router';
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 import { Input } from '../../../components/Forms/Input';
 import { api } from '../../../services/apiClient';
@@ -13,6 +13,7 @@ import { AuthContext } from '../../../contexts/AuthContext';
 import { withSSRAuth } from '../../../utils/withSSRAuth';
 import { setupAPIClient } from '../../../services/api';
 import { useCategories } from '../../../services/hooks/categories/useCategories';
+import { RichTextEditor } from '../../../components/RichTextEditor';
 
 type CreateMeetFormData = {
   name: string;
@@ -30,6 +31,7 @@ const createMeetFormSchema = yup.object().shape({
 
 export default function MentorMeetCriation() {
   const { data, isLoading, error } = useCategories()
+
 
   const { user } = useContext(AuthContext)
 
@@ -123,9 +125,9 @@ export default function MentorMeetCriation() {
               </Box>
             </SimpleGrid>
             <VStack w="100%" justify="flex-start">
-              <FormControl>
-                <FormLabel htmlFor="meetDetails" w="100%" ml="3">Detalhes do meet</FormLabel>
-                <Textarea
+              <FormControl >
+                <FormLabel htmlFor="meetDetails" w="100%">Detalhes do meet</FormLabel>
+                {/* <Textarea
                   focusBorderColor="blue.500"
                   h={40}
                   id="meetDetails"
@@ -134,9 +136,13 @@ export default function MentorMeetCriation() {
                   obs="(Importante se for Mentor)"
                   {...register('meetDetails')}
                   error={errors.meetDetails}
-                />
+                /> */}
+
+                <RichTextEditor />
               </FormControl>
             </VStack>
+ 
+
           </VStack>
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
