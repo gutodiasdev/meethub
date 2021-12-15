@@ -1,10 +1,10 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Spinner } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Spinner, Skeleton } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const { yupResolver } = require('@hookform/resolvers/yup')
 import Router from 'next/router';
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import dynamic from 'next/dynamic'
 
 import { Input } from '../../../components/Forms/Input';
@@ -15,9 +15,8 @@ import { withSSRAuth } from '../../../utils/withSSRAuth';
 import { setupAPIClient } from '../../../services/api';
 import { useCategories } from '../../../services/hooks/categories/useCategories';
 
-// import RichTextEditor from '../../../components/RichTextEditor';
-
 const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'), {
+  loading: () => <Skeleton h={24} />,
   ssr: false
 })
 
@@ -37,6 +36,7 @@ const createMeetFormSchema = yup.object().shape({
 
 export default function MentorMeetCriation() {
   const { data, isLoading, error } = useCategories()
+  const [textEditorData, setTextEditorData] = useState('')
 
 
   const { user } = useContext(AuthContext)
@@ -45,19 +45,32 @@ export default function MentorMeetCriation() {
     resolver: yupResolver(createMeetFormSchema)
   })
 
+  const handleTextEditor = (e, editor) => {
+    const data = editor.getData()
+
+    setTextEditorData(data)
+  }
+
   const handleCreateMentor: SubmitHandler<CreateMeetFormData> = async (values) => {
 
-    const response = await api.post('/meets', {
-      name: values.name,
-      meetDetails: values.meetDetails,
-      price: values.price,
-      categoryId: values.categoryId,
-      email: user.id,
-    })
+    // const response = await api.post('/meets', {
+    //   name: values.name,
+    //   meetDetails: values.meetDetails,
+    //   price: values.price,
+    //   categoryId: values.categoryId,
+    //   email: user.id,
+    // })
 
-    if (response.status === 201) {
-      Router.push('/app/meets')
+    // if (response.status === 201) {
+    //   Router.push('/app/meets')
+    // }
+    const response = {
+      values,
+      textEditorData,
+      user
     }
+
+    console.log(response)
 
   }
 
@@ -93,10 +106,12 @@ export default function MentorMeetCriation() {
                 error={errors.price}
               />
               <Box>
+                <FormLabel htmlFor="categoryId" >Categoria do Meet</FormLabel>
+
                 {isLoading ? (
 
-                  <Flex justify="center" mt={12}>
-                    <Spinner />
+                  <Flex direction="column">
+                    <Skeleton h={12} />
                   </Flex>
 
                 ) : error ? (
@@ -107,7 +122,6 @@ export default function MentorMeetCriation() {
                 ) : (
 
                   <FormControl>
-                    <FormLabel>Categoria do Meet</FormLabel>
                     <Select
                       name="categoryId"
                       id="categoryId"
@@ -133,12 +147,9 @@ export default function MentorMeetCriation() {
             <VStack w="100%" justify="flex-start">
               <FormControl>
                 <FormLabel htmlFor="meetDetails" w="100%" >Detalhes do meet</FormLabel>
-
-                <RichTextEditor />
+                <RichTextEditor handler={handleTextEditor} />
               </FormControl>
             </VStack>
- 
-
           </VStack>
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">

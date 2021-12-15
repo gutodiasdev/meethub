@@ -53,6 +53,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@types/bcrypt": "^5.0.0",
+    "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
     "@types/ckeditor__ckeditor5-engine": "^31.0.0",
     "@types/draft-js": "^0.11.7",
     "@types/faker": "^5.5.9",
