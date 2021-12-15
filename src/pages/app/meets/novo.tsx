@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl, Select, Text, Skeleton, Spinner } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl, Select, Text, Spinner } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -12,7 +12,7 @@ import AppContainer from '../../../components/AppContainer';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { withSSRAuth } from '../../../utils/withSSRAuth';
 import { setupAPIClient } from '../../../services/api';
-import { useQuery } from 'react-query';
+import { useCategories } from '../../../services/hooks/categories/useCategories';
 
 type CreateMeetFormData = {
   name: string;
@@ -29,13 +29,7 @@ const createMeetFormSchema = yup.object().shape({
 })
 
 export default function MentorMeetCriation() {
-  const { data, isLoading, error } = useQuery('categories', async () => {
-    const { data } = await api.get('categories')
-
-    return data
-  }, {
-    staleTime: 1000 * 60 * 15,
-  })
+  const { data, isLoading, error } = useCategories()
 
   const { user } = useContext(AuthContext)
 

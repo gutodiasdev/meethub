@@ -5,6 +5,7 @@ import { Flex, Center, Avatar, Box, HStack, Heading, Tag, Text, Button, Tabs, Ta
 import { WhoCanUse } from "../../../../components/WhoCanUse";
 
 export default function MyMeets({ asUser, asMentor }) {
+
   return (
     <AppContainer>
       <Flex w="100%">
@@ -174,14 +175,9 @@ export default function MyMeets({ asUser, asMentor }) {
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx);
-  const response = await apiClient.get(`meets/my/${ctx.query.id}`);
-
-  console.log(response.data);
+  const response = await apiClient.get(`/me`);
 
   return {
-    props: {
-      asMentor: response.data.asMentor,
-      asUser: response.data.asUser,
-    }
+    props: {}
   }
 })
