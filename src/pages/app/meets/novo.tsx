@@ -1,18 +1,18 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl, Select, Spinner, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl, Select, Text, Skeleton, Spinner } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const { yupResolver } = require('@hookform/resolvers/yup')
 import Router from 'next/router';
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 
 import { Input } from '../../../components/Forms/Input';
 import { api } from '../../../services/apiClient';
 import AppContainer from '../../../components/AppContainer';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { useCategories } from '../../../services/hooks/categories/useCategories';
 import { withSSRAuth } from '../../../utils/withSSRAuth';
 import { setupAPIClient } from '../../../services/api';
+import { useQuery } from 'react-query';
 
 type CreateMeetFormData = {
   name: string;
@@ -29,15 +29,15 @@ const createMeetFormSchema = yup.object().shape({
 })
 
 export default function MentorMeetCriation() {
-  const { user } = useContext(AuthContext)
-  const [categories, setCategories] = useState([]);
+  const { data, isLoading, error } = useQuery('categories', async () => {
+    const { data } = await api.get('categories')
 
-  useEffect(() => {
-    api.get('categories')
-      .then((response) => {
-        setCategories(response.data)
-      })
-  }, [])
+    return data
+  }, {
+    staleTime: 1000 * 60 * 15,
+  })
+
+  const { user } = useContext(AuthContext)
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(createMeetFormSchema)
@@ -58,7 +58,6 @@ export default function MentorMeetCriation() {
     }
 
   }
-
 
   return (
     <AppContainer>
@@ -92,25 +91,41 @@ export default function MentorMeetCriation() {
                 error={errors.price}
               />
               <Box>
-                <FormControl>
-                  <FormLabel>Categoria do Meet</FormLabel>
-                  <Select
-                    name="categoryId"
-                    id="categoryId"
-                    border="1px"
-                    borderColor="gray.300"
-                    height={12}
-                    {...register('categoryId')}
-                  >
-                    {
-                      categories.map(category => {
-                        return (
-                          <option key={category.id} value={category.id}>{category.name}</option>
-                        )
-                      })
-                    }
-                  </Select>
-                </FormControl>
+                {isLoading ? (
+
+                  <Flex justify="center" mt={12}>
+                    <Spinner />
+                  </Flex>
+
+                ) : error ? (
+                  <Flex justify="center">
+                    <Text>Erro ao carregar as categorias</Text>
+                  </Flex>
+
+                ) : (
+
+                  <FormControl>
+                    <FormLabel>Categoria do Meet</FormLabel>
+                    <Select
+                      name="categoryId"
+                      id="categoryId"
+                      border="1px"
+                      borderColor="gray.300"
+                      height={12}
+                      {...register('categoryId')}
+                    >
+                      {
+                        data.map(category => {
+                          return (
+                            <option key={category.id} value={category.id}>{category.name}</option>
+                          )
+                        })
+                      }
+                    </Select>
+                  </FormControl>
+
+                )}
+
               </Box>
             </SimpleGrid>
             <VStack w="100%" justify="flex-start">
@@ -118,13 +133,7 @@ export default function MentorMeetCriation() {
                 <FormLabel htmlFor="meetDetails" w="100%" ml="3">Detalhes do meet</FormLabel>
                 <Textarea
                   focusBorderColor="blue.500"
-                  border="1px"
-                  bgColor="gray.100"
-                  variant="filled"
                   h={40}
-                  _hover={{
-                    bgColor: 'gray.50'
-                  }}
                   id="meetDetails"
                   name="meetDetails"
                   type="text"

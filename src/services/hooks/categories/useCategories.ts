@@ -1,11 +1,20 @@
 import { useQuery } from "react-query";
 import { api } from "../../apiClient";
 
-export async function getCategories() {
+type Category = {
+  id: string;
+  name: string;
+}
 
-  const {data} = await api.get('categories')
+type GetCategoriesResponse = {
+  categories: Category[];
+}
 
-  const categories = data.map(category => {
+export async function getCategories(): Promise<GetCategoriesResponse> {
+
+  const { data } = await api.get('categories')
+
+  const categories = data.categories.map(category => {
     return {
       id: category.id,
       name: category.name,
