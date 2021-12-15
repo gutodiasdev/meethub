@@ -1,10 +1,11 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, Textarea, FormControl, Select, Text, Spinner } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Spinner } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const { yupResolver } = require('@hookform/resolvers/yup')
 import Router from 'next/router';
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
+import dynamic from 'next/dynamic'
 
 import { Input } from '../../../components/Forms/Input';
 import { api } from '../../../services/apiClient';
@@ -13,7 +14,12 @@ import { AuthContext } from '../../../contexts/AuthContext';
 import { withSSRAuth } from '../../../utils/withSSRAuth';
 import { setupAPIClient } from '../../../services/api';
 import { useCategories } from '../../../services/hooks/categories/useCategories';
-import { RichTextEditor } from '../../../components/RichTextEditor';
+
+// import RichTextEditor from '../../../components/RichTextEditor';
+
+const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'), {
+  ssr: false
+})
 
 type CreateMeetFormData = {
   name: string;
@@ -125,18 +131,8 @@ export default function MentorMeetCriation() {
               </Box>
             </SimpleGrid>
             <VStack w="100%" justify="flex-start">
-              <FormControl >
-                <FormLabel htmlFor="meetDetails" w="100%">Detalhes do meet</FormLabel>
-                {/* <Textarea
-                  focusBorderColor="blue.500"
-                  h={40}
-                  id="meetDetails"
-                  name="meetDetails"
-                  type="text"
-                  obs="(Importante se for Mentor)"
-                  {...register('meetDetails')}
-                  error={errors.meetDetails}
-                /> */}
+              <FormControl>
+                <FormLabel htmlFor="meetDetails" w="100%" >Detalhes do meet</FormLabel>
 
                 <RichTextEditor />
               </FormControl>

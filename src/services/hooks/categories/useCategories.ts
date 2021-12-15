@@ -6,11 +6,7 @@ type Category = {
   name: string;
 }
 
-type GetCategoriesResponse = {
-  categories: Category[];
-}
-
-export async function getCategories(): Promise<GetCategoriesResponse> {
+export async function getCategories(): Promise<Category[]> {
 
   const { data } = await api.get('categories')
 

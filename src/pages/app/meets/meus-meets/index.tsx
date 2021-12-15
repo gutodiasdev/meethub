@@ -10,7 +10,7 @@ export default function MyMeets({ asUser, asMentor }) {
     <AppContainer>
       <Flex w="100%">
         <WhoCanUse permissions={['user']}>
-        {asUser.map(meetItem => {
+        {/* {asUser.map(meetItem => {
                 return (
                   <Flex
                     key={meetItem.id}
@@ -58,7 +58,7 @@ export default function MyMeets({ asUser, asMentor }) {
                     </Button>
                   </Flex>
                 )
-              })}
+              })} */}
         </WhoCanUse>
 
         <WhoCanUse roles={['mentor']}>
@@ -69,7 +69,7 @@ export default function MyMeets({ asUser, asMentor }) {
           </TabList>
           <TabPanels>
             <TabPanel>
-              {asUser.map(meetItem => {
+              {/* {asUser.map(meetItem => {
                 return (
                   <Flex
                     key={meetItem.id}
@@ -117,10 +117,10 @@ export default function MyMeets({ asUser, asMentor }) {
                     </Button>
                   </Flex>
                 )
-              })}
+              })} */}
             </TabPanel>
             <TabPanel>
-              {asMentor.map(meetItem => {
+              {/* {asMentor.map(meetItem => {
                 return (
                   <Flex
                     cursor="pointer"
@@ -161,7 +161,7 @@ export default function MyMeets({ asUser, asMentor }) {
                     </Box>
                   </Flex>
                 )
-              })}
+              })} */}
             </TabPanel>
           </TabPanels>
         </Tabs>
