@@ -24,7 +24,7 @@ type CreateMeetFormData = {
   name: string;
   price: string;
   mentorEmail: string;
-  meetDetails?: string;
+  meetDetails: string;
   categoryId: string;
 }
 
@@ -53,24 +53,17 @@ export default function MentorMeetCriation() {
 
   const handleCreateMentor: SubmitHandler<CreateMeetFormData> = async (values) => {
 
-    // const response = await api.post('/meets', {
-    //   name: values.name,
-    //   meetDetails: values.meetDetails,
-    //   price: values.price,
-    //   categoryId: values.categoryId,
-    //   email: user.id,
-    // })
+    const response = await api.post('/meets', {
+      name: values.name,
+      meetDetails: textEditorData,
+      price: values.price,
+      categoryId: values.categoryId,
+      mentorId: user.id,
+    })
 
-    // if (response.status === 201) {
-    //   Router.push('/app/meets')
-    // }
-    const response = {
-      values,
-      textEditorData,
-      user
+    if (response.status === 201) {
+      Router.push('/app/meets')
     }
-
-    console.log(response)
 
   }
 
