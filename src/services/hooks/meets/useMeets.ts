@@ -1,6 +1,10 @@
 import { useQuery } from "react-query";
 import { api } from "../../apiClient";
 
+type Category = {
+  name: string;
+}
+
 type Meet = {
   id: string
   name: string
@@ -8,6 +12,7 @@ type Meet = {
   mentor: {
     id: string,
   };
+  categories: Category[];
 }
 export async function getMeets(): Promise<Meet[]> {
   const { data } = await api.get('/meets')
@@ -20,7 +25,13 @@ export async function getMeets(): Promise<Meet[]> {
         return {
           id: member.userId,
         }
-      })
+      }),
+      categories: meet.categories.map(category => {
+        return {
+          id: category.id,
+          name: category.name,
+        }
+      }),
     }
   })
   return meets

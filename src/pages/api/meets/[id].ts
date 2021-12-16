@@ -18,6 +18,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           meetDetails: true,
           price: true,
           members: true,
+          categories: {
+            select: {
+              name: true,
+            }
+          }
         }
       })
   

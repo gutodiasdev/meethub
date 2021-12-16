@@ -27,7 +27,6 @@ export function MentorContainer({ mentorId, mentorName, mentorPosition, mentorIm
       }
     })
 
-
     return categories
 
   })

@@ -1,5 +1,4 @@
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
-
 import AppContainer from "../../../components/AppContainer";
 import { MeetContainer } from '../../../components/MeetContainer';
 import { IsLoadingMeetList } from '../../../components/MeetContainer/IsLoadingMeetList';
@@ -9,6 +8,7 @@ import { withSSRAuth } from '../../../utils/withSSRAuth';
 
 export default function Meets() {
   const { data, isLoading, error } = useMeets()
+
   return (
     <AppContainer>
       <Flex
@@ -30,7 +30,15 @@ export default function Meets() {
         ) : (
           <Flex direction="column">
             {data.slice(0).reverse().map(meet => {
-              return <MeetContainer key={meet.id} meetId={meet.id} meetName={meet.name} meetPrice={meet.price} mentorId={meet.mentor[0].id} />
+              return (
+                <MeetContainer
+                  key={meet.id}
+                  meetId={meet.id}
+                  meetName={meet.name}
+                  meetPrice={meet.price}
+                  mentorId={meet.mentor[0].id}
+                />
+              )
             })}
           </Flex>
         )}

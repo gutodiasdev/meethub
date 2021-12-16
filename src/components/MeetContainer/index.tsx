@@ -1,7 +1,6 @@
 import { Avatar, Flex, Heading, HStack, Spinner, Tag, Text } from '@chakra-ui/react'
 import { useQuery } from 'react-query'
 import { api } from '../../services/apiClient'
-
 interface MeetContainerProps {
   meetId: string,
   meetName: string,
@@ -20,9 +19,6 @@ export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetCon
     })
     return singleMentor
   })
-
-  console.log(data)
-
   return (
     <Flex
       as="a"
@@ -73,6 +69,7 @@ export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetCon
                     </Text>
                   </Flex>
                 </Flex>
+
               )
             })
           )}
@@ -93,9 +90,6 @@ export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetCon
         h="100%"
         mt={4}
       >
-        <HStack>
-          <Tag size="sm">Marketing</Tag>
-        </HStack>
         <Heading
           size="lg"
           mt="2"
