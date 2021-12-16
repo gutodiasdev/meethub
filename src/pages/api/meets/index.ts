@@ -58,8 +58,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           members: {
             where: {
               roles: 'mentor',
-            },
-          }
+            }
+          },
         }
       })
       

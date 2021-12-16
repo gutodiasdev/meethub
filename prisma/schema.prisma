@@ -38,6 +38,7 @@ model Meet {
   categories Category[]
   reviews     Reviews[]
   members     MeetEnrollment[]
+  createdAt DateTime @default(now())
 }
 
 model MeetEnrollment {
