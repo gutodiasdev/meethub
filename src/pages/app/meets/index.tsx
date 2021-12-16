@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Skeleton, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react'
+import { Center, Flex, Text, VStack } from '@chakra-ui/react'
 import AppContainer from "../../../components/AppContainer";
 import { MeetContainer } from '../../../components/MeetContainer';
 import { IsLoadingMeetList } from '../../../components/MeetContainer/IsLoadingMeetList';

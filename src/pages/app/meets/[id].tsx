@@ -3,6 +3,7 @@ import { setupAPIClient } from "../../../services/api";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 import AppContainer from "../../../components/AppContainer";
 import { useState } from "react";
+import ReactHtmlParser from 'react-html-parser';
 
 
 const Meet = ({ meet, mentor }) => {
@@ -34,16 +35,15 @@ const Meet = ({ meet, mentor }) => {
             mb="2"
           >
             {meets.name}</Heading>
-          <Text
-            color="gray.500"
-          >
-            {meets.meetDetails}</Text>
+          <Box color="gray.500">
+            {ReactHtmlParser(meets.meetDetails)}
+          </Box>
         </Box>
-
       </Flex>
       <Flex width="100%" justify="flex-end">
         <Button
           as="a"
+          mt={4}
           href={`agendar/${meets.id}`}
           colorScheme="blue"
           size="lg"
