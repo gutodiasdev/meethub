@@ -23,6 +23,7 @@ model User {
   permissions     Permission       @default(user)
   token           String?
   meets           MeetEnrollment[]
+  categories      Category[]
   userPreferences UserPreferences?
 
   createdAt DateTime @default(now())
@@ -121,6 +122,7 @@ model Category {
   subCategory    SubCategory?
   userPreference UserPreferences[]
   meets Meet[]
+  users User[]
 }
 
 model SubCategory {
