@@ -14,7 +14,7 @@ export default function SignInForm() {
 
   const {register, handleSubmit, formState: { isSubmitting }} = useForm();
 
-  const handleSignIn: SubmitHandler<UserSignInData> = async (values, event: FormEvent) => {
+  const handleSignIn: SubmitHandler<UserSignInData> = async (values, event) => {
 
     event.preventDefault();
 
@@ -22,8 +22,7 @@ export default function SignInForm() {
       email: values.email,
       password: values.password,
     }
-    console.log(data);
-
+    
     await signIn(data);
   }
 

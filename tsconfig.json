@@ -22,7 +22,6 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", "src/components/RichTextEditor/index.tsx",
   ],
   "exclude": [
     "node_modules"

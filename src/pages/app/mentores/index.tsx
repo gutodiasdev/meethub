@@ -1,4 +1,4 @@
-import { Flex, Grid, Spinner } from '@chakra-ui/react'
+import { Flex, Grid, GridItem, Spinner } from '@chakra-ui/react'
 import AppContainer from "../../../components/AppContainer";
 import { MentorContainer } from '../../../components/MentorContainer';
 import { setupAPIClient } from '../../../services/api';
@@ -12,19 +12,21 @@ export default function Mentors() {
   return (
     <AppContainer>
       <Flex direction="column">
-        <Grid templateColumns="repeat(4, 1fr)">
+        <Grid templateColumns="repeat(4, 1fr)" gap={4}>
           {isLoading ? (
             <Spinner />
           ) : (
             data.map(mentor => {
               return (
-                <MentorContainer
-                  key={mentor.id}
-                  mentorId={mentor.id}
-                  mentorName={mentor.name}
-                  mentorPosition={mentor.position}
-                  mentorImage={mentor.image}
-                />
+                <GridItem colSpan={1}>
+                  <MentorContainer
+                    key={mentor.id}
+                    mentorId={mentor.id}
+                    mentorName={mentor.name}
+                    mentorPosition={mentor.position}
+                    mentorImage={mentor.image}
+                  />
+                </ GridItem>
               )
             })
           )}
