@@ -52,6 +52,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       const meets = await prisma.meet.findMany({
         select: {
           id: true,
+          categories: {
+            select: {
+              name: true,
+            },
+          },
           name: true,
           price: true,
           meetDetails:true,
