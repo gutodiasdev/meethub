@@ -19,6 +19,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           roles: true,
           userPreferences: true,
           telephone: true,
+          categories: true,
           meets: {
             include: {
               meet: true,

@@ -36,7 +36,7 @@ model Meet {
   price       Decimal
   
   // Relation Fields
-  categories Category[]
+  categories  Category[]
   reviews     Reviews[]
   members     MeetEnrollment[]
   createdAt DateTime @default(now())

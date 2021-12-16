@@ -7,17 +7,17 @@ import { generateJwtAndRefreshToken } from "../../../utils/generateJwtAndRefresh
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === 'POST') {
     try {
-      
-      const { 
-        email, 
-        password, 
-        telephone, 
+
+      const {
+        email,
+        password,
+        telephone,
         roles = 'mentor',
         name,
         image,
         position,
         biography,
-       } = request.body
+      } = request.body
 
       const passwordHash = await bcrypt.hash(password, 6)
 
@@ -55,38 +55,45 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     } catch (error) {
 
-      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
 
         console.log(error)
 
       }
 
       throw error;
-      
+
     }
   }
 
   if (request.method === 'GET') {
-    
+
     try {
-      
-      const users = await prisma.user.findMany({
+
+      const mentors = await prisma.user.findMany({
         where: {
           roles: 'mentor',
+        },
+        select: {
+          id: true,
+          categories: true,
+          image: true,
+          name: true,
+          position: true,
         }
       })
 
-      return response.status(200).json(users)
+      return response.status(200).json(mentors)
 
     } catch (error) {
-      
-      if(error instanceof Prisma.PrismaClientKnownRequestError) {
 
-        console.log(error)
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+
+        return response.status(500).json(error)
 
       }
 
-      throw error;
+      // throw error;
 
     }
   }
@@ -94,10 +101,10 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === 'PUT') {
 
     try {
-      
-      const {id, name, email, password, telephone, image, position, biography} = request.body
 
-      if(password) {
+      const { id, name, email, password, telephone, image, position, biography, categoryId } = request.body
+
+      if (password) {
 
         const hashedPassword = await bcrypt.hash(password, 6)
 
@@ -113,12 +120,17 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             telephone: telephone,
             position: position,
             biography: biography,
+            categories: {
+              connect: {
+                id: categoryId,
+              }
+            }
           }
         })
 
-        return response.status(200).json(updatedMentor) 
+        return response.status(200).json(updatedMentor)
       }
-  
+
       const updatedUser = await prisma.user.update({
         where: {
           id: id,
@@ -130,28 +142,33 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           telephone: telephone,
           position: position,
           biography: biography,
-        }
+          categories: {
+            connect: {
+              id: categoryId,
+            },
+          },
+        },
       })
 
-      return response.status(200).json(updatedUser) 
+      return response.status(200).json(updatedUser)
 
     } catch (error) {
 
-      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
 
         return response.json(String(error))
 
       }
 
       throw error;
-      
+
     }
 
   }
-  
+
   // NEED TO BE ADDED A NEW ONE
   if (request.method === 'DELETE') {
-    
+
     try {
 
       const { id } = request.body
@@ -162,7 +179,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         }
       })
 
-      return response.status(200).json({message: `User ${id} was deleted successfully!`})
+      return response.status(200).json({ message: `User ${id} was deleted successfully!` })
 
     } catch (error) {
 
@@ -170,7 +187,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         Error: String(error),
         message: 'Somenthing goes wrong. Trying again',
       })
-      
+
     }
 
   }
