@@ -9,11 +9,9 @@ export default function App() {
     </AppContainer>
   )
 }
-
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx)
   const reponse = await apiClient.get('/me')
-
   return {
     props: {}
   }

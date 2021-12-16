@@ -4,11 +4,9 @@ import prisma from '../../../lib/utils/prisma'
 export default async (request: NextApiRequest, response: NextApiResponse) => {
 
   if (request.method === 'GET') {
-
     const { id } = request.query
 
     try {
-      
       const findOne = await prisma.user.findUnique({
         where: {
           id: String(id),
@@ -29,10 +27,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         },
       })
   
-      return response.status(200).json(findOne)
-
+      return response.status(200).json([findOne])
     } catch (error) {
-
       return response.status(500).json({
         Error: String(error),
         message: 'Somenthing goes wrong. Trying again',

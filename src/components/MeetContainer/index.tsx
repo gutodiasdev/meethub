@@ -1,12 +1,28 @@
-import { Avatar, Flex, Heading, HStack, Tag, Text } from '@chakra-ui/react'
+import { Avatar, Flex, Heading, HStack, Spinner, Tag, Text } from '@chakra-ui/react'
+import { useQuery } from 'react-query'
+import { api } from '../../services/apiClient'
 
 interface MeetContainerProps {
   meetId: string,
   meetName: string,
   meetPrice: string,
+  mentorId: string,
 }
 
-export function MeetContainer({ meetId, meetPrice, meetName }: MeetContainerProps) {
+export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetContainerProps) {
+  const { data, isLoading } = useQuery('mentor', async () => {
+    const response = await api.get(`/mentors/${mentorId}`)
+    const singleMentor = response.data.map(mentor => {
+      return {
+        name: mentor.name,
+        position: mentor.position,
+      }
+    })
+    return singleMentor
+  })
+
+  console.log(data)
+
   return (
     <Flex
       as="a"
@@ -26,30 +42,40 @@ export function MeetContainer({ meetId, meetPrice, meetName }: MeetContainerProp
         justify="space-between"
       >
         <Flex>
-          <Avatar
-            size="md"
-            name="Henrique Tarciano"
-          />
-          <Flex
-            direction="column"
-            justify="center"
-            ml={2}
-          >
-            <Heading
-              size="sm"
-              color="gray.600"
-              fontWeight="normal"
-            >
-              Fulano
-            </Heading>
-            <Text
-              mt="-1"
-              fontSize="xs"
-              color="gray.400"
-            >
-              COO - Meethub
-            </Text>
-          </Flex>
+          {isLoading ? (
+            <Flex><Spinner /></Flex>
+          ) : (
+            data.map(mentor => {
+              return (
+                <Flex key={meetId}>
+                  <Avatar
+                    size="md"
+                    name={mentor.name}
+                  />
+                  <Flex
+                    direction="column"
+                    justify="center"
+                    ml={2}
+                  >
+                    <Heading
+                      size="sm"
+                      color="gray.600"
+                      fontWeight="normal"
+                    >
+                      {mentor.name}
+                    </Heading>
+                    <Text
+                      mt="-1"
+                      fontSize="xs"
+                      color="gray.400"
+                    >
+                      {mentor.position}
+                    </Text>
+                  </Flex>
+                </Flex>
+              )
+            })
+          )}
         </Flex>
         <Flex>
           <Text

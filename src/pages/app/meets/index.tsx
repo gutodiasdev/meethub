@@ -1,4 +1,5 @@
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
+
 import AppContainer from "../../../components/AppContainer";
 import { MeetContainer } from '../../../components/MeetContainer';
 import { IsLoadingMeetList } from '../../../components/MeetContainer/IsLoadingMeetList';
@@ -8,7 +9,6 @@ import { withSSRAuth } from '../../../utils/withSSRAuth';
 
 export default function Meets() {
   const { data, isLoading, error } = useMeets()
-
   return (
     <AppContainer>
       <Flex
@@ -20,22 +20,17 @@ export default function Meets() {
         spacing={4}
       >
         {isLoading ? (
-
           <IsLoadingMeetList />
-
         ) : error ? (
-
           <Flex>
             <Center>
               <Text>Erro ao recuperar os meets</Text>
             </Center>
           </Flex>
-
         ) : (
-
           <Flex direction="column">
             {data.slice(0).reverse().map(meet => {
-              return <MeetContainer meetId={meet.id} meetName={meet.name} meetPrice={meet.price} />
+              return <MeetContainer key={meet.id} meetId={meet.id} meetName={meet.name} meetPrice={meet.price} mentorId={meet.mentor[0].id} />
             })}
           </Flex>
         )}
@@ -43,7 +38,6 @@ export default function Meets() {
     </AppContainer>
   )
 }
-
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx);
   const response = await apiClient.get('me');
