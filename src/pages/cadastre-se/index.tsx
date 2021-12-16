@@ -25,15 +25,13 @@ const createUserFormSchema = yup.object({
 export default function UserRegisterForm() {
   const { signUp } = useContext(AuthContext);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState: { errors, isSubmitting }} = useForm({
     resolver: yupResolver(createUserFormSchema)
   });
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = (values) => {
     signUp(values);
   }
-
-  const { errors } = formState;
 
   return (
     <Flex
@@ -101,7 +99,7 @@ export default function UserRegisterForm() {
           type="submit"
           colorScheme="blue"
           h={12}
-          isLoading={formState.isSubmitting}
+          isLoading={isSubmitting}
         >
           Criar conta
         </Button>

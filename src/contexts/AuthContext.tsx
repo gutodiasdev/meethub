@@ -136,7 +136,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`
 
-      Router.push('/cadastre-se/preferências')
+      Router.push('/cadastre-se/preferencias')
     } catch (error) {
       console.log(error)
     }
