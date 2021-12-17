@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Flex, Heading, Button, Text, Box, Center, Spinner } from "@chakra-ui/react";
+import { Flex, Heading, Button, Text, Box, Center, Spinner, useBoolean } from "@chakra-ui/react";
 import { RiArrowRightSLine } from 'react-icons/ri'
 import { useCategories } from '../../services/hooks/categories/useCategories'
+import { CategoryButton } from "../../components/CategoryButton";
 
 export default function Preferences() {
   const { data, isLoading } = useCategories()
   const [preferences, setPreferences] = useState([])
+  const [buttonStyle, setButtonStyle] = useState(false)
 
   useEffect(() => {
     const data = localStorage.getItem('meethub-preferences')
@@ -18,8 +20,8 @@ export default function Preferences() {
     localStorage.setItem('meethub-preferences', JSON.stringify(preferences))
   })
 
-  function handlePreferences(value) {
-    setPreferences(old => [...old, value.target.value])
+  function handlePreferences(categoryId) {
+    setPreferences(old => [...old, categoryId]);
   }
 
   return (
@@ -28,7 +30,7 @@ export default function Preferences() {
         <Heading as="h2" color="gray.700" size="md">Escolha os assuntos que você mais se identifica</Heading>
         <Text color="gray.500">Para melhorar sua experiência na Meethub.</Text>
       </Box>
-      <Flex justify="center" textAlign="center" flexWrap="wrap">
+      <Flex justify="center" textAlign="center" flexWrap="wrap" minW={300}>
         {isLoading ? (
           <Center>
             <Spinner />
@@ -36,24 +38,13 @@ export default function Preferences() {
         ) : (
           data.map(category => {
             return (
-              <Button
-                mx={2}
-                my={2}
-                variant="outline"
-                colorScheme="gray"
-                maxW={180}
-                name={category.name}
-                value={category.id}
-                key={category.id}
-                borderRadius="full"
-                onClick={handlePreferences}
-                flexBasis="auto"
-                px={8}
-                py={4}
-                fontSize="xl"
-              >
-                {category.name}
-              </Button>
+              <Box onClick={() => handlePreferences(category.id)} >
+                <CategoryButton
+                  key={category.id}
+                  value={category.name}
+                  name={category.name}
+                />
+              </Box>
             )
           })
         )}
@@ -62,7 +53,14 @@ export default function Preferences() {
         <Button variant="outline" borderRadius="full">
           Pular
         </Button>
-        <Button borderRadius="full" size="lg" rightIcon={<RiArrowRightSLine />} _hover={{ bg: 'blue.500', color: 'white' }}>
+        <Button
+          borderRadius="full"
+          size="lg"
+          rightIcon={<RiArrowRightSLine />}
+          _hover={{ bg: 'blue.500', color: 'white' }}
+          bg={buttonStyle ? 'blue.500' : ''}
+          color={buttonStyle ? 'white' : ''}
+        >
           Finalizar
         </Button>
       </Flex>
