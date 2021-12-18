@@ -8,20 +8,18 @@ import { AuthProvider } from "../contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
 
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
         <SidebarDrawerProvider>
-            <AuthProvider>
-              <Component {...pageProps} />
-            </AuthProvider>
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
         </SidebarDrawerProvider>
       </ChakraProvider>
     </QueryClientProvider>
 
   )
 }
-
-export default MyApp
