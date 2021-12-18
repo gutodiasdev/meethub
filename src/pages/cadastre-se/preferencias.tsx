@@ -1,10 +1,21 @@
-import { useEffect, useState } from "react";
-import { Flex, Heading, Button, Text, Box, Center, Spinner, useBoolean } from "@chakra-ui/react";
+import { FormEvent, useEffect, useState } from "react";
+import { Flex, Heading, Button, Text, Box, Center, Spinner } from "@chakra-ui/react";
 import { RiArrowRightSLine } from 'react-icons/ri'
 import { useCategories } from '../../services/hooks/categories/useCategories'
 import { CategoryButton } from "../../components/CategoryButton";
+import { withSSRAuth } from '../../utils/withSSRAuth'
+import { useMutation } from "react-query";
+import { api } from "../../services/apiClient";
+import { SubmitHandler } from "react-hook-form";
+import { setupAPIClient } from "../../services/api";
+import Router from "next/router";
 
-export default function Preferences() {
+type UpdateData = {
+  email: string;
+  categoryId: string[];
+}
+
+export default function Preferences({ user }) {
   const { data, isLoading } = useCategories()
   const [preferences, setPreferences] = useState([])
   const [buttonStyle, setButtonStyle] = useState(false)
@@ -20,12 +31,33 @@ export default function Preferences() {
     localStorage.setItem('meethub-preferences', JSON.stringify(preferences))
   })
 
+  useEffect(() => {
+    if (preferences.length >= 3) {
+      setButtonStyle(true)
+    }
+  })
+
   function handlePreferences(categoryId) {
-    setPreferences(old => [...old, categoryId]);
+    if (!preferences.includes(categoryId)) {
+      setPreferences(old => [...old, categoryId]);
+    }
+  }
+
+  const handleUserPreferenceUpdate: SubmitHandler<UpdateData> = (values, e) => {
+    e.preventDefault()
+
+    preferences.forEach( async ( ) => {
+      const response = await api.put('/users/userPreferences', {
+        email: values.email,
+        categoryId: values.categoryId,
+      })
+    })
   }
 
   return (
-    <Flex maxW={600} h="100vh" py={32} justify="space-between" mx="auto" direction="column">
+    <Flex as="form" maxW={600} h="100vh" py={32} justify="space-between" mx="auto" direction="column"
+      onSubmit={(e) => { handleUserPreferenceUpdate({ email: user.id, categoryId: preferences }) }}
+    >
       <Box>
         <Heading as="h2" color="gray.700" size="md">Escolha os assuntos que você mais se identifica</Heading>
         <Text color="gray.500">Para melhorar sua experiência na Meethub.</Text>
@@ -38,9 +70,8 @@ export default function Preferences() {
         ) : (
           data.map(category => {
             return (
-              <Box onClick={() => handlePreferences(category.id)} >
+              <Box key={category.id} onClick={() => handlePreferences(category.id)} >
                 <CategoryButton
-                  key={category.id}
                   value={category.name}
                   name={category.name}
                 />
@@ -50,16 +81,16 @@ export default function Preferences() {
         )}
       </Flex>
       <Flex w="100%" justify="space-between" alignItems="center">
-        <Button variant="outline" borderRadius="full">
+        <Button variant="none" color="gray.400" _hover={{ variant: 'outline' }}>
           Pular
         </Button>
         <Button
           borderRadius="full"
           size="lg"
           rightIcon={<RiArrowRightSLine />}
-          _hover={{ bg: 'blue.500', color: 'white' }}
-          bg={buttonStyle ? 'blue.500' : ''}
+          colorScheme={buttonStyle ? 'blue' : null}
           color={buttonStyle ? 'white' : ''}
+          type="submit"
         >
           Finalizar
         </Button>
@@ -67,3 +98,14 @@ export default function Preferences() {
     </Flex>
   )
 }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
+  const response = await apiClient.get('/me')
+
+  return {
+    props: {
+      user: response.data
+    }
+  }
+})

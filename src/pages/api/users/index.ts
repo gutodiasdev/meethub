@@ -80,7 +80,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     try {
       
-      const {id, name, email, password, telephone, image, position, biography} = request.body
+      const {id, name, email, password, telephone, image, position, biography, categoryId} = request.body
 
       if(password) {
 
@@ -115,6 +115,13 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           telephone: telephone,
           position: position,
           biography: biography,
+          userPreferences: {
+            update: {
+              categories: {
+                connect: categoryId,
+              },
+            }
+          }
         }
       })
 
