@@ -1,13 +1,58 @@
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
+import { useQuery } from 'react-query';
 import AppContainer from "../../../components/AppContainer";
 import { MeetContainer } from '../../../components/MeetContainer';
 import { IsLoadingMeetList } from '../../../components/MeetContainer/IsLoadingMeetList';
 import { setupAPIClient } from '../../../services/api';
-import { useMeets } from '../../../services/hooks/meets/useMeets';
+import { getMeets } from '../../../services/hooks/meets/useMeets'
 import { withSSRAuth } from '../../../utils/withSSRAuth';
 
+type Category = {
+  name: string;
+}
+
+type Meet = {
+  id: string
+  name: string
+  price: string
+  mentor: {
+    id: string,
+  };
+  categories: Category[];
+}
+
 export default function Meets() {
-  const { data, isLoading, error } = useMeets()
+  // const { data, isLoading, error } = useQuery('meets', async (): Promise<Meet[]> => {
+  //   const { data } = await api.get('/meets')
+
+  //   console.log(data)
+
+  //   const meets = data.map(meet => {
+  //     return {
+  //       id: meet.id,
+  //       name: meet.name,
+  //       price: meet.price,
+  //       mentor: meet.members.map(member => {
+  //         return {
+  //           id: member.userId,
+  //         }
+  //       }),
+  //       categories: meet.categories.map(category => {
+  //         return {
+  //           id: category.id,
+  //           name: category.name,
+  //         }
+  //       }),
+  //     }
+  //   })
+
+  //   return meets
+
+  // }, {
+  //   staleTime: 1000 * 60 * 15 // 15 min
+  // })
+
+  const { data, isLoading, error } = useQuery('meets', getMeets)
 
   return (
     <AppContainer>
