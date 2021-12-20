@@ -1,7 +1,5 @@
 import { Avatar, Box, Flex, Heading, Image, SimpleGrid, Spinner, Tag, Text } from "@chakra-ui/react";
 import { useQuery } from 'react-query'
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 
 import AppContainer from "../../components/AppContainer";
 import { Search } from "../../components/Header/Search";
