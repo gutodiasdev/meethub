@@ -5,7 +5,7 @@ import prisma from '../../../lib/utils/prisma'
 const handler = nextConnect<NextApiRequest, NextApiResponse>({
 
 })
-  .get(async (req, res) => {
+  .post(async (req, res) => {
     const { keyword } = req.body
 
     const mentors = await prisma.user.findMany({
