@@ -165,7 +165,7 @@ const Meet = ({ meet }) => {
           </TabPanels>
         </Tabs>
       </Flex>
-      <EditMeetModal isOpen={isOpen} onClose={onClose} />
+      <EditMeetModal isOpen={isOpen} onClose={onClose} meetId={meets.id} />
     </AppContainer>
   )
 }

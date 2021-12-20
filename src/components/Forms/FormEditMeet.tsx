@@ -1,19 +1,19 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Skeleton, GridItem } from '@chakra-ui/react';
-import Link from "next/link";
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Box, Flex, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Skeleton, GridItem, Spinner, useToast } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const { yupResolver } = require('@hookform/resolvers/yup')
-import Router from 'next/router';
 import { useContext, useState } from 'react'
 import dynamic from 'next/dynamic'
 
 import { Input } from './Input';
-import { api } from '../../services/apiClient';
 import { AuthContext } from '../../contexts/AuthContext';
 import { withSSRAuth } from '../../utils/withSSRAuth';
 import { setupAPIClient } from '../../services/api';
 import { useCategories } from '../../services/hooks/categories/useCategories';
 import { FileInputMeet } from '../../components/Forms/FileInputMeet';
+import { useSingleMeet } from '../../services/hooks/meets/useMeets'
+import { useMutation } from 'react-query';
+import { api } from '../../services/apiClient';
 
 const RichTextEditor = dynamic(() => import('../../components/RichTextEditor'), {
   loading: () => <Skeleton h={24} />,
@@ -31,21 +31,37 @@ type CreateMeetFormData = {
 
 interface FormEditMeetProps {
   closeModal: () => void;
+  meetId: string;
 }
 
-const createMeetFormSchema = yup.object().shape({
-  name: yup.string().required('Nome é obrigatório'),
-  meetDetails: yup.string(),
-  price: yup.number().required('Preço é obrigatório'),
-})
+type Category = {
+  name: string;
+}
 
-export default function FormEditMeet({ closeModal }: FormEditMeetProps) {
+type UpdateUserData = {
+  meetId: string
+  name?: string,
+  price?: string,
+  categories?: Category[],
+}
+
+export default function FormEditMeet({ closeModal, meetId }: FormEditMeetProps) {
   const { data, isLoading, error } = useCategories()
   const [textEditorData, setTextEditorData] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [localimageUrl, setLocalImageUrl] = useState('')
 
+  const meet = useSingleMeet(meetId)
+  const mutation = useMutation(async (data: UpdateUserData) => {
+    await api.put('/meets', {
+      ...data,
+      image: imageUrl,
+      meetDetails: textEditorData,
+    })
+  })
+
   const { user } = useContext(AuthContext)
+  const toast = useToast()
 
   const acceptedFormatsRegex =
     /(?:([^:/?#]+):)?(?:([^/?#]*))?([^?#](?:jpeg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
@@ -63,131 +79,144 @@ export default function FormEditMeet({ closeModal }: FormEditMeetProps) {
     }
   };
 
-  const { register, handleSubmit, formState: { errors, isSubmitting }, setError, trigger } = useForm({
-    resolver: yupResolver(createMeetFormSchema)
-  })
-
   const handleTextEditor = (e, editor) => {
     const data = editor.getData()
 
     setTextEditorData(data)
   }
 
-  const handleCreateMentor: SubmitHandler<CreateMeetFormData> = async (values) => {
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError, trigger, reset } = useForm()
 
-    const response = await api.post('/meets', {
-      name: values.name,
-      image: imageUrl,
-      meetDetails: textEditorData,
-      price: values.price,
-      categoryId: values.categoryId,
-      mentorId: user.id,
-    })
-
-    if (response.status === 201) {
-      Router.push('/app/meets')
+  const onSubmit = async (data: UpdateUserData): Promise<void> => {
+    try {
+      await mutation.mutateAsync(data)
+      toast({
+        title: 'Imagem cadastrada',
+        description: 'Sua imagem foi cadastrada com sucesso.',
+        status: 'success',
+      });
+    } catch {
+      toast({
+        title: 'Falha na atualização',
+        description: 'Ocorreu um erro ao tentar atualizar o meet',
+        status: 'error',
+      });
+    } finally {
+      reset()
+      setImageUrl('')
+      setLocalImageUrl('')
+      closeModal()
     }
-
   }
 
-
-
   return (
-    <Flex w="100%" maxWidth={1480} mx="auto" mb={16}>
-      <Box
-        as="form"
-        flex="1"
-        borderRadius="8"
-        bg="white"
-        onSubmit={handleSubmit(handleCreateMentor)}
-      >
-        <VStack spacing="4">
-          <FileInputMeet
-            name="image"
-            setImageUrl={setImageUrl}
-            localImageUrl={localimageUrl}
-            setLocalImageUrl={setLocalImageUrl}
-            setError={setError}
-            trigger={trigger}
-            {...register('image', formValidations.image)}
-          />
-          <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns='repeat(12, 1fr)'>
-            <GridItem colSpan={10}>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                label="Título do meet"
-                {...register('name')}
-                error={errors.name}
-              />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <Input
-                leftAddon='R$'
-                id="price"
-                name="price"
-                type="number"
-                label="Preço"
-                textAlign='right'
-                {...register('price')}
-                error={errors.price}
-              />
-            </GridItem>
-          </SimpleGrid>
-          <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns="repeat(2, 1fr)">
-            <Box>
-              <FormLabel htmlFor="categoryId" >Categoria do Meet</FormLabel>
+    <Flex
+      w="100%"
+      maxWidth={1480}
+      mx="auto"
+      mb={16}
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {meet.isLoading ? (
+        <Flex w="100%" h={48} align="center" justify="center">
+          <Spinner />
+        </Flex>
+      ) : (
+        <Box
+          flex="1"
+          borderRadius="8"
+          bg="white"
+        >
+          <Input id="meetId" name="meetId" value={meetId} display="none" {...register('meetId')} />
+          <Input id="userId" name="userId" value={user.id} display="none" {...register('userId')} />
+          <VStack spacing="4">
+            <FileInputMeet
+              name="image"
+              setImageUrl={setImageUrl}
+              localImageUrl={localimageUrl}
+              setLocalImageUrl={setLocalImageUrl}
+              setError={setError}
+              trigger={trigger}
+              {...register('image', formValidations.image)}
+            />
+            <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns='repeat(12, 1fr)'>
+              <GridItem colSpan={10}>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  label="Título do meet"
+                  placeholder={meet.data.name}
+                  {...register('name')}
+                  error={errors.name}
+                />
+              </GridItem>
+              <GridItem colSpan={2}>
+                <Input
+                  leftAddon='R$'
+                  id="price"
+                  name="price"
+                  type="number"
+                  label="Preço"
+                  textAlign='right'
+                  placeholder={meet.data.price}
+                  {...register('price')}
+                  error={errors.price}
+                />
+              </GridItem>
+            </SimpleGrid>
+            <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns="repeat(2, 1fr)">
+              <Box>
+                <FormLabel htmlFor="categoryId" >Categoria do Meet</FormLabel>
 
-              {isLoading ? (
+                {isLoading ? (
 
-                <Flex direction="column">
-                  <Skeleton h={12} />
-                </Flex>
+                  <Flex direction="column">
+                    <Skeleton h={12} />
+                  </Flex>
 
-              ) : error ? (
-                <Flex justify="center">
-                  <Text>Erro ao carregar as categorias</Text>
-                </Flex>
+                ) : error ? (
+                  <Flex justify="center">
+                    <Text>Erro ao carregar as categorias</Text>
+                  </Flex>
 
-              ) : (
+                ) : (
 
-                <FormControl>
-                  <Select
-                    name="categoryId"
-                    id="categoryId"
-                    border="1px"
-                    borderColor="gray.300"
-                    height={10}
-                    maxW={300}
-                    {...register('categoryId')}
-                  >
-                    {
-                      data.map(category => {
-                        return (
-                          <option key={category.id} value={category.id}>{category.name}</option>
-                        )
-                      })
-                    }
-                  </Select>
-                </FormControl>
-
-              )}
-
-            </Box>
-            <Box></Box>
-          </SimpleGrid>
-          <VStack w="100%" justify="flex-start">
-            <FormControl>
-              <FormLabel htmlFor="meetDetails" w="100%" >Detalhes do meet</FormLabel>
-              <RichTextEditor handler={handleTextEditor} />
-            </FormControl>
+                  <FormControl>
+                    <Select
+                      name="categoryId"
+                      id="categoryId"
+                      border="1px"
+                      borderColor="gray.300"
+                      height={10}
+                      maxW={300}
+                      {...register('categoryId')}
+                    >
+                      {
+                        data.map(category => {
+                          return (
+                            <option key={category.id} value={category.id}>{category.name}</option>
+                          )
+                        })
+                      }
+                    </Select>
+                  </FormControl>
+                )}
+              </Box>
+              <Box></Box>
+            </SimpleGrid>
+            <VStack w="100%" justify="flex-start">
+              <FormControl>
+                <FormLabel htmlFor="meetDetails" w="100%" >Detalhes do meet</FormLabel>
+                <RichTextEditor handler={handleTextEditor} />
+              </FormControl>
+            </VStack>
           </VStack>
-        </VStack>
-        <Flex mt="8" justify="flex-end">
-          <HStack spacing="4">
-            <Link href="/usuarios" passHref>
+          <Flex mt="8" justify="flex-end">
+            <HStack spacing="4">
               <Button
+                onClick={closeModal}
                 colorScheme="blackAlpha"
                 _hover={{
                   bg: "red.500",
@@ -195,17 +224,17 @@ export default function FormEditMeet({ closeModal }: FormEditMeetProps) {
               >
                 Cancelar
               </Button>
-            </Link>
-            <Button
-              colorScheme="blue"
-              type="submit"
-              isLoading={isSubmitting}
-            >
-              Salvar
-            </Button>
-          </HStack>
-        </Flex>
-      </Box>
+              <Button
+                colorScheme="blue"
+                type="submit"
+                isLoading={isSubmitting}
+              >
+                Salvar
+              </Button>
+            </HStack>
+          </Flex>
+        </Box>
+      )}
     </Flex >
   );
 }

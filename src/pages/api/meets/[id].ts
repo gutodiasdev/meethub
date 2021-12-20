@@ -4,13 +4,13 @@ import prisma from '../../../lib/utils/prisma'
 export default async (request: NextApiRequest, response: NextApiResponse) => {
 
   if (request.method === 'GET') {
-    const { id } = request.body
+    const { id } = request.query
 
     try {
 
       const meet = await prisma.meet.findUnique({
         where: {
-          id: request.query.id.toString(),
+          id: String(id),
         },
         select: {
           id: true,

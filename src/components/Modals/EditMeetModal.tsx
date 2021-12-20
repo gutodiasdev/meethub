@@ -13,9 +13,10 @@ import FormEditMeet from '../Forms/FormEditMeet';
 interface EditMeetModalProps {
   isOpen: boolean;
   onClose: () => void;
+  meetId: string;
 }
 
-export function EditMeetModal({ isOpen, onClose, }: EditMeetModalProps): JSX.Element {
+export function EditMeetModal({ isOpen, onClose, meetId }: EditMeetModalProps): JSX.Element {
   const handleCloseModal = (): void => {
     onClose();
   };
@@ -27,7 +28,7 @@ export function EditMeetModal({ isOpen, onClose, }: EditMeetModalProps): JSX.Ele
         <ModalHeader>Editar</ModalHeader>
         <ModalCloseButton />
         <ModalBody >
-          <FormEditMeet closeModal={handleCloseModal} />
+          <FormEditMeet closeModal={handleCloseModal} meetId={meetId} />
         </ModalBody>
       </ModalContent>
     </Modal>
