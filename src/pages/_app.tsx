@@ -1,6 +1,7 @@
 import { AppProps } from "next/app"
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClientProvider, QueryClient } from 'react-query';
+import 'react-multi-carousel/lib/styles.css';
 
 import { theme } from "../styles/theme"
 import { SidebarDrawerProvider } from "../contexts/SidebarContextDrawer"

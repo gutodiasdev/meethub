@@ -19,16 +19,6 @@ const RichTextEditor = dynamic(() => import('../../components/RichTextEditor'), 
   loading: () => <Skeleton h={24} />,
   ssr: false
 })
-
-type CreateMeetFormData = {
-  name: string;
-  price: string;
-  image: string;
-  mentorEmail: string;
-  meetDetails: string;
-  categoryId: string;
-}
-
 interface FormEditMeetProps {
   closeModal: () => void;
   meetId: string;
@@ -91,8 +81,8 @@ export default function FormEditMeet({ closeModal, meetId }: FormEditMeetProps) 
     try {
       await mutation.mutateAsync(data)
       toast({
-        title: 'Imagem cadastrada',
-        description: 'Sua imagem foi cadastrada com sucesso.',
+        title: 'Meet atualizado com sucesso!',
+        description: 'O meet foi atualizado com sucesso!',
         status: 'success',
       });
     } catch {
