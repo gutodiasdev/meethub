@@ -1,9 +1,8 @@
-import { Avatar, Box, Flex, Heading, Icon, Image, SimpleGrid, Spinner, Tag, Text } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Heading, Icon, SimpleGrid, Spinner, Tag, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMutation, useQuery } from 'react-query'
 
 import AppContainer from "../../components/AppContainer";
-// import { Search } from "../../components/Header/Search";
 import { DebounceInput } from 'react-debounce-input'
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
@@ -32,8 +31,8 @@ export default function App() {
     return mentors
   })
 
-  const mutation = useMutation(async () => {
-    const { data } = await api.post('search', { keyword: theKeyword })
+  const mutation = useMutation(async (keyword) => {
+    const { data } = await api.post('search', { keyword })
 
     const mentorsResults = data.results.mentors.map(result => {
       return {
@@ -54,13 +53,13 @@ export default function App() {
 
   })
 
-  const handleSearch = (data) => {
-    if (data.value.length > 3) {
+  const handleSearch = async (data) => {
+    if (data.value.length >= 3) {
       setIsSearching(true)
-      console.log(data.value)
+      await mutation.mutateAsync(data.value)
+
     } else if (data.value.length <= 3) {
       setIsSearching(false)
-      console.log(data.value)
     }
   }
 
@@ -74,6 +73,8 @@ export default function App() {
     slidesPerRow: 2
   }
 
+  console.log(mutation.data)
+
   return (
     <AppContainer>
       <Flex direction='column'>
@@ -84,6 +85,7 @@ export default function App() {
             py="4"
             px={4}
             mb={6}
+            justify='space-between'
             maxWidth={400}
             alignSelf="center"
             color="gray.900"
@@ -94,7 +96,7 @@ export default function App() {
           >
             <DebounceInput
               minLength={3}
-              debounceTimeout={500}
+              debounceTimeout={750}
               onChange={event => handleSearch({ value: event.target.value })}
             />
             <Icon as={RiSearchLine} fontSize="20" />
@@ -137,7 +139,45 @@ export default function App() {
             )}
           </Flex>
         ) : (
-          <Text>Search results...</Text>
+          mutation.isLoading ? (
+
+            <Flex>
+              <Spinner />
+            </Flex>
+
+          ) : mutation.isSuccess ? (
+
+            <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
+              {mutation.data.map(result => {
+                return (
+                  <Flex
+                    direction='column'
+                    key={result.id}
+                    border='1px'
+                    borderColor='gray.200'
+                    borderRadius='md'
+                    colSpan={1}
+                    p={6}
+                    align='center'
+                  >
+                    <Avatar size='xl' src={result.image} name={result.name} />
+                    <Flex w='100%' justify='center' my={2} minH={5}>
+                      {result.categories.slice(0, 5).map(name => {
+                        return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
+                      })}
+                    </Flex>
+                    <Heading as='h2' size='md' >{result.name}</Heading>
+                    <Text color='gray.400'>{result.position}</Text>
+                  </Flex>
+                )
+              })}
+            </SimpleGrid>
+
+          ) : (
+
+            <Heading size='md' color='gray.500' >Não encontramos nenhum resultado...</Heading>
+
+          )
         )}
       </Flex>
     </AppContainer>
