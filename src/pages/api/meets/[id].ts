@@ -15,6 +15,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         select: {
           id: true,
           name: true,
+          image: true,
           meetDetails: true,
           price: true,
           members: true,
@@ -25,11 +26,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           }
         }
       })
-  
+
       return response.status(200).json(meet)
 
     } catch (error) {
-      
+
       return response.status(500).json({
         Error: String(error),
         message: 'Somenthing goes wrong. Trying again',
@@ -37,5 +38,5 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     }
   }
-  
+
 }
