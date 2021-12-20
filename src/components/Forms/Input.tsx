@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, Input as ChakraInput, InputProps as ChakraInputProps, Box, Text, FormErrorMessage } from '@chakra-ui/react'
+import { FormControl, FormLabel, Input as ChakraInput, InputProps as ChakraInputProps, Box, Text, FormErrorMessage, InputGroup, InputLeftAddon, InputRightAddon } from '@chakra-ui/react'
 import { forwardRef, ForwardRefRenderFunction } from 'react';
 import { FieldError } from 'react-hook-form';
 
@@ -7,9 +7,11 @@ interface InputProps extends ChakraInputProps {
   label?: string;
   obs?: string;
   error?: FieldError;
+  leftAddon?: string;
+  rightAddon?: string;
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, label, obs, error = null, ...rest }, ref) => {
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, leftAddon, rightAddon, label, obs, error = null, ...rest }, ref) => {
   return (
     <FormControl isInvalid={!!error}>
       <Box display="flex">
@@ -24,19 +26,23 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ nam
             {obs}
           </Text>}
       </Box>
-      <ChakraInput
-        name={name}
-        id={name}
-        focusBorderColor="blue.500"
-        border="1px"
-        borderColor="gray.300"
-        _hover={{
-          bgColor: 'gray.50'
-        }}
-        size="lg"
-        ref={ref}
-        {...rest}
-      />
+      <InputGroup>
+        {leftAddon ? <InputLeftAddon children={leftAddon} size="lg" /> : null}
+        <ChakraInput
+          name={name}
+          id={name}
+          focusBorderColor="blue.500"
+          border="1px"
+          borderColor="gray.300"
+          _hover={{
+            bgColor: 'gray.50'
+          }}
+          // size="lg"
+          ref={ref}
+          {...rest}
+        />
+        {rightAddon ? <InputRightAddon children={rightAddon} /> : null}
+      </InputGroup>
 
       {!!error && (
         <FormErrorMessage>

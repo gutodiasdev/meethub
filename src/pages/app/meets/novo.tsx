@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Spinner, Skeleton } from '@chakra-ui/react';
+import { Box, Flex, Heading, VStack, SimpleGrid, FormLabel, Button, HStack, FormControl, Select, Text, Skeleton, GridItem } from '@chakra-ui/react';
 import Link from "next/link";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -14,6 +14,7 @@ import { AuthContext } from '../../../contexts/AuthContext';
 import { withSSRAuth } from '../../../utils/withSSRAuth';
 import { setupAPIClient } from '../../../services/api';
 import { useCategories } from '../../../services/hooks/categories/useCategories';
+import { FileInputMeet } from '../../../components/Forms/FileInputMeet';
 
 const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'), {
   loading: () => <Skeleton h={24} />,
@@ -23,6 +24,7 @@ const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'
 type CreateMeetFormData = {
   name: string;
   price: string;
+  image: string;
   mentorEmail: string;
   meetDetails: string;
   categoryId: string;
@@ -37,11 +39,28 @@ const createMeetFormSchema = yup.object().shape({
 export default function MentorMeetCriation() {
   const { data, isLoading, error } = useCategories()
   const [textEditorData, setTextEditorData] = useState('')
-
+  const [imageUrl, setImageUrl] = useState('')
+  const [localimageUrl, setLocalImageUrl] = useState('')
 
   const { user } = useContext(AuthContext)
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+  const acceptedFormatsRegex =
+    /(?:([^:/?#]+):)?(?:([^/?#]*))?([^?#](?:jpeg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
+
+  const formValidations = {
+    image: {
+      required: 'Arquivo obrigatório',
+      validate: {
+        lessThan10MB: fileList =>
+          fileList[0].size < 10000000 || 'O arquivo deve ser menor que 10MB',
+        acceptedFormats: fileList =>
+          acceptedFormatsRegex.test(fileList[0].type) ||
+          'Somente são aceitos arquivos PNG, JPEG e GIF',
+      },
+    }
+  };
+
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError, trigger } = useForm({
     resolver: yupResolver(createMeetFormSchema)
   })
 
@@ -55,6 +74,7 @@ export default function MentorMeetCriation() {
 
     const response = await api.post('/meets', {
       name: values.name,
+      image: imageUrl,
       meetDetails: textEditorData,
       price: values.price,
       categoryId: values.categoryId,
@@ -67,9 +87,11 @@ export default function MentorMeetCriation() {
 
   }
 
+
+
   return (
     <AppContainer>
-      <Flex w="100%" maxWidth={1480} mx="auto">
+      <Flex w="100%" maxWidth={1480} mx="auto" mb={16}>
         <Box
           as="form"
           flex="1"
@@ -79,25 +101,40 @@ export default function MentorMeetCriation() {
         >
           <Heading size="lg" fontWeight="normal" mb="4">Criar meet</Heading>
           <VStack spacing="4">
-            <SimpleGrid spacing={["6", "8"]} w="100%">
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                label="Título do meet"
-                {...register('name')}
-                error={errors.name}
-              />
+            <FileInputMeet
+              name="image"
+              setImageUrl={setImageUrl}
+              localImageUrl={localimageUrl}
+              setLocalImageUrl={setLocalImageUrl}
+              setError={setError}
+              trigger={trigger}
+              {...register('image', formValidations.image)}
+            />
+            <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns='repeat(12, 1fr)'>
+              <GridItem colSpan={10}>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  label="Título do meet"
+                  {...register('name')}
+                  error={errors.name}
+                />
+              </GridItem>
+              <GridItem colSpan={2}>
+                <Input
+                  leftAddon='R$'
+                  id="price"
+                  name="price"
+                  type="number"
+                  label="Preço"
+                  textAlign='right'
+                  {...register('price')}
+                  error={errors.price}
+                />
+              </GridItem>
             </SimpleGrid>
             <SimpleGrid spacing={["6", "8"]} w="100%" templateColumns="repeat(2, 1fr)">
-              <Input
-                id="price"
-                name="price"
-                type="number"
-                label="Preço"
-                {...register('price')}
-                error={errors.price}
-              />
               <Box>
                 <FormLabel htmlFor="categoryId" >Categoria do Meet</FormLabel>
 
@@ -120,7 +157,8 @@ export default function MentorMeetCriation() {
                       id="categoryId"
                       border="1px"
                       borderColor="gray.300"
-                      height={12}
+                      height={10}
+                      maxW={300}
                       {...register('categoryId')}
                     >
                       {
@@ -136,6 +174,7 @@ export default function MentorMeetCriation() {
                 )}
 
               </Box>
+              <Box></Box>
             </SimpleGrid>
             <VStack w="100%" justify="flex-start">
               <FormControl>

@@ -7,13 +7,14 @@ export default nextConnect<NextApiRequest, NextApiResponse>({
   onNoMatch: (req, res, next) => { },
 })
   .post(async (req, res) => {
-    const { name, price, meetDetails, categoryId, mentorId } = req.body;
+    const { name, price, meetDetails, categoryId, mentorId, image } = req.body;
 
     const meet = await prisma.meet.create({
       data: {
         name: name,
         price: Number(price),
         meetDetails: meetDetails,
+        image: image,
         members: {
           create: {
             roles: "mentor",

@@ -136,7 +136,10 @@ const FileInputBase: ForwardRefRenderFunction<
       <FormControl isInvalid={!!error}>
         <FormLabel
           mx="auto"
-          w={40}
+          border='1px'
+          borderRadius={8}
+          borderColor='gray.300'
+          overflow='hidden'
           h={40}
           htmlFor={name}
           cursor={isSending ? 'progress' : 'pointer'}
@@ -148,7 +151,7 @@ const FileInputBase: ForwardRefRenderFunction<
               h="full"
               src={localImageUrl}
               alt="Uploaded photo"
-              borderRadius="full"
+
               objectFit="cover"
             />
           ) : (
@@ -169,7 +172,7 @@ const FileInputBase: ForwardRefRenderFunction<
                   <CircularProgress
                     trackColor="pGray.200"
                     value={progress}
-                    color="orange.500"
+                    color="blue.500"
                   >
                     <CircularProgressLabel>{progress}%</CircularProgressLabel>
                   </CircularProgress>
@@ -226,4 +229,4 @@ const FileInputBase: ForwardRefRenderFunction<
     );
   };
 
-export const FileInput = forwardRef(FileInputBase);
+export const FileInputMeet = forwardRef(FileInputBase);

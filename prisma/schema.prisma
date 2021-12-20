@@ -30,16 +30,17 @@ model User {
 }
 
 model Meet {
-  id          String           @id @default(uuid())
+  id          String  @id @default(uuid())
+  image       String?
   name        String
   meetDetails String?
   price       Decimal
-  
+
   // Relation Fields
-  categories  Category[]
-  reviews     Reviews[]
-  members     MeetEnrollment[]
-  createdAt DateTime @default(now())
+  categories Category[]
+  reviews    Reviews[]
+  members    MeetEnrollment[]
+  createdAt  DateTime         @default(now())
 }
 
 model MeetEnrollment {
@@ -115,14 +116,14 @@ model UserPreferences {
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
   description String?
 
   subCategory    SubCategory?
   userPreference UserPreferences[]
-  meets Meet[]
-  users User[]
+  meets          Meet[]
+  users          User[]
 }
 
 model SubCategory {
