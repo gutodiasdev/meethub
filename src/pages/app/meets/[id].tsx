@@ -13,8 +13,10 @@ import {
   Image,
   Avatar,
   Text,
-  Spinner
+  Spinner,
+  useDisclosure
 } from '@chakra-ui/react'
+
 import { setupAPIClient } from "../../../services/api";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 import AppContainer from "../../../components/AppContainer";
@@ -23,11 +25,12 @@ import ReactHtmlParser from 'react-html-parser';
 import { useQuery } from 'react-query';
 import { api } from '../../../services/apiClient';
 import { WhoCanUse } from '../../../components/WhoCanUse';
+import { EditMeetModal } from '../../../components/Modals/EditMeetModal'
 
 
 const Meet = ({ meet }) => {
   const [meets, setMeets] = useState(meet);
-  const [isResponsible, setIsResponsible] = useState(false);
+  const { onOpen, isOpen, onClose } = useDisclosure()
   const mentorId = meets.members[0].userId
 
   const { data, isLoading } = useQuery('mentor', async () => {
@@ -97,6 +100,7 @@ const Meet = ({ meet }) => {
             colorScheme="blue"
             size="lg"
             mr={4}
+            onClick={() => onOpen()}
           >
             Editar meet
           </Button>
@@ -161,6 +165,7 @@ const Meet = ({ meet }) => {
           </TabPanels>
         </Tabs>
       </Flex>
+      <EditMeetModal isOpen={isOpen} onClose={onClose} />
     </AppContainer>
   )
 }
