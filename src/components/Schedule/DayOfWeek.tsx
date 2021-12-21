@@ -8,7 +8,6 @@ type DayofWeekParams = {
 
 export function DayOfWeek({ dayName, dayValue }: DayofWeekParams) {
   const [isDayName, setIsDayName] = useState(dayName)
-  const [isDayValue, setIsDayValue] = useState(dayValue)
   const [isSelected, setIsSelected] = useBoolean(false)
 
   function handleSelected(data) {
@@ -18,7 +17,7 @@ export function DayOfWeek({ dayName, dayValue }: DayofWeekParams) {
     }
     if (isSelected) {
       setIsSelected.off()
-      console.log(`Remove day ${isDayName}`)
+      console.log(`Remove day ${isDayName} with value ${dayValue}`)
     }
   }
 
