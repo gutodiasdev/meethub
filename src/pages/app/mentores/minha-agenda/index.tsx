@@ -1,4 +1,4 @@
-import { Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
 import { addDays, addYears, format, getDay, setDay, startOfWeek } from 'date-fns'
 import { ptBR } from "date-fns/locale";
 
@@ -10,7 +10,6 @@ export default function AgendaMentor() {
   const firstDOW = startOfWeek(new Date())
   const shortWeekDaysArray = Array.from(Array(7)).map((e, i) => format(addDays(firstDOW, i), 'eee', { locale: ptBR }))
 
-
   return (
     <AppContainer>
       <Flex w='100%' direction='column'>
@@ -21,6 +20,7 @@ export default function AgendaMentor() {
               <DayOfWeek
                 key={index}
                 dayName={key}
+                dayValue={index}
               />
             )
           })}
