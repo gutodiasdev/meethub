@@ -47,8 +47,6 @@ export default function App() {
     return meets
   })
 
-  console.log(meets.data)
-
   const mutation = useMutation(async (keyword) => {
     const { data } = await api.post('search', { keyword })
 
@@ -137,7 +135,7 @@ export default function App() {
               <Text>Desculpe, houve algum erro durante tentarmos trazer os especialistas</Text>
             ) : (
               <Flex w='100%' direction='column'>
-                <Heading size='md' color='gray.500'>Mentores</Heading>
+                <Heading size='lg' color='gray.600' my={4}>Mentores</Heading>
                 <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
                   {data.map(mentor => {
                     return (
@@ -163,18 +161,26 @@ export default function App() {
                     )
                   })}
                 </SimpleGrid>
-                <VStack mt={4} spacing={4}>
-                  {meets.data.map(meet => {
-                    return (
-                      <MeetContainer
-                        key={meet.id}
-                        meetId={meet.id}
-                        meetName={meet.name}
-                        meetPrice={meet.price}
-                        mentorId={meet.mentor}
-                      />
-                    )
-                  })}
+                <VStack mt={4} mb={16} spacing={4}>
+                  <Heading size='lg' color='gray.600' mt={4} mr='auto'>Meets</Heading>
+                  {meets.isLoading ? (
+                    <Flex>
+                      <Spinner />
+                    </Flex>
+                  ) : (
+                    meets.data.map(meet => {
+                      return (
+                        <MeetContainer
+                          href={`/app/meets/${meet.id}`}
+                          key={meet.id}
+                          meetId={meet.id}
+                          meetName={meet.name}
+                          meetPrice={meet.price}
+                          mentorId={meet.mentor}
+                        />
+                      )
+                    })
+                  )}
                 </VStack>
               </Flex>
             )}
@@ -217,6 +223,7 @@ export default function App() {
                 {mutation.data.meets.map(meet => {
                   return (
                     <MeetContainer
+                      href={`/app/meets/${meet.id}`}
                       key={meet.id}
                       meetId={meet.id}
                       meetName={meet.name}

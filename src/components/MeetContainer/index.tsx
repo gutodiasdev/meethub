@@ -6,9 +6,10 @@ interface MeetContainerProps {
   meetName: string,
   meetPrice: string,
   mentorId?: string,
+  href: string,
 }
 
-export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetContainerProps) {
+export function MeetContainer({ meetId, meetPrice, meetName, mentorId, href }: MeetContainerProps) {
   const { data, isLoading } = useQuery('mentor', async () => {
     const response = await api.get(`/mentors/${mentorId}`)
     const singleMentor = response.data.map(mentor => {
@@ -22,7 +23,8 @@ export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetCon
   return (
     <Flex
       as="a"
-      href={`meets/${meetId}`}
+      // href={`meets/${meetId}`}
+      href={href}
       cursor="pointer"
       key={meetId}
       bg="white"
