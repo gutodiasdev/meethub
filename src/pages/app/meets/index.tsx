@@ -57,6 +57,8 @@ export default function Meets() {
     }
   }
 
+  console.log(mutation.data)
+
   return (
     <AppContainer>
       <Flex w="100%" direction="column" >
@@ -107,7 +109,7 @@ export default function Meets() {
                       meetId={meet.id}
                       meetName={meet.name}
                       meetPrice={meet.price}
-                      mentorId={meet.mentor[0].id}
+                      mentorId={meet.mentor.id}
                     />
                   )
                 })}
@@ -129,7 +131,7 @@ export default function Meets() {
                     meetId={meet.id}
                     meetName={meet.name}
                     meetPrice={meet.price}
-                    mentorId={meet.mentor}
+                    mentorId={meet.mentor[0].id}
                   />
                 )
               })}

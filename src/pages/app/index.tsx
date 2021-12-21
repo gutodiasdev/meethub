@@ -12,6 +12,7 @@ import { MeetContainer } from "../../components/MeetContainer";
 export default function App() {
   const [isSearching, setIsSearching] = useState(false)
   const [theKeyword, setTheKeyword] = useState('')
+
   const { data, isLoading, error } = useQuery('mentors', async () => {
     const response = await api.get('mentors')
 
@@ -97,6 +98,8 @@ export default function App() {
     rows: 1,
     slidesPerRow: 2
   }
+
+  console.log(meets.data)
 
   return (
     <AppContainer>

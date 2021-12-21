@@ -1,4 +1,4 @@
-import { Avatar, Flex, Heading, HStack, Spinner, Tag, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Heading, SkeletonCircle, SkeletonText, Text } from '@chakra-ui/react'
 import { useQuery } from 'react-query'
 import { api } from '../../services/apiClient'
 interface MeetContainerProps {
@@ -10,7 +10,8 @@ interface MeetContainerProps {
 }
 
 export function MeetContainer({ meetId, meetPrice, meetName, mentorId, href }: MeetContainerProps) {
-  const { data, isLoading } = useQuery('mentor', async () => {
+
+  const { data, isLoading, error } = useQuery('mentor', async () => {
     const response = await api.get(`/mentors/${mentorId}`)
     const singleMentor = response.data.map(mentor => {
       return {
@@ -20,10 +21,12 @@ export function MeetContainer({ meetId, meetPrice, meetName, mentorId, href }: M
     })
     return singleMentor
   })
+
+  console.log(data)
+
   return (
     <Flex
       as="a"
-      // href={`meets/${meetId}`}
       href={href}
       cursor="pointer"
       key={meetId}
@@ -41,7 +44,16 @@ export function MeetContainer({ meetId, meetPrice, meetName, mentorId, href }: M
       >
         <Flex>
           {isLoading ? (
-            <Flex><Spinner /></Flex>
+            <Box>
+              <SkeletonCircle size='12' />
+            </Box>
+          ) : error ? (
+            <Flex>
+              <Avatar
+                size="md"
+                name=''
+              />
+            </Flex>
           ) : (
             data.map(mentor => {
               return (
