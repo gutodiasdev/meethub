@@ -25,8 +25,18 @@ model User {
   meets           MeetEnrollment[]
   categories      Category[]
   userPreferences UserPreferences?
+  schedule        Schedule?
 
   createdAt DateTime @default(now())
+}
+
+model Schedule {
+  id          String  @id @default(uuid())
+  date        String
+  isAvailable Boolean
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Meet {
