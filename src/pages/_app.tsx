@@ -5,6 +5,7 @@ import { QueryClientProvider, QueryClient } from 'react-query';
 import { theme } from "../styles/theme"
 import { SidebarDrawerProvider } from "../contexts/SidebarContextDrawer"
 import { AuthProvider } from "../contexts/AuthContext";
+import { ScheduleProvider } from "../contexts/ScheduleContext";
 
 const queryClient = new QueryClient();
 
@@ -15,7 +16,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <ChakraProvider theme={theme}>
         <SidebarDrawerProvider>
           <AuthProvider>
-            <Component {...pageProps} />
+            <ScheduleProvider>
+              <Component {...pageProps} />
+            </ScheduleProvider>
           </AuthProvider>
         </SidebarDrawerProvider>
       </ChakraProvider>

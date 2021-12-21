@@ -87,8 +87,6 @@ export default function MentorMeetCriation() {
 
   }
 
-
-
   return (
     <AppContainer>
       <Flex w="100%" maxWidth={1480} mx="auto" mb={16}>

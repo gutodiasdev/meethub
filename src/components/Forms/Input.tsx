@@ -37,7 +37,6 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ nam
           _hover={{
             bgColor: 'gray.50'
           }}
-          // size="lg"
           ref={ref}
           {...rest}
         />

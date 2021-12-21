@@ -11,6 +11,7 @@ function Schedule() {
   const weekDays = Array.from(Array(7)).map(
     (e, i) => format(addDays(startOfTheWeek, i), 'eee', { locale: ptBR })
   )
+
   const tomorrowStart = startOfTomorrow()
   const tomorrowEnd = endOfTomorrow()
 
@@ -20,7 +21,7 @@ function Schedule() {
   })
 
   return (
-    <>
+    <Flex w='100%' direction='column'>
       <Heading color='gray.700' size='md'>Dias em que estou disponível</Heading>
       <Text color='gray.500'>Escolha os dias da semana em que você você terá disponibilidade</Text>
       <SimpleGrid w='100%' templateColumns='repeat(7, 1fr)' my='8' gap='4'>
@@ -42,7 +43,7 @@ function Schedule() {
           return <Hours key={index} hour={format(key, 'HH:mm')} />
         })}
       </SimpleGrid>
-    </>
+    </Flex>
   )
 }
 
