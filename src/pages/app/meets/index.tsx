@@ -48,6 +48,7 @@ export default function Meets() {
             {data.slice(0).reverse().map(meet => {
               return (
                 <MeetContainer
+                  href={`/app/meets/${meet.id}`}
                   key={meet.id}
                   meetId={meet.id}
                   meetName={meet.name}
