@@ -22,35 +22,6 @@ type Meet = {
 }
 
 export default function Meets() {
-  // const { data, isLoading, error } = useQuery('meets', async (): Promise<Meet[]> => {
-  //   const { data } = await api.get('/meets')
-
-  //   console.log(data)
-
-  //   const meets = data.map(meet => {
-  //     return {
-  //       id: meet.id,
-  //       name: meet.name,
-  //       price: meet.price,
-  //       mentor: meet.members.map(member => {
-  //         return {
-  //           id: member.userId,
-  //         }
-  //       }),
-  //       categories: meet.categories.map(category => {
-  //         return {
-  //           id: category.id,
-  //           name: category.name,
-  //         }
-  //       }),
-  //     }
-  //   })
-
-  //   return meets
-
-  // }, {
-  //   staleTime: 1000 * 60 * 15 // 15 min
-  // })
 
   const { data, isLoading, error } = useQuery('meets', getMeets)
 

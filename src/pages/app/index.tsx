@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Heading, Icon, SimpleGrid, Spinner, Tag, Text } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Heading, Icon, SimpleGrid, Spinner, Tag, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMutation, useQuery } from 'react-query'
 
@@ -7,6 +7,7 @@ import { DebounceInput } from 'react-debounce-input'
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { RiSearchLine } from "react-icons/ri";
+import { MeetContainer } from "../../components/MeetContainer";
 
 export default function App() {
   const [isSearching, setIsSearching] = useState(false)
@@ -31,6 +32,24 @@ export default function App() {
     return mentors
   })
 
+  const meets = useQuery('meets', async () => {
+    const response = await api.get('meets')
+
+    const meets = response.data.map(meet => {
+      return {
+        id: meet.id,
+        name: meet.name,
+        categories: meet.categories.map(category => {
+          return {
+            name: category.name,
+          }
+        }),
+      }
+    })
+
+    return meets
+  })
+
   const mutation = useMutation(async (keyword) => {
     const { data } = await api.post('search', { keyword })
 
@@ -49,7 +68,16 @@ export default function App() {
       }
     })
 
-    return mentorsResults
+    const meetsResults = data.results.meets.map(result => {
+      return {
+        id: result.id,
+        name: result.name,
+        price: result.price,
+        mentor: result.members[0].userId
+      }
+    })
+
+    return { mentors: mentorsResults, meets: meetsResults }
 
   })
 
@@ -72,8 +100,6 @@ export default function App() {
     rows: 1,
     slidesPerRow: 2
   }
-
-  console.log(mutation.data)
 
   return (
     <AppContainer>
@@ -146,32 +172,46 @@ export default function App() {
             </Flex>
 
           ) : mutation.isSuccess ? (
-
-            <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
-              {mutation.data.map(result => {
-                return (
-                  <Flex
-                    direction='column'
-                    key={result.id}
-                    border='1px'
-                    borderColor='gray.200'
-                    borderRadius='md'
-                    colSpan={1}
-                    p={6}
-                    align='center'
-                  >
-                    <Avatar size='xl' src={result.image} name={result.name} />
-                    <Flex w='100%' justify='center' my={2} minH={5}>
-                      {result.categories.slice(0, 5).map(name => {
-                        return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
-                      })}
+            <>
+              <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
+                {mutation.data.mentors.map(result => {
+                  return (
+                    <Flex
+                      direction='column'
+                      key={result.id}
+                      border='1px'
+                      borderColor='gray.200'
+                      borderRadius='md'
+                      colSpan={1}
+                      p={6}
+                      align='center'
+                    >
+                      <Avatar size='xl' src={result.image} name={result.name} />
+                      <Flex w='100%' justify='center' my={2} minH={5}>
+                        {result.categories.slice(0, 5).map(name => {
+                          return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
+                        })}
+                      </Flex>
+                      <Heading as='h2' size='md' >{result.name}</Heading>
+                      <Text color='gray.400'>{result.position}</Text>
                     </Flex>
-                    <Heading as='h2' size='md' >{result.name}</Heading>
-                    <Text color='gray.400'>{result.position}</Text>
-                  </Flex>
-                )
-              })}
-            </SimpleGrid>
+                  )
+                })}
+              </SimpleGrid>
+              <VStack mt={4} spacing={4}>
+                {mutation.data.meets.map(meet => {
+                  return (
+                    <MeetContainer
+                      key={meet.id}
+                      meetId={meet.id}
+                      meetName={meet.name}
+                      meetPrice={meet.price}
+                      mentorId={meet.mentor}
+                    />
+                  )
+                })}
+              </VStack>
+            </>
 
           ) : (
 

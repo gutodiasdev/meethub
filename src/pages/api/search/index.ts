@@ -29,29 +29,43 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>({
       }
     })
 
-    // const meets = await prisma.meet.findMany({
-    //   where: {
-    //     OR: [{
-    //       name: {
-    //         startsWith: keyword,
-    //       }
-    //     }, {
-    //       members: {
-    //         some: {
-    //           user: {
-    //             roles: 'mentor',
-    //             name: {
-    //               contains: keyword,
-    //               mode: 'insensitive'
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }]
-    //   }
-    // })
+    const meets = await prisma.meet.findMany({
+      where: {
+        OR: [{
+          name: {
+            contains: keyword,
+            mode: 'insensitive',
+          }
+        },
+        {
+          members: {
+            some: {
+              roles: 'mentor',
+              user: {
+                name: {
+                  contains: keyword,
+                  mode: 'insensitive'
+                }
+              }
+            }
+          }
+        }
+        ]
+      },
+      include: {
+        members: {
+          where: {
+            roles: 'mentor'
+          },
+          select: {
+            roles: true,
+            userId: true,
+          }
+        }
+      }
+    })
 
-    return res.status(200).json({ results: { mentors } })
+    return res.status(200).json({ results: { mentors, meets } })
   })
 
 export default handler

@@ -5,7 +5,7 @@ interface MeetContainerProps {
   meetId: string,
   meetName: string,
   meetPrice: string,
-  mentorId: string,
+  mentorId?: string,
 }
 
 export function MeetContainer({ meetId, meetPrice, meetName, mentorId }: MeetContainerProps) {
