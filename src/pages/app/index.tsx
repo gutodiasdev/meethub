@@ -39,16 +39,15 @@ export default function App() {
       return {
         id: meet.id,
         name: meet.name,
-        categories: meet.categories.map(category => {
-          return {
-            name: category.name,
-          }
-        }),
+        price: meet.price,
+        mentor: meet.members[0].userId
       }
     })
 
     return meets
   })
+
+  console.log(meets.data)
 
   const mutation = useMutation(async (keyword) => {
     const { data } = await api.post('search', { keyword })
@@ -137,31 +136,47 @@ export default function App() {
             ) : error ? (
               <Text>Desculpe, houve algum erro durante tentarmos trazer os especialistas</Text>
             ) : (
-              <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
-                {data.map(mentor => {
-                  return (
-                    <Flex
-                      direction='column'
-                      key={mentor.id}
-                      border='1px'
-                      borderColor='gray.200'
-                      borderRadius='md'
-                      colSpan={1}
-                      p={6}
-                      align='center'
-                    >
-                      <Avatar size='xl' src={mentor.image} name={mentor.name} />
-                      <Flex w='100%' justify='center' my={2} minH={5}>
-                        {mentor.categories.slice(0, 5).map(name => {
-                          return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
-                        })}
+              <Flex w='100%' direction='column'>
+                <Heading size='md' color='gray.500'>Mentores</Heading>
+                <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
+                  {data.map(mentor => {
+                    return (
+                      <Flex
+                        direction='column'
+                        key={mentor.id}
+                        border='1px'
+                        borderColor='gray.200'
+                        borderRadius='md'
+                        colSpan={1}
+                        p={6}
+                        align='center'
+                      >
+                        <Avatar size='xl' src={mentor.image} name={mentor.name} />
+                        <Flex w='100%' justify='center' my={2} minH={5}>
+                          {mentor.categories.slice(0, 5).map(name => {
+                            return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
+                          })}
+                        </Flex>
+                        <Heading as='h2' size='md' >{mentor.name}</Heading>
+                        <Text color='gray.400'>{mentor.position}</Text>
                       </Flex>
-                      <Heading as='h2' size='md' >{mentor.name}</Heading>
-                      <Text color='gray.400'>{mentor.position}</Text>
-                    </Flex>
-                  )
-                })}
-              </SimpleGrid>
+                    )
+                  })}
+                </SimpleGrid>
+                <VStack mt={4} spacing={4}>
+                  {meets.data.map(meet => {
+                    return (
+                      <MeetContainer
+                        key={meet.id}
+                        meetId={meet.id}
+                        meetName={meet.name}
+                        meetPrice={meet.price}
+                        mentorId={meet.mentor}
+                      />
+                    )
+                  })}
+                </VStack>
+              </Flex>
             )}
           </Flex>
         ) : (
