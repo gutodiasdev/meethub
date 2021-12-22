@@ -7,8 +7,11 @@ import { useQuery } from 'react-query'
 import { api } from "../../../../services/apiClient";
 import { RiAddFill, RiEditBoxLine } from "react-icons/ri";
 import { FiTrash } from "react-icons/fi";
+import { useState } from "react";
 
 export default function MyMeets({ user }) {
+  const [hasMeetAsUser, setHasMeetAsUser] = useState(false)
+
   const { data, isLoading, error } = useQuery('meets', async () => {
     const { data } = await api.post('/meets/my', { userId: user.id })
     const asMentor = data.asMentor.map(meet => {
@@ -31,6 +34,10 @@ export default function MyMeets({ user }) {
       }
     })
 
+    if (asUser.length === 0) {
+      setHasMeetAsUser(true)
+    }
+
     return { asMentor: asMentor, asUser: asUser }
   })
 
@@ -47,10 +54,6 @@ export default function MyMeets({ user }) {
           ) : error ? (
             <Heading size='md' color='gray.600'>
               Desculpe, ocorreu algum erro
-            </Heading>
-          ) : (data.asUser.length == 0) ? (
-            <Heading size='md' color='gray.600'>
-              Você ainda não tem meets como usuário ...
             </Heading>
           ) : (
             data.asUser.map(meet => {
@@ -121,7 +124,7 @@ export default function MyMeets({ user }) {
                   <Heading size='md' color='gray.600'>
                     Desculpe, ocorreu algum erro
                   </Heading>
-                ) : (data.asUser.length == 0) ? (
+                ) : hasMeetAsUser ? (
                   <Heading size='md' color='gray.600'>
                     Você ainda não tem meets como usuário ...
                   </Heading>
@@ -237,8 +240,6 @@ export default function MyMeets({ user }) {
             </TabPanels>
           </Tabs>
         </WhoCanUse>
-
-
       </Flex>
     </AppContainer>
   )

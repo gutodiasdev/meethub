@@ -101,7 +101,7 @@ export default function Meets() {
               </Flex>
             ) : (
               <Flex direction="column">
-                {data.slice(0).reverse().map(meet => {
+                {data.map(meet => {
                   return (
                     <MeetContainer
                       href={`/app/meets/${meet.id}`}
