@@ -26,7 +26,23 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>({
     }
   })
 
-  return res.status(200).json({ asMentor: mentor })
+  const user = await prisma.meet.findMany({
+    where: {
+      members: {
+        some: {
+          user: {
+            AND: [{
+              id: userId,
+            }, {
+              roles: 'user',
+            }]
+          }
+        }
+      }
+    }
+  })
+
+  return res.status(200).json({ asMentor: mentor, asUser: user })
 
 })
 

@@ -11,7 +11,7 @@ import { FiTrash } from "react-icons/fi";
 export default function MyMeets({ user }) {
   const { data, isLoading, error } = useQuery('meets', async () => {
     const { data } = await api.post('/meets/my', { userId: user.id })
-    const meets = data.asMentor.map(meet => {
+    const asMentor = data.asMentor.map(meet => {
       return {
         id: meet.id,
         image: meet.image,
@@ -21,7 +21,17 @@ export default function MyMeets({ user }) {
       }
     })
 
-    return { asMentor: meets }
+    const asUser = data.asUser.map(meet => {
+      return {
+        id: meet.id,
+        image: meet.image,
+        meetDetails: meet.meetDetails,
+        name: meet.name,
+        price: meet.price,
+      }
+    })
+
+    return { asMentor: asMentor, asUser: asUser }
   })
 
   console.log(data)
@@ -29,56 +39,70 @@ export default function MyMeets({ user }) {
   return (
     <AppContainer>
       <Flex w="100%">
-        <WhoCanUse permissions={['user']}>
-          {/* {asUser.map(meetItem => {
-            return (
-              <Flex
-                key={meetItem.id}
-                bg="white"
-                border="1px"
-                borderColor="gray.100"
-                borderRadius="8"
-                width="100%"
-                p="4"
-                mb="4"
-              >
-                <Center
-                  w="150px"
+        <WhoCanUse roles={['user']}>
+          {isLoading ? (
+            <Flex>
+              <Spinner />
+            </Flex>
+          ) : error ? (
+            <Heading size='md' color='gray.600'>
+              Desculpe, ocorreu algum erro
+            </Heading>
+          ) : (data.asUser.length == 0) ? (
+            <Heading size='md' color='gray.600'>
+              Você ainda não tem meets como usuário ...
+            </Heading>
+          ) : (
+            data.asUser.map(meet => {
+              return (
+                <Flex
+                  key={meet.id}
+                  bg="white"
+                  border="1px"
+                  borderColor="gray.100"
+                  borderRadius="8"
+                  width="100%"
+                  p="4"
+                  mb="4"
                 >
-                  <Avatar size="lg" />
-                </Center>
-                <Box
-                  flex="1"
-                  columnSpan={4}
-                  direction="column"
-                  h="100%"
-                >
-                  <HStack>
-                    <Tag size="sm">Marketing</Tag>
-                  </HStack>
-                  <Heading
-                    size="md"
-                    mt="2"
-                    mb="1"
+                  <Center
+                    w="150px"
                   >
-                    {meetItem.name}</Heading>
-                  <Text
-                    color="gray.500"
-                    fontWeight="thin"
+                    <Avatar size="lg" />
+                  </Center>
+                  <Box
+                    flex="1"
+                    columnSpan={4}
+                    direction="column"
+                    h="100%"
                   >
-                    {meetItem.description}</Text>
-                </Box>
-                <Button
-                  as="a"
-                  target="_blank"
-                  href={`/app/meets/meus-meets/sala/${meetItem.id}`}
-                  colorScheme="blue"
-                >
-                  Entrar na sala
-                </Button>
-              </Flex>
-            )
-          })} */}
+                    <HStack>
+                      <Tag size="sm">Marketing</Tag>
+                    </HStack>
+                    <Heading
+                      size="md"
+                      mt="2"
+                      mb="1"
+                    >
+                      {meet.name}</Heading>
+                    <Text
+                      color="gray.500"
+                      fontWeight="thin"
+                    >
+                      {meet.description}</Text>
+                  </Box>
+                  <Button
+                    as="a"
+                    href={`sala/${meet.id}`}
+                    target="_blank"
+                    colorScheme="blue"
+                  >
+                    Entrar na sala
+                  </Button>
+                </Flex>
+              )
+            })
+          )}
         </WhoCanUse>
 
         <WhoCanUse roles={['mentor']}>
@@ -89,55 +113,70 @@ export default function MyMeets({ user }) {
             </TabList>
             <TabPanels>
               <TabPanel>
-                {/* {asUser.map(meetItem => {
-                  return (
-                    <Flex
-                      key={meetItem.id}
-                      bg="white"
-                      border="1px"
-                      borderColor="gray.100"
-                      borderRadius="8"
-                      width="100%"
-                      p="4"
-                      mb="4"
-                    >
-                      <Center
-                        w="150px"
+                {isLoading ? (
+                  <Flex>
+                    <Spinner />
+                  </Flex>
+                ) : error ? (
+                  <Heading size='md' color='gray.600'>
+                    Desculpe, ocorreu algum erro
+                  </Heading>
+                ) : (data.asUser.length == 0) ? (
+                  <Heading size='md' color='gray.600'>
+                    Você ainda não tem meets como usuário ...
+                  </Heading>
+                ) : (
+                  data.asUser.map(meet => {
+                    return (
+                      <Flex
+                        key={meet.id}
+                        bg="white"
+                        border="1px"
+                        borderColor="gray.100"
+                        borderRadius="8"
+                        width="100%"
+                        p="4"
+                        mb="4"
                       >
-                        <Avatar size="lg" />
-                      </Center>
-                      <Box
-                        flex="1"
-                        columnSpan={4}
-                        direction="column"
-                        h="100%"
-                      >
-                        <HStack>
-                          <Tag size="sm">Marketing</Tag>
-                        </HStack>
-                        <Heading
-                          size="md"
-                          mt="2"
-                          mb="1"
+                        <Center
+                          w="150px"
                         >
-                          {meetItem.name}</Heading>
-                        <Text
-                          color="gray.500"
-                          fontWeight="thin"
+                          <Avatar size="lg" />
+                        </Center>
+                        <Box
+                          flex="1"
+                          columnSpan={4}
+                          direction="column"
+                          h="100%"
                         >
-                          {meetItem.description}</Text>
-                      </Box>
-                      <Button
-                        as="a"
-                        href={`sala/${meetItem.id}`}
-                        target="_blank"
-                        colorScheme="blue"
-                      >
-                        Entrar na sala
-                      </Button>
-                    </Flex>
-                  )
-                })} */}
+                          <HStack>
+                            <Tag size="sm">Marketing</Tag>
+                          </HStack>
+                          <Heading
+                            size="md"
+                            mt="2"
+                            mb="1"
+                          >
+                            {meet.name}</Heading>
+                          <Text
+                            color="gray.500"
+                            fontWeight="thin"
+                          >
+                            {meet.description}</Text>
+                        </Box>
+                        <Button
+                          as="a"
+                          href={`sala/${meet.id}`}
+                          target="_blank"
+                          colorScheme="blue"
+                        >
+                          Entrar na sala
+                        </Button>
+                      </Flex>
+                    )
+                  })
+                )}
+
               </TabPanel>
               <TabPanel>
                 <Flex justify='right'>
