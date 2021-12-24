@@ -2,7 +2,6 @@ import {
   Box,
   Heading,
   Flex,
-  HStack,
   Tag,
   Tabs,
   TabList,
@@ -14,7 +13,13 @@ import {
   Avatar,
   Text,
   Spinner,
-  useDisclosure
+  useDisclosure,
+  Skeleton,
+  Input,
+  useToast,
+  Radio,
+  RadioGroup,
+  Stack
 } from '@chakra-ui/react'
 
 import { setupAPIClient } from "../../../services/api";
@@ -26,12 +31,24 @@ import { useQuery } from 'react-query';
 import { api } from '../../../services/apiClient';
 import { WhoCanUse } from '../../../components/WhoCanUse';
 import { EditMeetModal } from '../../../components/Modals/EditMeetModal'
+import dynamic from 'next/dynamic';
+import { useForm } from 'react-hook-form';
+import { RiStarLine } from 'react-icons/ri';
 
+
+const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'), {
+  loading: () => <Skeleton h={24} />,
+  ssr: false
+})
 
 const Meet = ({ meet }) => {
   const [meets, setMeets] = useState(meet);
+  const [textEditorData, setTextEditorData] = useState('')
+  const [isValue, setIsValue] = useState('1')
   const { onOpen, isOpen, onClose } = useDisclosure()
   const mentorId = meets.members[0].userId
+
+  const toast = useToast()
 
   const { data, isLoading } = useQuery('mentor', async () => {
     const response = await api.get(`mentors/${mentorId}`)
@@ -50,6 +67,37 @@ const Meet = ({ meet }) => {
   }, {
     staleTime: 1000 * 60 * 15
   })
+
+  const handleTextEditor = (e, editor) => {
+    const data = editor.getData()
+
+    setTextEditorData(data)
+  }
+
+  const { register, formState: { isSubmitting, errors }, handleSubmit } = useForm()
+
+  const handleReviewSubmit = async (value) => {
+    try {
+      await api.post('/meets/reviews', {
+        meetId: value.meetId,
+        description: textEditorData,
+        rating: isValue,
+      })
+      toast({
+        status: 'success',
+        title: 'Avaliação enviada',
+        description: 'Sua avaliação foi enviada com sucesso'
+      })
+    } catch (e) {
+      toast({
+        status: 'error',
+        title: 'Algo de errado',
+        description: 'Desculpe, algo deu errado durante o envio de sua avaliação'
+      })
+    } finally {
+      setTextEditorData('')
+    }
+  }
 
   return (
     <AppContainer>
@@ -127,7 +175,31 @@ const Meet = ({ meet }) => {
               Agenda
             </TabPanel>
             <TabPanel>
-              Reviews
+              <Box w='100%' as='form' textAlign='right' >
+                <Box w='100%' textAlign='left'>
+                  <Heading size='sm' as='h3' my='4'>Envie seu review</Heading>
+                  <RadioGroup onChange={setIsValue} value={isValue} my='4'>
+                    <Stack direction='row'>
+                      <Radio value='1'><Flex align='center'>1 <RiStarLine /></Flex></Radio>
+                      <Radio value='2'><Flex align='center'>2 <RiStarLine /></Flex></Radio>
+                      <Radio value='3'><Flex align='center'>3 <RiStarLine /></Flex></Radio>
+                      <Radio value='4'><Flex align='center'>4 <RiStarLine /></Flex></Radio>
+                      <Radio value='5'><Flex align='center'>5 <RiStarLine /></Flex></Radio>
+                    </Stack>
+                  </RadioGroup>
+                  <RichTextEditor handler={handleTextEditor} />
+                </Box>
+                <Input name='meetId' display='none' value={meet.id} {...register('meetId')} />
+                <Button
+                  type='submit'
+                  colorScheme='blue'
+                  variant='outline'
+                  mt='4'
+                  onClick={handleSubmit(handleReviewSubmit)}
+                >
+                  Enviar review
+                </Button>
+              </Box>
             </TabPanel>
             <TabPanel>
               {isLoading ? (
@@ -166,13 +238,14 @@ const Meet = ({ meet }) => {
         </Tabs>
       </Flex>
       <EditMeetModal isOpen={isOpen} onClose={onClose} meetId={meets.id} />
-    </AppContainer>
+    </AppContainer >
   )
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx);
   const response = await apiClient.get(`meets/${ctx.query.id}`);
+  console.log(response.data)
 
   return {
     props: {

@@ -29,7 +29,7 @@ export default function Meets() {
   const [isSearching, setIsSearching] = useState(false)
   const [theKeyword, setTheKeyword] = useState('')
 
-  const { data, isLoading, error } = useQuery('meets', getMeets)
+  const { data, isLoading, error } = useQuery('allMeets', getMeets)
 
   const mutation = useMutation(async (keyword) => {
     const { data } = await api.post('search/meets', { keyword })
@@ -56,8 +56,6 @@ export default function Meets() {
       setIsSearching(false)
     }
   }
-
-  console.log(mutation.data)
 
   return (
     <AppContainer>

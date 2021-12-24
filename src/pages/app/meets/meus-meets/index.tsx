@@ -10,9 +10,9 @@ import { FiTrash } from "react-icons/fi";
 import { useState } from "react";
 
 export default function MyMeets({ user }) {
-  const [hasMeetAsUser, setHasMeetAsUser] = useState(false)
+  const [hasMeetAsUser, setHasMeetAsUser] = useState(true)
 
-  const { data, isLoading, error } = useQuery('meets', async () => {
+  const { data, isLoading, error } = useQuery('UserMeetsAndMentorMeets', async () => {
     const { data } = await api.post('/meets/my', { userId: user.id })
     const asMentor = data.asMentor.map(meet => {
       return {
@@ -35,10 +35,12 @@ export default function MyMeets({ user }) {
     })
 
     if (asUser.length === 0) {
-      setHasMeetAsUser(true)
+      setHasMeetAsUser(false)
     }
 
     return { asMentor: asMentor, asUser: asUser }
+  }, {
+    staleTime: 1000 * 60 * 15 // 15 minutes
   })
 
   console.log(data)
@@ -124,7 +126,7 @@ export default function MyMeets({ user }) {
                   <Heading size='md' color='gray.600'>
                     Desculpe, ocorreu algum erro
                   </Heading>
-                ) : hasMeetAsUser ? (
+                ) : !hasMeetAsUser ? (
                   <Heading size='md' color='gray.600'>
                     Você ainda não tem meets como usuário ...
                   </Heading>

@@ -146,9 +146,9 @@ model SubCategory {
 
 model Reviews {
   id          String  @id @default(uuid())
-  rating      Int
+  rating      Int?
   title       String?
-  description String
+  description String?
 
   meetId String @unique
   meet   Meet   @relation(fields: [meetId], references: [id])
