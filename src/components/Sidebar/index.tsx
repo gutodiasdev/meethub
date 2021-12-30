@@ -32,8 +32,8 @@ export function Sidebar() {
   return (
     <Box
       as="aside"
-      h="100%"
-      position="fixed"
+      h='100vh'
+      position='sticky'
       pt="4"
       pl={6}
     >

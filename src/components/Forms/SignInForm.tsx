@@ -1,5 +1,5 @@
 import { VStack, Button } from '@chakra-ui/react'
-import { FormEvent, useContext, useState } from 'react'
+import { useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Input } from '../../components/Forms/Input'
 import { AuthContext } from '../../contexts/AuthContext'
@@ -12,7 +12,7 @@ type UserSignInData = {
 export default function SignInForm() {
   const { signIn } = useContext(AuthContext)
 
-  const {register, handleSubmit, formState: { isSubmitting }} = useForm();
+  const { register, handleSubmit, formState: { isSubmitting } } = useForm();
 
   const handleSignIn: SubmitHandler<UserSignInData> = async (values, event) => {
 
@@ -22,7 +22,7 @@ export default function SignInForm() {
       email: values.email,
       password: values.password,
     }
-    
+
     await signIn(data);
   }
 
@@ -41,8 +41,8 @@ export default function SignInForm() {
         type="password"
         {...register('password')}
       />
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         isLoading={isSubmitting}
       >
         Entrar

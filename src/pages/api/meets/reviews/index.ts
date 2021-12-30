@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
-import { title } from 'process'
 import prisma from '../../../../lib/utils/prisma'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>({

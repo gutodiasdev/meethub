@@ -25,7 +25,7 @@ export function setupAPIClient(ctx = undefined) {
       }
     });
   }
- 
+
   api.interceptors.response.use(response => {
     return response
   }, (error: AxiosError) => {
@@ -38,8 +38,6 @@ export function setupAPIClient(ctx = undefined) {
 
         if (!isRefresing) {
           isRefresing = true;
-
-          console.log('refresh')
 
           api.post('/refresh', {
             refreshToken,
