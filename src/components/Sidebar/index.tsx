@@ -1,7 +1,16 @@
-import { Box, useBreakpointValue, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody } from "@chakra-ui/react";
+import {
+  useBreakpointValue,
+  Drawer, DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  Flex,
+  IconButton
+} from "@chakra-ui/react";
+import { RiMenu2Line } from "react-icons/ri";
+import NextLink from 'next/link';
 import { useSidebarDrawer } from "../../contexts/SidebarContextDrawer";
-import { setupAPIClient } from "../../services/api";
-import { withSSRAuth } from "../../utils/withSSRAuth";
 import { Logo } from "../Header/Logo";
 import { SidebarNav } from "./SidebarNav";
 
@@ -30,17 +39,35 @@ export function Sidebar() {
   }
 
   return (
-    <Box
-      as="aside"
-      h='100vh'
-      position='sticky'
-      pt="4"
-      pl={6}
+    <Flex
+      pos='sticky'
+      bg='white'
+      flexDir='column'
+      h='95vh'
+      marginTop='2.5vh'
+      boxShadow='lg'
+      justifyContent='space-between'
+      borderRadius='0  16px 16px 0 '
+      as='nav'
     >
-      <Box as="a" href="/app" mb="4">
+      <Flex
+        alignItems='center'
+        p='5'
+      >
+        <NextLink
+          href='/'
+        >
+          <IconButton
+            mr='4'
+            aria-label='navigation'
+            _hover={{ bg: 'none' }}
+            bg='none'
+            icon={<RiMenu2Line />}
+          />
+        </NextLink>
         <Logo />
-      </Box>
+      </Flex>
       <SidebarNav />
-    </Box>
+    </Flex>
   );
 }
