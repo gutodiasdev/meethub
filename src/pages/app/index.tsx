@@ -110,8 +110,6 @@ export default function App() {
     slidesPerRow: 2
   }
 
-  console.log(meets.data)
-
   return (
     <AppContainer>
       <Flex
@@ -143,11 +141,25 @@ export default function App() {
               <Spinner />
             </Flex>
           ) : error ? (
-            <Text>Desculpe, houve algum erro durante tentarmos trazer os especialistas</Text>
+            <Text>Desculpe, houve algum erro durante
+              tentarmos trazer os especialistas</Text>
           ) : (
-            <Flex w='100%' direction='column'>
-              <Heading size='lg' color='gray.600' my={4}>Mentores</Heading>
-              <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
+            <Flex
+              w='100%'
+              direction='column'
+            >
+              <Heading
+                size='lg'
+                color='gray.600'
+                my={4}
+              >
+                Mentores
+              </Heading>
+              <SimpleGrid
+                templateColumns='repeat(4, 1fr)'
+                gap={4}
+                w='100%'
+              >
                 {data.map(mentor => {
                   return (
                     <Flex
@@ -160,10 +172,21 @@ export default function App() {
                       p={6}
                       align='center'
                     >
-                      <Avatar size='xl' src={mentor.image} name={mentor.name} />
+                      <Avatar
+                        size='xl'
+                        src={mentor.image}
+                        name={mentor.name}
+                      />
                       <Flex w='100%' justify='center' my={2} minH={5}>
                         {mentor.categories.slice(0, 5).map(name => {
-                          return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
+                          return <Tag
+                            key={name.name}
+                            mx={1}
+                            size='sm'
+                            borderRadius='full'
+                          >
+                            {name.name}
+                          </Tag>
                         })}
                       </Flex>
                       <Heading as='h2' size='md' >{mentor.name}</Heading>
@@ -173,7 +196,14 @@ export default function App() {
                 })}
               </SimpleGrid>
               <VStack mt={4} mb={16} spacing={4}>
-                <Heading size='lg' color='gray.600' mt={4} mr='auto'>Meets</Heading>
+                <Heading
+                  size='md'
+                  color='gray.600'
+                  mt={4}
+                  mr='auto'
+                >
+                  Meets
+                </Heading>
                 {meets.isLoading ? (
                   <Flex>
                     <Spinner />
@@ -205,7 +235,11 @@ export default function App() {
 
         ) : mutation.isSuccess ? (
           <>
-            <SimpleGrid templateColumns='repeat(4, 1fr)' gap={4} w='100%'>
+            <SimpleGrid
+              templateColumns='repeat(4, 1fr)'
+              gap={4}
+              w='100%'
+            >
               {mutation.data.mentors.map(result => {
                 return (
                   <Flex
@@ -218,19 +252,46 @@ export default function App() {
                     p={6}
                     align='center'
                   >
-                    <Avatar size='xl' src={result.image} name={result.name} />
-                    <Flex w='100%' justify='center' my={2} minH={5}>
+                    <Avatar
+                      size='xl'
+                      rc={result.image}
+                      name={result.name}
+                    />
+                    <Flex
+                      w='100%'
+                      justify='center'
+                      my={2}
+                      minH={5}>
                       {result.categories.slice(0, 5).map(name => {
-                        return <Tag key={name.name} mx={1} size='sm' borderRadius='full'>{name.name}</Tag>
+                        return <Tag
+                          key={name.name}
+                          mx={1}
+                          size='sm'
+                          borderRadius='full'
+                        >
+                          {name.name}
+                        </Tag>
                       })}
                     </Flex>
-                    <Heading as='h2' size='md' >{result.name}</Heading>
-                    <Text color='gray.400'>{result.position}</Text>
+                    <Heading
+                      as='h2'
+                      size='md'
+                    >
+                      {result.name}
+                    </Heading>
+                    <Text
+                      color='gray.400'
+                    >
+                      {result.position}
+                    </Text>
                   </Flex>
                 )
               })}
             </SimpleGrid>
-            <VStack mt={4} spacing={4}>
+            <VStack
+              mt={4}
+              spacing={4}
+            >
               {mutation.data.meets.map(meet => {
                 return (
                   <MeetContainer
@@ -248,7 +309,12 @@ export default function App() {
 
         ) : (
 
-          <Heading size='md' color='gray.500' >Não encontramos nenhum resultado...</Heading>
+          <Heading
+            size='md'
+            color='gray.500'
+          >
+            Não encontramos nenhum resultado...
+          </Heading>
 
         )
       )}

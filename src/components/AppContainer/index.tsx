@@ -11,6 +11,7 @@ export default function AppContainer({ children }: AppContainerProps) {
     <SimpleGrid
       templateColumns='200px 1fr'
       h="100vh"
+      bg='gray.50'
     >
       <Sidebar />
       <Box

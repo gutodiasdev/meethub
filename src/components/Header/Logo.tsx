@@ -1,7 +1,19 @@
-import Image from "next/image";
+import { Image, Link } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
 export function Logo() {
   return (
-    <Image src="/meethub-logo.svg" width={80} height={40} alt="Meethub" />
+    <NextLink
+      href='/app'
+      passHref
+    >
+      <Link>
+        <Image
+          src="/meethub-logo.svg"
+          alt="Meethub"
+          maxW='80px'
+        />
+      </Link>
+    </NextLink>
   );
 }

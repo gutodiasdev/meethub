@@ -56,9 +56,11 @@ export function Sidebar() {
         p='5'
       >
         <NextLink
-          href='/'
+          href='/app'
+          passHref
         >
           <IconButton
+            as='a'
             mr='4'
             aria-label='navigation'
             _hover={{ bg: 'none' }}
