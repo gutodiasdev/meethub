@@ -54,9 +54,10 @@ export function MentorContainer({
         as="a"
         direction="column"
         cursor="pointer"
+        bg='white'
         boxShadow='base'
         borderRadius="8"
-        minH='48'
+        minH='64'
         justify='space-between'
         p="4"
         align="center"
@@ -108,7 +109,6 @@ export function MentorContainer({
             {mentorName}</Heading>
           <Text
             color="gray.500"
-            fontWeight="thin"
           >
             {mentorPosition}</Text>
         </Box>

@@ -1,10 +1,12 @@
 import {
   Avatar,
+  Box,
   Flex,
   Heading,
   Tag,
   Text,
 } from "@chakra-ui/react"
+import NextLink from 'next/link'
 
 interface HomeMentorContainerProps {
   mentorId: string;
@@ -24,49 +26,60 @@ export function HomeMentorContainer({
   mentorPosition,
 }: HomeMentorContainerProps) {
   return (
-    <Flex
-      direction='column'
-      key={mentorId}
-      border='1px'
-      borderColor='gray.200'
-      borderRadius='md'
-      colSpan={1}
-      p={6}
-      align='center'
+    <NextLink
+      href={`/app/mentores/${mentorId}`}
+      passHref
     >
-      <Avatar
-        size='xl'
-        src={mentorImage}
-        name={mentorName}
-      />
       <Flex
-        w='100%'
-        justify='center'
-        my={2}
-        minH={5}
+        as='a'
+        direction='column'
+        key={mentorId}
+        minH='64'
+        justify='space-between'
+        bg='white'
+        boxShadow='md'
+        borderRadius='md'
+        p={6}
+        align='center'
       >
-        {mentorCategories.slice(0, 5).map(name => {
-          return <Tag
-            key={name.name}
-            mx={1}
-            size='sm'
-            borderRadius='full'
+        <Avatar
+          size='xl'
+          src={mentorImage}
+          name={mentorName}
+        />
+        <Flex
+          w='100%'
+          justify='center'
+          my={2}
+          minH={5}
+        >
+          {mentorCategories.slice(0, 5).map(name => {
+            return <Tag
+              key={name.name}
+              mx={1}
+              size='sm'
+              borderRadius='full'
+            >
+              {name.name}
+            </Tag>
+          })}
+        </Flex>
+        <Box
+          textAlign='center'
+        >
+          <Heading
+            as='h2'
+            size='md'
           >
-            {name.name}
-          </Tag>
-        })}
+            {mentorName}
+          </Heading>
+          <Text
+            color='gray.500'
+          >
+            {mentorPosition}
+          </Text>
+        </Box>
       </Flex>
-      <Heading
-        as='h2'
-        size='md'
-      >
-        {mentorName}
-      </Heading>
-      <Text
-        color='gray.400'
-      >
-        {mentorPosition}
-      </Text>
-    </Flex>
+    </NextLink>
   )
 }
