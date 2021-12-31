@@ -1,5 +1,15 @@
-import { Flex, Center, Avatar, Box, Tag, Heading, Text, SkeletonText } from "@chakra-ui/react";
+import {
+  Flex,
+  Center,
+  Avatar,
+  Box,
+  Tag,
+  Heading,
+  Text,
+  SkeletonText
+} from "@chakra-ui/react";
 import { useQuery } from "react-query";
+import NextLink from 'next/link'
 import { api } from "../../services/apiClient";
 
 type Category = {
@@ -30,48 +40,74 @@ export function MentorContainer({ mentorId, mentorName, mentorPosition, mentorIm
 
   })
 
-  console.log(data)
-
   return (
-    <Flex
-      as="a"
-      key={mentorId}
-      direction="column"
+    <NextLink
       href={`mentores/${mentorId}`}
-      cursor="pointer"
-      border="1px"
-      borderColor="gray.100"
-      borderRadius="8"
-      p="4"
-      align="center"
+      passHref
     >
-      <Center
-        w="150px"
+      <Flex
+        as="a"
+        direction="column"
+        cursor="pointer"
+        boxShadow='base'
+        borderRadius="8"
+        minH='48'
+        justify='space-between'
+        p="4"
+        align="center"
       >
-        <Avatar size="xl" name={mentorName} src={mentorImage} />
-      </Center>
-      <Box textAlign="center">
-        {isLoading ? (
-          <SkeletonText noOfLines={1} my="3"><Tag size="sm" my="3"></Tag></SkeletonText>
-        ) : error ? (
-          <Box h={8}></Box>
-        ) : (
-          data.map(category => {
-            return (
-              <Tag mx={1} size="sm" my="3" key={category.id}>{category.name}</Tag>
-            )
-          })
-        )}
-        <Heading
-          size="md"
+        <Center
+          w="150px"
         >
-          {mentorName}</Heading>
-        <Text
-          color="gray.500"
-          fontWeight="thin"
-        >
-          {mentorPosition}</Text>
-      </Box>
-    </Flex>
+          <Avatar
+            size="xl"
+            name={mentorName}
+            src={mentorImage}
+          />
+        </Center>
+        <Box textAlign="center">
+          {isLoading ? (
+            <SkeletonText
+              noOfLines={1}
+              my="3"
+            >
+              <Tag
+                size="sm"
+                my="3"
+              >
+              </Tag>
+            </SkeletonText>
+          ) : error ? (
+            <Box h={8}></Box>
+          ) : (
+            <Flex
+              minH='10'
+            >
+              {data.map(category => {
+                return (
+                  <Tag
+                    mx={1}
+                    size="sm"
+                    my="3"
+                    key={category.id}
+                  >
+                    {category.name}
+                  </Tag>
+                )
+              })}
+            </Flex>
+          )}
+          <Heading
+            size="md"
+          >
+            {mentorName}</Heading>
+          <Text
+            color="gray.500"
+            fontWeight="thin"
+          >
+            {mentorPosition}</Text>
+        </Box>
+      </Flex>
+    </NextLink>
   )
 }
