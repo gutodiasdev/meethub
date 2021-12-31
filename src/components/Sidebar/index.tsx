@@ -44,8 +44,6 @@ export function Sidebar() {
       pos='sticky'
       bg='white'
       flexDir='column'
-      h='95vh'
-      marginTop='2.5vh'
       boxShadow='md'
       justifyContent='space-between'
       borderRadius='0  16px 16px 0 '

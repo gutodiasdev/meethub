@@ -56,7 +56,7 @@ export function SidebarNav() {
         >
           <NavLink
             icon={RiAddLine}
-            href="/app/meets/novo"
+            href="/app/meets/adicionar-novo"
           >
             Adicionar novo
           </NavLink>

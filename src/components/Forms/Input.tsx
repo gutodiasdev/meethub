@@ -1,5 +1,19 @@
-import { FormControl, FormLabel, Input as ChakraInput, InputProps as ChakraInputProps, Box, Text, FormErrorMessage, InputGroup, InputLeftAddon, InputRightAddon } from '@chakra-ui/react'
-import { forwardRef, ForwardRefRenderFunction } from 'react';
+import {
+  FormControl,
+  FormLabel,
+  Input as ChakraInput,
+  InputProps as ChakraInputProps,
+  Box,
+  Text,
+  FormErrorMessage,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon
+} from '@chakra-ui/react'
+import {
+  forwardRef,
+  ForwardRefRenderFunction
+} from 'react';
 import { FieldError } from 'react-hook-form';
 
 interface InputProps extends ChakraInputProps {
@@ -11,11 +25,27 @@ interface InputProps extends ChakraInputProps {
   rightAddon?: string;
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, leftAddon, rightAddon, label, obs, error = null, ...rest }, ref) => {
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({
+  name,
+  leftAddon,
+  rightAddon,
+  label,
+  obs,
+  error = null
+  , ...rest }
+  , ref) => {
   return (
     <FormControl isInvalid={!!error}>
       <Box display="flex">
-        {!!label && <FormLabel color="gray.500" htmlFor={name} id={name + label}>{label}</FormLabel>}
+        {!!label &&
+          <FormLabel
+            mt='4'
+            color="gray.500"
+            htmlFor={name}
+            id={name + label}
+          >
+            {label}
+          </FormLabel>}
         {!!obs &&
           <Text
             as="span"

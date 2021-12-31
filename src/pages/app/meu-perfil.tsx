@@ -1,4 +1,14 @@
-import { Heading, Flex, Grid, Box, Button, FormControl, FormLabel, Skeleton, useToast } from '@chakra-ui/react'
+import {
+  Heading,
+  Flex,
+  Grid,
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Skeleton,
+  useToast
+} from '@chakra-ui/react'
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form'
@@ -98,11 +108,30 @@ export default function MyProfile({ me }) {
 
   return (
     <AppContainer>
-      <Flex as="form" onSubmit={handleSubmit(onSubmit)} w="100%" direction="column">
-        <Heading>Meu perfil</Heading>
-        <WhoCanUse roles={['user']}>
-          <Box py={6}>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+      <Box
+        as="form"
+        bg='white'
+        p='6'
+        borderRadius='md'
+        boxShadow='md'
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Heading
+          size='md'
+          color='gray.700'
+        >
+          Meu perfil
+        </Heading>
+        <WhoCanUse
+          roles={['user']}
+        >
+          <Box
+            py={6}
+          >
+            <Grid
+              templateColumns="repeat(2, 1fr)"
+              gap={4}
+            >
               <Input
                 name="name"
                 id="name"
@@ -127,9 +156,16 @@ export default function MyProfile({ me }) {
             </Grid>
           </Box>
         </WhoCanUse>
-        <WhoCanUse roles={['mentor']}>
-          <Box py={6}>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+        <WhoCanUse
+          roles={['mentor']}
+        >
+          <Box
+            py={6}
+          >
+            <Grid
+              templateColumns="repeat(2, 1fr)"
+              gap={4}
+            >
               <FileInput
                 setImageUrl={setImageUrl}
                 localImageUrl={localimageUrl}
@@ -138,12 +174,20 @@ export default function MyProfile({ me }) {
                 trigger={trigger}
                 {...register('image', formValidations.image)}
               />
-              <Input
-                name="name"
-                id="name"
-                label="Nome"
-                {...register('name')}
-              />
+              <Box>
+                <Input
+                  name="name"
+                  id="name"
+                  label="Nome"
+                  {...register('name')}
+                />
+                <Input
+                  name="position"
+                  id="position"
+                  label="Cargo Atual"
+                  {...register('position')}
+                />
+              </Box>
               <Input
                 name="email"
                 id="email"
@@ -156,37 +200,47 @@ export default function MyProfile({ me }) {
                 label="Telefone"
                 {...register('telephone')}
               />
-              <Input
-                name="position"
-                id="position"
-                label="Cargo Atual"
-                {...register('position')}
-              />
+
             </Grid>
-            <FormControl mt={4} >
-              <FormLabel htmlFor="meetDetails" w="100%" >Biografia</FormLabel>
-              <RichTextEditor handler={handleTextEditor} />
+            <FormControl
+              mt={4}
+            >
+              <FormLabel
+                htmlFor="meetDetails"
+                w="100%"
+              >
+                Biografia
+              </FormLabel>
+              <RichTextEditor
+                handler={handleTextEditor}
+              />
             </FormControl>
           </Box>
         </WhoCanUse>
-        <Button
-          as="a"
-          href="/app/meets"
-          _hover={{
-            bg: 'red',
-            color: 'white',
-          }}
+        <Flex
+          w='100%'
+          justify='flex-end'
         >
-          Cancelar
-        </Button>
-        <Button
-          type="submit"
-          colorScheme="blue"
-          isLoading={isSubmitting}
-        >
-          Salvar
-        </Button>
-      </Flex>
+          <Button
+            as="a"
+            mx='4'
+            href="/app/meets"
+            _hover={{
+              bg: 'red',
+              color: 'white',
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            colorScheme="blue"
+            isLoading={isSubmitting}
+          >
+            Salvar
+          </Button>
+        </Flex>
+      </Box>
     </AppContainer>
   )
 }
