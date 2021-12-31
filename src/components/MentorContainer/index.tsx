@@ -23,7 +23,12 @@ interface MentorContainerProps {
   mentorPosition: string;
 }
 
-export function MentorContainer({ mentorId, mentorName, mentorPosition, mentorImage }: MentorContainerProps) {
+export function MentorContainer({
+  mentorId,
+  mentorName,
+  mentorPosition,
+  mentorImage
+}: MentorContainerProps) {
 
   const { data, isLoading, error } = useQuery('categories', async () => {
 

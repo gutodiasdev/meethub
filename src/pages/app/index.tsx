@@ -19,6 +19,7 @@ import { withSSRAuth } from "../../utils/withSSRAuth";
 import { RiSearchLine } from "react-icons/ri";
 import { MeetContainer } from "../../components/MeetContainer";
 import { setupAPIClient } from "../../services/api";
+import { HomeMentorContainer } from "../../components/MentorContainer/HomeMentorContainer";
 
 export default function App() {
   const [isSearching, setIsSearching] = useState(false)
@@ -149,7 +150,7 @@ export default function App() {
               direction='column'
             >
               <Heading
-                size='lg'
+                size='md'
                 color='gray.600'
                 my={4}
               >
@@ -162,36 +163,14 @@ export default function App() {
               >
                 {data.map(mentor => {
                   return (
-                    <Flex
-                      direction='column'
+                    <HomeMentorContainer
                       key={mentor.id}
-                      border='1px'
-                      borderColor='gray.200'
-                      borderRadius='md'
-                      colSpan={1}
-                      p={6}
-                      align='center'
-                    >
-                      <Avatar
-                        size='xl'
-                        src={mentor.image}
-                        name={mentor.name}
-                      />
-                      <Flex w='100%' justify='center' my={2} minH={5}>
-                        {mentor.categories.slice(0, 5).map(name => {
-                          return <Tag
-                            key={name.name}
-                            mx={1}
-                            size='sm'
-                            borderRadius='full'
-                          >
-                            {name.name}
-                          </Tag>
-                        })}
-                      </Flex>
-                      <Heading as='h2' size='md' >{mentor.name}</Heading>
-                      <Text color='gray.400'>{mentor.position}</Text>
-                    </Flex>
+                      mentorId={mentor.id}
+                      mentorPosition={mentor.position}
+                      mentorName={mentor.name}
+                      mentorImage={mentor.image}
+                      mentorCategories={mentor.categories}
+                    />
                   )
                 })}
               </SimpleGrid>
