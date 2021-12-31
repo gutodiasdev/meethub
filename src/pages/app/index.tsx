@@ -1,4 +1,14 @@
-import { Avatar, Box, Flex, Heading, Icon, SimpleGrid, Spinner, Tag, Text, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Flex,
+  Heading,
+  Icon,
+  SimpleGrid,
+  Spinner,
+  Tag,
+  Text,
+  VStack
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useMutation, useQuery } from 'react-query'
 
@@ -8,6 +18,7 @@ import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { RiSearchLine } from "react-icons/ri";
 import { MeetContainer } from "../../components/MeetContainer";
+import { setupAPIClient } from "../../services/api";
 
 export default function App() {
   const [isSearching, setIsSearching] = useState(false)
@@ -246,7 +257,12 @@ export default function App() {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
+  const user = await apiClient.get('/me')
+  console.log(user.data)
   return {
-    props: {}
+    props: {
+      user: user.data,
+    }
   }
 })

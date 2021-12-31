@@ -1,6 +1,9 @@
-import { Avatar, Box, Flex, Heading, SkeletonCircle, SkeletonText, Text } from '@chakra-ui/react'
-import { useQuery } from 'react-query'
-import { api } from '../../services/apiClient'
+import {
+  Flex,
+  Heading,
+  Text,
+} from '@chakra-ui/react'
+import NextLink from 'next/link'
 interface MeetContainerProps {
   meetId: string,
   meetName: string,
@@ -9,108 +12,104 @@ interface MeetContainerProps {
   href: string,
 }
 
-export function MeetContainer({ meetId, meetPrice, meetName, mentorId, href }: MeetContainerProps) {
-
-  const { data, isLoading, error } = useQuery('mentor', async () => {
-    const response = await api.get(`/mentors/${mentorId}`)
-    const singleMentor = response.data.map(mentor => {
-      return {
-        name: mentor.name,
-        position: mentor.position,
-      }
-    })
-    return singleMentor
-  })
-
-  console.log(data)
-
+export function MeetContainer({ meetId, meetPrice, meetName, href }: MeetContainerProps) {
   return (
-    <Flex
-      as="a"
+    <NextLink
       href={href}
-      cursor="pointer"
-      key={meetId}
-      bg="white"
-      border="1px"
-      borderColor="gray.200"
-      borderRadius="8"
-      width="100%"
-      direction="column"
-      p="4"
-      mb={4}
+      passHref
     >
       <Flex
-        justify="space-between"
-      >
-        <Flex>
-          {isLoading ? (
-            <Box>
-              <SkeletonCircle size='12' />
-            </Box>
-          ) : error ? (
-            <Flex>
-              <Avatar
-                size="md"
-                name=''
-              />
-            </Flex>
-          ) : (
-            data.map(mentor => {
-              return (
-                <Flex key={meetId}>
-                  <Avatar
-                    size="md"
-                    name={mentor.name}
-                  />
-                  <Flex
-                    direction="column"
-                    justify="center"
-                    ml={2}
-                  >
-                    <Heading
-                      size="sm"
-                      color="gray.600"
-                      fontWeight="normal"
-                    >
-                      {mentor.name}
-                    </Heading>
-                    <Text
-                      mt="-1"
-                      fontSize="xs"
-                      color="gray.400"
-                    >
-                      {mentor.position}
-                    </Text>
-                  </Flex>
-                </Flex>
-
-              )
-            })
-          )}
-        </Flex>
-        <Flex>
-          <Text
-            fontSize="xl"
-            color="gray.500"
-          >
-            R${meetPrice}
-          </Text>
-        </Flex>
-      </Flex>
-      <Flex
-        flex="1"
-        columnSpan={4}
+        as="a"
+        cursor="pointer"
+        key={meetId}
+        bg="white"
+        width="100%"
         direction="column"
-        h="100%"
-        mt={4}
+        boxShadow='md'
+        borderRadius='lg'
+        p='8'
+        mb='6'
       >
-        <Heading
-          size="lg"
-          mt="2"
-          mb="1"
+        <Flex
+          justify="space-between"
         >
-          {meetName}</Heading>
+          <Flex>
+            {/* {isLoading ? (
+              <Box>
+                <SkeletonCircle size='12' />
+              </Box>
+            ) : error ? (
+              <Flex>
+                <Avatar
+                  size="md"
+                  name=''
+                />
+              </Flex>
+            ) : (
+              data.map(mentor => {
+                return (
+                  <Flex key={meetId}>
+                    <Avatar
+                      size="md"
+                      name={mentor.name}
+                    />
+                    <Flex
+                      direction="column"
+                      justify="center"
+                      ml={2}
+                    >
+                      <Heading
+                        size="sm"
+                        color="gray.600"
+                        fontWeight="normal"
+                      >
+                        {mentor.name}
+                      </Heading>
+                      <Text
+                        mt="-1"
+                        fontSize="xs"
+                        color="gray.400"
+                      >
+                        {mentor.position}
+                      </Text>
+                    </Flex>
+                  </Flex>
+
+                )
+              })
+            )} */}
+          </Flex>
+          <Flex>
+            <Text
+              fontSize="xl"
+              font
+              color="gray.500"
+            >
+              {Number(meetPrice).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              })}
+            </Text>
+          </Flex>
+        </Flex>
+        <Flex
+          flex="1"
+          columnSpan={4}
+          direction="column"
+          h="100%"
+          mt={4}
+        >
+          <Heading
+            size="lg"
+            mt="2"
+            mb="1"
+            color='gray.700'
+            fontWeight='600'
+          >
+            {meetName}
+          </Heading>
+        </Flex>
       </Flex>
-    </Flex>
+    </NextLink>
   )
 }

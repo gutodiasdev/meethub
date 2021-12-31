@@ -6,7 +6,8 @@ import {
   DrawerHeader,
   DrawerBody,
   Flex,
-  IconButton
+  IconButton,
+  Avatar
 } from "@chakra-ui/react";
 import { RiMenu2Line } from "react-icons/ri";
 import NextLink from 'next/link';
@@ -45,7 +46,7 @@ export function Sidebar() {
       flexDir='column'
       h='95vh'
       marginTop='2.5vh'
-      boxShadow='lg'
+      boxShadow='md'
       justifyContent='space-between'
       borderRadius='0  16px 16px 0 '
       as='nav'
@@ -68,6 +69,6 @@ export function Sidebar() {
         <Logo />
       </Flex>
       <SidebarNav />
-    </Flex>
+    </Flex >
   );
 }
