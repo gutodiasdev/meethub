@@ -1,4 +1,4 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, VStack } from "@chakra-ui/react";
 import {
   RiAddLine,
   RiCalendarTodoLine,
@@ -14,8 +14,12 @@ import { NavSection } from "./NavSection";
 import { WhoCanUse } from "../WhoCanUse";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { setupAPIClient } from "../../services/api";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export function SidebarNav() {
+  const { signOut } = useContext(AuthContext)
+
   return (
     <VStack
       w='100%'
@@ -25,64 +29,71 @@ export function SidebarNav() {
       <Flex
         direction='column'
       >
-        <NavSection
-          title="GERAL"
-        >
-          <NavLink
-            icon={RiDashboardLine}
-            href="/app/meets"
-          >
-            Meets
-          </NavLink>
-          <WhoCanUse
-            roles={['administrator']}
+        <Box>
+          <NavSection
+            title="GERAL"
           >
             <NavLink
-              icon={RiContactsLine}
-              href="/app/usuarios"
+              icon={RiDashboardLine}
+              href="/app/meets"
             >
-              Usuários
+              Meets
             </NavLink>
-          </WhoCanUse>
-          <NavLink
-            icon={RiTeamLine}
-            href="/app/mentores"
+            <WhoCanUse
+              roles={['administrator']}
+            >
+              <NavLink
+                icon={RiContactsLine}
+                href="/app/usuarios"
+              >
+                Usuários
+              </NavLink>
+            </WhoCanUse>
+            <NavLink
+              icon={RiTeamLine}
+              href="/app/mentores"
+            >
+              Mentores
+            </NavLink>
+          </NavSection>
+          <NavSection
+            title="MEETS"
           >
-            Mentores
-          </NavLink>
-        </NavSection>
-        <NavSection
-          title="MEETS"
+            <NavLink
+              icon={RiAddLine}
+              href="/app/meets/meus-meets"
+            >
+              Meus meets
+            </NavLink>
+            <NavLink
+              icon={RiVideoChatLine}
+              href={`/app/meets/agendados`}
+            >
+              Agendados
+            </NavLink>
+          </NavSection>
+          <NavSection
+            title="PERFIL"
+          >
+            <NavLink
+              icon={RiCalendarTodoLine}
+              href="/app/mentores/minha-agenda"
+            >
+              Minha agenda
+            </NavLink>
+            <NavLink
+              icon={CgProfile}
+              href={`/app/meu-perfil/`}
+            >
+              Meu perfil
+            </NavLink>
+          </NavSection>
+        </Box>
+        <Button
+          onClick={signOut}
         >
-          <NavLink
-            icon={RiAddLine}
-            href="/app/meets/meus-meets"
-          >
-            Meus meets
-          </NavLink>
-          <NavLink
-            icon={RiVideoChatLine}
-            href={`/app/meets/agendados`}
-          >
-            Agendados
-          </NavLink>
-        </NavSection>
-        <NavSection
-          title="PERFIL"
-        >
-          <NavLink
-            icon={RiCalendarTodoLine}
-            href="/app/mentores/minha-agenda"
-          >
-            Minha agenda
-          </NavLink>
-          <NavLink
-            icon={CgProfile}
-            href={`/app/meu-perfil/`}
-          >
-            Meu perfil
-          </NavLink>
-        </NavSection>
+          Sair
+        </Button>
       </Flex>
     </VStack>
   );

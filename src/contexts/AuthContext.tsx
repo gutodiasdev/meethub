@@ -37,17 +37,18 @@ export const AuthContext = createContext({} as AuthContextData)
 
 let authChannel: BroadcastChannel
 
-export function signOut() {
-  destroyCookie(undefined, 'meethub.token')
-  destroyCookie(undefined, 'meethub.refreshToken')
-
-
-  Router.push('/');
-}
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()
   const isAuthenticated = !!user
+
+  function signOut() {
+    destroyCookie(undefined, 'meethub.token')
+    destroyCookie(undefined, 'meethub.refreshToken')
+
+
+    Router.push('/');
+  }
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
