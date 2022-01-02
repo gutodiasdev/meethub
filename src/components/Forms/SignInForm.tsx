@@ -9,7 +9,7 @@ type UserSignInData = {
   password: string;
 }
 
-export default function SignInForm() {
+export function SignInForm() {
   const { signIn } = useContext(AuthContext)
 
   const { register, handleSubmit, formState: { isSubmitting } } = useForm();
