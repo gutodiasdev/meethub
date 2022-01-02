@@ -56,15 +56,15 @@ export function SidebarNav() {
         >
           <NavLink
             icon={RiAddLine}
-            href="/app/meets/adicionar-novo"
+            href="/app/meets/meus-meets"
           >
-            Adicionar novo
+            Meus meets
           </NavLink>
           <NavLink
             icon={RiVideoChatLine}
-            href={`/app/meets/meus-meets/`}
+            href={`/app/meets/agendados`}
           >
-            Meus meets
+            Agendados
           </NavLink>
         </NavSection>
         <NavSection

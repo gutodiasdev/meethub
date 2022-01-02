@@ -36,7 +36,7 @@ const createMeetFormSchema = yup.object().shape({
   price: yup.number().required('Preço é obrigatório'),
 })
 
-export default function MentorMeetCriation() {
+export default function myMeets() {
   const { data, isLoading, error } = useCategories()
   const [textEditorData, setTextEditorData] = useState('')
   const [imageUrl, setImageUrl] = useState('')

@@ -1,5 +1,15 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Link, Text } from '@chakra-ui/react'
-import SignInForm from '../Forms/SignInForm'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  useDisclosure,
+  Link,
+  Text
+} from '@chakra-ui/react'
+import { SignInForm } from '../Forms/SignInForm'
 
 export function UserLoginModal() {
   const { isOpen, onClose, onOpen } = useDisclosure()
