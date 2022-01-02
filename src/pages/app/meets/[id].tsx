@@ -21,19 +21,21 @@ import {
   RadioGroup,
   Stack
 } from '@chakra-ui/react'
+import dynamic from 'next/dynamic';
+import NextLink from 'next/link'
+import { useForm } from 'react-hook-form';
+import { RiStarLine } from 'react-icons/ri';
+import { useQuery } from 'react-query';
+import { useState } from "react";
+import ReactHtmlParser from 'react-html-parser';
 
 import { setupAPIClient } from "../../../services/api";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 import AppContainer from "../../../components/AppContainer";
-import { useState } from "react";
-import ReactHtmlParser from 'react-html-parser';
-import { useQuery } from 'react-query';
 import { api } from '../../../services/apiClient';
 import { WhoCanUse } from '../../../components/WhoCanUse';
 import { EditMeetModal } from '../../../components/Modals/EditMeetModal'
-import dynamic from 'next/dynamic';
-import { useForm } from 'react-hook-form';
-import { RiStarLine } from 'react-icons/ri';
+import { formatCurrency } from '../../../utils/formatCurrency'
 
 
 const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'), {
@@ -103,11 +105,10 @@ const Meet = ({ meet }) => {
     <AppContainer>
       <Flex
         bg="white"
-        border="1px"
-        borderColor="gray.100"
-        borderRadius="8"
+        boxShadow='base'
+        borderRadius="lg"
         width="100%"
-        p="4"
+        p="8"
       >
         <Box
           flex="1"
@@ -124,7 +125,7 @@ const Meet = ({ meet }) => {
               })}
             </Flex>
             <Flex>
-              <Text fontSize="3xl">{`R$${meet.price}`}</Text>
+              <Text fontSize="2xl">{formatCurrency(Number(meet.price))}</Text>
             </Flex>
           </Flex>
           <Image src={meets.image} alt={meets.name} borderRadius={8} my={8} maxH={56} w="100%" />
@@ -153,15 +154,19 @@ const Meet = ({ meet }) => {
             Editar meet
           </Button>
         </WhoCanUse>
-        <Button
-          as="a"
-          mt={4}
+        <NextLink
           href={`agendar/${meets.id}`}
-          colorScheme="blue"
-          size="lg"
+          passHref
         >
-          Agendar um meet
-        </Button>
+          <Button
+            as="a"
+            mt={4}
+            colorScheme="blue"
+            size="lg"
+          >
+            Agendar um meet
+          </Button>
+        </NextLink>
       </Flex>
       <Flex width="100%" pt="4" mb={48}>
         <Tabs variant="enclosed" width="100%" >
