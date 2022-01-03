@@ -64,7 +64,10 @@ export default function Booked({ user }) {
 
   return (
     <AppContainer>
-      <Flex w="100%">
+      <Flex
+        w="100%"
+        direction='column'
+      >
         <WhoCanUse roles={['user']}>
           {isLoading ? (
             <Flex>
