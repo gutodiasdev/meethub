@@ -1,15 +1,34 @@
+import {
+  Flex,
+  Center,
+  Avatar,
+  Box,
+  HStack,
+  Heading,
+  Tag,
+  Text,
+  Button,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Spinner,
+  Icon
+} from '@chakra-ui/react'
+import { useQuery } from 'react-query'
+import { FiTrash } from "react-icons/fi";
+import { useState } from "react";
+import NextLink from 'next/link'
+
 import AppContainer from "../../../../components/AppContainer";
 import { setupAPIClient } from "../../../../services/api";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
-import { Flex, Center, Avatar, Box, HStack, Heading, Tag, Text, Button, Tabs, TabList, Tab, TabPanels, TabPanel, Spinner, Icon } from '@chakra-ui/react'
 import { WhoCanUse } from "../../../../components/WhoCanUse";
-import { useQuery } from 'react-query'
 import { api } from "../../../../services/apiClient";
 import { RiAddFill, RiEditBoxLine } from "react-icons/ri";
-import { FiTrash } from "react-icons/fi";
-import { useState } from "react";
 
-export default function MyMeets({ user }) {
+export default function Booked({ user }) {
   const [hasMeetAsUser, setHasMeetAsUser] = useState(true)
 
   const { data, isLoading, error } = useQuery('UserMeetsAndMentorMeets', async () => {
@@ -43,8 +62,6 @@ export default function MyMeets({ user }) {
     staleTime: 1000 * 60 * 15 // 15 minutes
   })
 
-  console.log(data)
-
   return (
     <AppContainer>
       <Flex w="100%">
@@ -63,9 +80,8 @@ export default function MyMeets({ user }) {
                 <Flex
                   key={meet.id}
                   bg="white"
-                  border="1px"
-                  borderColor="gray.100"
-                  borderRadius="8"
+                  boxShadow='base'
+                  borderRadius="lg"
                   width="100%"
                   p="4"
                   mb="4"
@@ -96,14 +112,17 @@ export default function MyMeets({ user }) {
                     >
                       {meet.description}</Text>
                   </Box>
-                  <Button
-                    as="a"
+                  <NextLink
                     href={`sala/${meet.id}`}
-                    target="_blank"
-                    colorScheme="blue"
+                    passHref
                   >
-                    Entrar na sala
-                  </Button>
+                    <Button
+                      as="a"
+                      colorScheme="blue"
+                    >
+                      Entrar na sala
+                    </Button>
+                  </NextLink>
                 </Flex>
               )
             })
@@ -136,9 +155,8 @@ export default function MyMeets({ user }) {
                       <Flex
                         key={meet.id}
                         bg="white"
-                        border="1px"
-                        borderColor="gray.100"
-                        borderRadius="8"
+                        boxShadow='base'
+                        borderRadius='lg'
                         width="100%"
                         p="4"
                         mb="4"
@@ -169,14 +187,17 @@ export default function MyMeets({ user }) {
                           >
                             {meet.description}</Text>
                         </Box>
-                        <Button
-                          as="a"
+                        <NextLink
                           href={`sala/${meet.id}`}
-                          target="_blank"
-                          colorScheme="blue"
+                          passHref
                         >
-                          Entrar na sala
-                        </Button>
+                          <Button
+                            as="a"
+                            colorScheme="blue"
+                          >
+                            Entrar na sala
+                          </Button>
+                        </NextLink>
                       </Flex>
                     )
                   })

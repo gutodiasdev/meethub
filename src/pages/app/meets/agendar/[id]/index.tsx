@@ -30,7 +30,7 @@ const Meet = ({ meet }) => {
   }
 
   function handleBooking() {
-    router.push(`/app/meets/agendar/${meets.id}/finalizar-agendamento`)
+    router.push(`/app/meets/agendar/${meets.id}/finalizar-agendamento/`)
   }
 
   return (

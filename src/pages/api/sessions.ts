@@ -1,13 +1,12 @@
 import bcrypt from "bcrypt"
 
 import prisma from "../../lib/utils/prisma"
-import { CreateSessionDTO } from "../../utils/types";
 import { generateJwtAndRefreshToken } from "../../utils/generateJwtAndRefreshToken";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
 
-  if(request.method === 'POST') {
+  if (request.method === 'POST') {
 
     const { email, password } = request.body;
 
