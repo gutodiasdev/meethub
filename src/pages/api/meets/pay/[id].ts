@@ -215,9 +215,12 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>({
       zipcode,
       meetId,
       meetName,
-      unitPrice,
       meetQuantity,
       endDate,
+      userProfession,
+      userExpectation,
+      userChoice,
+      userMoreAbout
     } = req.body;
 
     pagarme.client.connect({ api_key: 'ak_test_YEFfXjb6pcktWWpYys2PT1HZfBSqcs' })
@@ -340,13 +343,17 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>({
                 roles: 'user',
                 room: roomUrl,
                 userId: userId,
+                userProfession: userProfession,
+                userChoice: userChoice,
+                userExpectation: userExpectation,
+                userMoreAbout: userMoreAbout,
               }
             })
           })
 
         return res.status(200).json(roomUrl)
       })
-      .catch(err => console.log(JSON.stringify(err)))
+      .catch(err => console.log(err))
 
   })
 

@@ -54,9 +54,13 @@ model Meet {
 }
 
 model MeetEnrollment {
-  createdAt DateTime @default(now())
-  roles     Role
-  room      String?
+  createdAt       DateTime @default(now())
+  roles           Role
+  room            String?
+  userProfession  String?
+  userExpectation String?
+  userChoice      String?
+  userMoreAbout   String?
 
   // Relation Fields
   userId            String

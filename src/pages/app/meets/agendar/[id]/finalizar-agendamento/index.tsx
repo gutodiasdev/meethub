@@ -4,10 +4,12 @@ import {
   Grid,
   GridItem,
   FormControl,
-  FormLabel,
   Select,
   Button,
-  Box
+  Box,
+  FormLabel,
+  Textarea,
+  SimpleGrid
 } from "@chakra-ui/react";
 import Router from "next/router";
 import { useContext, useState } from "react";
@@ -49,6 +51,10 @@ type CheckoutFormData = {
   unitPrice: number;
   meetQuantity: number;
   phoneNumbers: string;
+  userProfession: string;
+  userChoice: string;
+  userExpectation: string;
+  userMoreAbout: string;
 }
 
 
@@ -66,7 +72,7 @@ export default function FinalizarAgendamento({ meet }) {
 
     const data = {
       userRole: "user",
-      endDate: "2022-01-03T15:30:00", //TODO - TEMPORARY
+      endDate: "2022-01-04T17:30:00", //TODO - TEMPORARY
       amount: meetPrice,
       cardNumber: values.cardNumber,
       cardCvv: values.cardCvv,
@@ -95,6 +101,10 @@ export default function FinalizarAgendamento({ meet }) {
       meetName: meet.name,
       unitPrice: meetPrice,
       meetQuantity: 1,
+      userProfession: values.userProfession,
+      userChoice: values.userChoice,
+      userExpectation: values.userExpectation,
+      userMoreAbout: values.userMoreAbout,
     }
 
     await api.post(`meets/pay/${meet.id}`, data)
@@ -346,6 +356,83 @@ export default function FinalizarAgendamento({ meet }) {
               </Grid>
             </Box>
           </Flex>
+          <Flex
+            direction='column'
+            my='4'
+          >
+            <Heading
+              as="span"
+              size="md"
+              fontWeight='thin'
+              textAlign="left"
+              color="gray.400"
+              py={4}
+            >
+              Briefing
+            </Heading>
+            <SimpleGrid
+              columns={2}
+              gap='4'
+            >
+              <FormControl
+                my='2'
+              >
+                <FormLabel
+                  htmlFor='userProfession'
+                >
+                  Qual sua profissão?
+                </FormLabel>
+                <Textarea
+                  name='userProfession'
+                  id='userProfession'
+                  {...register('userProfession')}
+                />
+              </FormControl>
+              <FormControl
+                my='2'
+              >
+                <FormLabel
+                  htmlFor='userExpectation'
+                >
+                  Qual sua expectativa com o meet?
+                </FormLabel>
+                <Textarea
+                  id='userExpectation'
+                  name='userExpectation'
+                  {...register('userExpectation')}
+                />
+              </FormControl>
+              <FormControl
+                my='2'
+              >
+                <FormLabel
+                  htmlFor='userChoice'
+                >
+                  Por que escolheu este especialista?
+                </FormLabel>
+                <Textarea
+                  id='userChoice'
+                  name='userChoice'
+                  {...register('userChoice')}
+                />
+              </FormControl>
+              <FormControl
+                my='2'
+              >
+                <FormLabel
+                  htmlFor='userMoreAbout'
+                >
+                  Conte-nos mais sobre você
+                </FormLabel>
+                <Textarea
+                  id='userMoreAbout'
+                  name='userMoreAbout'
+                  {...register('userMoreAbout')}
+                />
+              </FormControl>
+            </SimpleGrid>
+          </Flex>
+
           <Button
             type="submit"
             size="lg"
